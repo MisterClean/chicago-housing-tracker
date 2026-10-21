@@ -46,28 +46,52 @@ be designed to show the two series separately.
    counts and AMI tiers. It carries no date, so buildings are dated by
    matching to the nearest new-construction permit within 75 m (93% of units).
    Importer: `scripts/import_aro.py`.
-2. **In-lieu fees — the missing half of the ARO story.** Developers may pay
-   instead of building, and nothing published so far quantifies that by year
-   or by ward. Until it exists the page understates how the ordinance
-   actually works, and says so. Leads: DOH reporting, the Chicago Housing
-   Trust, the OIG's ARO administration audit. **Note:** the fee schedule
-   quoted in secondary sources (roughly $100k–225k per unit) could not be
-   confirmed from the February 2024 ARO Rules PDF, whose text layer did not
-   yield a fee table. Do not publish a fee figure without a primary citation.
-   Worth stating clearly when we have it: the fee is set well below what it
-   costs to actually produce a unit in Chicago, which is why paying is
-   attractive.
-3. **LIHTC.** HUD's database: 518 Chicago properties, 42,576 low-income
-   units, but placed-in-service records stop in 2020 and allocation years
-   stop in 2018, so it cannot answer "units added" for recent years. IHDA,
-   the state allocator, is the lead for closing that gap; its developer
-   pages 404'd on first attempt and need a real look.
-4. **Supportive housing.** `MULTIFAMILY_PROPERTIES_ASSISTED`: 330 Chicago
-   properties, 30,572 assisted units of 38,643 total, current to 2026-07,
-   with a client-group field separating elderly, disabled and family.
+2. **In-lieu fees — a note, not a project.** Developers may pay instead of
+   building ARO units. The fees go to the City's affordable housing funds,
+   which pay for City-financed deals already counted under LIHTC or for rent
+   subsidies, so counting them as units would double-count. Worth one line
+   on the page once sourced ("this many required units were bought out"),
+   with a primary citation for any fee figure; the February 2024 ARO Rules
+   PDF's text layer did not yield a fee table.
+3. ~~**LIHTC.**~~ **Shipped** in `/affordable` alongside ARO (program
+   switch; new vs preserved; permit year or opening year). Importer:
+   `scripts/import_lihtc.py`, run by hand; sources are saved under
+   `sources/` (git-ignored). HUD's file was reconciled against the City's
+   round awards and 2010–2023 year-end reports, IHDA's award lists, closing
+   reports and TEFRA notices, and City Council ordinances (2023–26, via the
+   Clerk's API). Other City/State developments (no tax credits) are a program
+   (CITY_FUNDED: 69 counted, 1,247 restricted units, including 39 NSP
+   rental buildings); refinancing-only, for-sale and out-of-scope ones are
+   in CITY_SET_ASIDE. The pipeline table lists both programs (43
+   developments, 3,530 units awarded but not permitted). Rules decided
+   2026-10: only units at or under 80% AMI count, but 81–120% units are
+   kept in `over80`; a deal that newly restricts existing homes counts as
+   preserved without a renovation; "new" needs documented vacancy or a
+   building that was not housing.
+
+   **Open, to pick up in the refresh routine (item 4):**
+   - possibly stalled: Riverside Village, Calhoun, Englewood Phase I;
+   - award not confirmed: Galleria 89, Pioneros, Lawndale ReDefined;
+   - Southbridge 3A: the City's 48 may leave out CHA units; Teachers
+     Village: CHA unit count not stated;
+   - NSP: 36 of 39 buildings use the City's yearly at-or-under-80% share,
+     not a published split;
+   - PEAR loans small enough not to need an ordinance, and the City's TIF
+     purchase-rehab units (totals only, no addresses);
+   - IHDA's pre-FY2018 closing reports (not online) and its FY2026 report.
+4. **Supportive housing.** Done as a "Who it serves" filter (general /
+   senior / supportive) on the Affordable Units page, classed per building
+   in the importer's SENIOR and SUPPORTIVE sets. Still to consider (decided
+   2026-10 to keep in mind, not include yet): senior-only buildings with no
+   tax credits and no City money, mostly HUD Section 202, which are outside
+   every program on the page. `MULTIFAMILY_PROPERTIES_ASSISTED` (330 Chicago
+   properties, client groups elderly / disabled / family) is the source.
 5. **CHA.** `Public_Housing_Developments` filtered to `PARTICIPANT_CODE='IL002'`:
    103 developments, 19,651 units, current to 2026-07. No year-added field.
    Show *net* of removals or not at all.
+   CHA renovations without tax credits are left out of the page for now —
+   e.g. ABLA Brooks Homes, 330 units under renovation 2025–27 with City TIF
+   for site work only (decided 2026-10-19); this item is where they would go.
 
 The directory (`s6ha-ppgi`) remains useful as a cross-check on coverage and
 as a secondary stock view, normalised per 1,000 households.
@@ -134,9 +158,8 @@ siting question in the city since 2023. Ward-level bed counts only, no
 addresses. **Domestic-violence shelters are never mapped** — locations are
 confidential for safety. Scope this separately, last.
 
-**Sequence:** LIHTC (best data; proves the pipeline) → ARO → supportive (a
-filter on data already loaded) → CHA (after the net-vs-gross decision) →
-shelters, if at all.
+**Sequence:** LIHTC and ARO shipped → supportive (a filter on data already
+loaded) → CHA (after the net-vs-gross decision) → shelters, if at all.
 
 **Resolved.** The directory's `units` field is *inconsistent*: across 35
 mixed-income buildings matched to HUD records, it equalled HUD's total unit
@@ -282,7 +305,7 @@ North Side teardowns, the two-flat-to-single-family conversion.
 2. Join Cook County Assessor parcel data for unit counts.
 3. Only then consider a net figure, and say what it excludes.
 
-## 3. Zoning map amendments by ward## 3. Zoning map amendments by ward
+## 3. Zoning map amendments by ward
 
 **Question.** Which wards upzone and which downzone? This is aldermanic
 prerogative in data form, and it fills the gap the scorecard left without the
@@ -296,6 +319,23 @@ editorial problem.
   zoning snapshots.
 - **Output.** Rezonings per ward per year, classified up or down; share of
   residential land rezoned in each direction.
+
+## 4. Refresh routine for the Affordable Units data
+
+`src/data/lihtc.json` is rebuilt by hand. Write down (and where possible
+script) a quarterly pass that catches what each source adds:
+
+- **City Council ordinances** — the Clerk's API
+  (`api.chicityclerkelms.chicago.gov/search`) returned every 2023–26
+  housing-finance ordinance; filter to mayoral filings mentioning
+  multi-family funds, bonds, tax credits, TIF or affordable housing, then
+  read the attachments for units and AMI.
+- **Building permits** for everything in the pipeline: a permit moves a
+  development out of the pipeline and into the counts.
+- **IHDA** — TEFRA notices, 9% awards, annual closing and progress reports.
+- **The City's funding rounds** and year-end reports (none published after
+  2023 so far).
+- **HUD's annual LIHTC file.**
 
 ## Also queued
 
@@ -322,5 +362,7 @@ editorial problem.
 - **Confirm `citythatworks@substack.com` is a monitored inbox** before the
   "let us know" link gets traffic.
 - **OG / Twitter card tags** so shared links preview properly.
+- **Pages overflow the screen at phone width** (seen at 390px on Permitting
+  and Affordable Units): the toggle rows and summary stats do not wrap.
 - **README route table** has drifted from `src/sections.ts` three times; it
   either needs generating or removing.

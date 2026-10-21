@@ -31,3 +31,11 @@ dist-ssr
 __pycache__/
 *.pyc
 .aro_reno_cache.json
+
+# LIHTC download cache (regenerate with scripts/import_lihtc.py)
+.lihtc_cache.json
+.lihtc_permits_extra.json
+
+# source documents gathered for research (public, but not ours to republish)
+sources/
+.lihtc_coords.json

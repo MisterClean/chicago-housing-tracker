@@ -58,8 +58,8 @@ export const SECTIONS: Section[] = [
     nav: "Affordable Units",
     title: "Affordable Units",
     blurb:
-      "Affordable units delivered by the Affordable Requirements Ordinance, and how small a share of new housing they are.",
-    stage: "What the market is required to build",
+      "Income-restricted homes from the Affordable Requirements Ordinance, low-income housing tax credits and City and State funding, by ward and year.",
+    stage: "What gets built affordable",
     status: "live",
   },
   {

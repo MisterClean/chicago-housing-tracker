@@ -30,10 +30,23 @@ export function Glossary() {
         <div>
           <dt>ARO — Affordable Requirements Ordinance</dt>
           <dd>
-            Chicago's rule requiring many new developments to include affordable units. It also
-            publishes maximum rents by unit size, which is why our 60% AMI figures use a{" "}
+            Chicago's rule requiring residential developments of ten or more units that need a
+            zoning change, City land or City money to set aside a share of their homes, usually
+            20%, at restricted rents, or to pay a fee instead. The units are built by private
+            developers inside market-rate buildings, so they land where the market builds. The City
+            also publishes maximum rents by unit size, which is why our 60% AMI figures use a{" "}
             <strong>different cap for a studio than for a four-bedroom</strong> — a more accurate
             approach than one flat citywide number, since larger households need larger homes.
+          </dd>
+        </div>
+        <div>
+          <dt>CHA — Chicago Housing Authority</dt>
+          <dd>
+            The City&rsquo;s public housing authority. Since the Plan for Transformation most new
+            CHA homes are built inside mixed-income, tax-credit developments on former public
+            housing sites, alongside affordable and market-rate units. The Affordable Units page
+            counts those CHA units and can show them on their own; CHA housing built or bought
+            without tax credits is not covered.
           </dd>
         </div>
         <div>
@@ -45,6 +58,28 @@ export function Glossary() {
           </dd>
         </div>
         <div>
+          <dt>Income-restricted</dt>
+          <dd>
+            A home whose rent is capped and whose tenants must earn below a set share of AMI,
+            usually 80% or less, under a legal agreement that runs for years or decades. This is
+            what the Affordable Units page counts. It is different from housing that simply
+            happens to be cheap: a low market rent can rise; a restricted one cannot, until the
+            agreement ends.
+          </dd>
+        </div>
+        <div>
+          <dt>LIHTC — Low-Income Housing Tax Credit</dt>
+          <dd>
+            The federal program behind most subsidized affordable housing built in the US since
+            1986. Investors buy tax credits from a development in exchange for equity, and in return
+            the units must stay rent- and income-restricted, generally at or below 60% AMI, for at
+            least 30 years. In Chicago the credits are awarded by the City and by the Illinois
+            Housing Development Authority (IHDA). <strong>9% credits</strong> are competitive and
+            cover more of the cost; <strong>4% credits</strong> come with tax-exempt bonds and are
+            often used to rehab existing buildings.
+          </dd>
+        </div>
+        <div>
           <dt>Listings vs. housing stock</dt>
           <dd>
             The affordability map counts <strong>listings</strong> — homes actively on the market
@@ -53,10 +88,45 @@ export function Glossary() {
             already living there pay.
           </dd>
         </div>
+        <div>
+          <dt>New vs. preserved units</dt>
+          <dd>
+            A <strong>new</strong> affordable unit is one that did not exist as housing before:
+            new construction, or a building converted from another use or brought back from long
+            vacancy. A <strong>preserved</strong> unit was already housing; public money paid to
+            rehab it and to set or renew its rent limits. Preservation keeps affordable homes
+            affordable, but it adds no homes, so the Affordable Units page shows new units by
+            default and lets you add preserved ones.
+          </dd>
+        </div>
+        <div>
+          <dt>Other City/State affordable housing</dt>
+          <dd>
+            Developments paid for directly by the City (loans, tax-increment financing, land or
+            federal Neighborhood Stabilization Program money it administered) or by the Illinois
+            Housing Development Authority (HOME funds, trust funds, donation credits), without
+            federal tax credits. Many are small supportive-housing or senior
+            buildings. The Affordable Units page counts their income-restricted units as a program
+            alongside tax credits, CHA and ARO; projects where public money only refinanced
+            debt or paid for repairs are left out, since nothing was built, rehabbed or newly
+            restricted.
+          </dd>
+        </div>
+        <div>
+          <dt>TIF — Tax-increment financing</dt>
+          <dd>
+            City money drawn from the growth in property taxes inside a designated district and
+            spent on projects there, including affordable housing. TIF is usually one source among
+            several, so on the Affordable Units page it is a label: the TIF button shows every
+            development that received it, whether it is also a tax-credit, Other City/State or ARO
+            development.
+          </dd>
+        </div>
       </dl>
 
       <p className="stub-back">
-        <Link to="/affordability">See the affordability data →</Link>
+        <Link to="/affordability">See the affordability data →</Link>{" "}
+        <Link to="/affordable">See affordable units by ward →</Link>
       </p>
     </div>
   );

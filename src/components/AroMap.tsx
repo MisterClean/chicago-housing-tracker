@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { GeoJSON, MapContainer, TileLayer } from "react-leaflet";
+import { CircleMarker, GeoJSON, MapContainer, Pane, TileLayer, Tooltip } from "react-leaflet";
 import type { Layer, PathOptions } from "leaflet";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
 import { basemapUrl, BASEMAP_ATTRIBUTION } from "../lib/basemap";
-import { aroColor, ARO_NO_DATA, type AroWardRow } from "../lib/aro";
+import { aroColor, ARO_NO_DATA } from "../lib/aro";
 
 type WardFeature = Feature<Geometry, { ward: number }>;
 type WardCollection = FeatureCollection<Geometry, { ward: number }>;
@@ -11,8 +11,23 @@ type WardCollection = FeatureCollection<Geometry, { ward: number }>;
 const GEO_URL = `${import.meta.env.BASE_URL}chicago_wards.json`;
 const CHICAGO_CENTER: [number, number] = [41.8501, -87.6877];
 
+/** A development drawn on top of the wards. */
+export interface MapPoint {
+  id: string;
+  ll: [number, number];
+  units: number;
+  color: string;
+  label: string;
+}
+
 interface Props {
-  rows: AroWardRow[];
+  rows: { ward: number; units: number }[];
+  /** Developments to draw as dots, sized by units. */
+  points?: MapPoint[];
+  /** Ward fill opacity; lowered when dots are drawn so they stay visible. */
+  fillOpacity?: number;
+  /** Fill for a ward's unit count; defaults to the ARO scale. */
+  colorFor?: (units: number | null) => string;
   selectedWard: number | null;
   hoveredWard: number | null;
   onSelectWard: (w: number | null) => void;
@@ -21,6 +36,9 @@ interface Props {
 
 export function AroMap({
   rows,
+  points = [],
+  fillOpacity = 1,
+  colorFor = aroColor,
   selectedWard,
   hoveredWard,
   onSelectWard,
@@ -58,8 +76,8 @@ export function AroMap({
     const isSelected = w === selectedWard;
     const isHovered = w === hoveredWard;
     return {
-      fillColor: row ? aroColor(row.units) : ARO_NO_DATA,
-      fillOpacity: 1,
+      fillColor: row ? colorFor(row.units) : ARO_NO_DATA,
+      fillOpacity,
       color: isSelected ? "#0a1014" : "#fff",
       weight: isSelected ? 3 : isHovered ? 2 : 1,
     };
@@ -90,12 +108,25 @@ export function AroMap({
         <TileLayer url={basemapUrl(prefersDark)} attribution={BASEMAP_ATTRIBUTION} />
         {geoData && (
           <GeoJSON
-            key={`${rows.map((r) => r.units).join(",")}-${selectedWard}-${hoveredWard}`}
+            key={`${rows.map((r) => r.units).join(",")}-${colorFor(1)}-${selectedWard}-${hoveredWard}-${fillOpacity}`}
             data={geoData}
             style={styleFeature as (f?: Feature) => PathOptions}
             onEachFeature={onEachFeature as (f: Feature, l: Layer) => void}
           />
         )}
+        {/* Own pane above the wards: the ward layer is re-mounted on hover and would otherwise cover the dots. */}
+        <Pane name="developments" style={{ zIndex: 450 }}>
+        {points.map((p) => (
+          <CircleMarker
+            key={p.id}
+            center={p.ll}
+            radius={Math.min(16, 2.5 + Math.sqrt(p.units) * 0.7)}
+            pathOptions={{ color: "#fff", weight: 1, fillColor: p.color, fillOpacity: 0.9 }}
+          >
+            <Tooltip direction="top" offset={[0, -4]}>{p.label}</Tooltip>
+          </CircleMarker>
+        ))}
+        </Pane>
       </MapContainer>
     </>
   );

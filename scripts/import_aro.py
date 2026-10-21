@@ -89,6 +89,14 @@ WARDS = "https://data.cityofchicago.org/resource/p293-wvbd.geojson"
 PERMIT_CACHE = ".permits_cache.json"
 OUT = "src/data/aro.json"
 
+# ARO buildings that also received City TIF, from the City's TIF-funded RDA
+# list (mex4-ppfc) matched by location, checked 2026-10-20. Their ARO units
+# stay ARO on the page; the tag only lets the TIF view include them.
+TIF_ARO = {
+    "5105 S. Harper Ave": "City Hyde Park: RDA 2014, 5100 S Lake Park Ave, 180 units",
+    "811 W. Agatite Ave": "Eight Eleven Uptown: Montrose/Clarendon RDA 2016, 381 units incl. 20 affordable",
+}
+
 # Last-resort match radius. 40 m dates only 74% of buildings; 150 m starts
 # picking up the building next door. 75 m is the usable middle.
 # House-number slack for an address match, in street-number units. Chicago
@@ -739,6 +747,8 @@ def main():
             "y": year,
             "m": how,
             "k": kind,
+            "ll": [round(b["lat"], 5), round(b["lon"], 5)],
+            **({"tif": True} if (b.get("Project_Ad") or "").strip() in TIF_ARO else {}),
         })
 
     print(f"  placed in a ward: {len(buildings) - unplaced}/{len(buildings)}")

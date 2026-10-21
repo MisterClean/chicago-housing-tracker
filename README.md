@@ -17,7 +17,7 @@ there — deliberate, since the information architecture will shift as data sour
 | `/` | Landing — hero, section cards, newsletter coverage | Live |
 | `/affordability` | What you can afford — the listings dashboard | Live |
 | `/permitting` | What gets built — units permitted by ward | Live |
-| `/affordable` | What the market is required to build — ARO units by ward | Live |
+| `/affordable` | What gets built affordable — ARO, tax-credit and City/State-funded units by ward and year | Live |
 | `/income` | Who builds — ward income against units permitted | Live |
 | `/glossary` | Reference — AMI, ARO, and how to read the numbers | Live |
 
@@ -153,6 +153,7 @@ dependency — it is a one-shot tool, so run it via `npx` when needed.
 | `src/data/permits.json` | **Automated.** `.github/workflows/refresh-permits.yml` re-runs the importer monthly and commits any change. Also runnable by hand from the Actions tab. |
 | `src/data/aro.json` | Manual — `python3 scripts/import_aro.py`. Needs `.permits_cache.json` present, so run the permit importer first. |
 | `src/data/wards_data.json` | Manual — Zillow listing counts collected by hand, see the pipeline notes above. |
+| `src/data/lihtc.json` | Manual — `python3 scripts/import_lihtc.py`. Tax-credit and City/State-funded developments; hand-reviewed records live in the script, source documents in `sources/` (git-ignored). See BACKLOG item 4 for the refresh pass. |
 
 The permit importer is safe to run unattended because it fails loudly rather
 than committing bad data:

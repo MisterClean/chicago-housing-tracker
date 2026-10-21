@@ -1,6 +1,12 @@
 /* Affordable Units — layers on top of permitting.css, which supplies the
    page frame, controls, map overlay and table. Only what differs lives here. */
 
+/* The intro and the method notes run the full width of the boxes between them. */
+.affordable .pm-header,
+.affordable .pm-method {
+  max-width: none;
+}
+
 /* Two charts side by side: separate measures, separate scales, never one
    plot with two y-axes. */
 
@@ -40,6 +46,98 @@
   align-items: flex-end;
   gap: 3px;
   height: 104px;
+}
+
+/* Y-axis labels on the left, light gridlines behind the bars, and a label
+   over the hovered year. */
+.af-plot {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 8px;
+}
+
+.af-yaxis {
+  position: relative;
+  height: 104px;
+  min-width: 28px;
+  font-size: 10.5px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.af-yaxis span {
+  position: absolute;
+  right: 0;
+  transform: translateY(50%);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.af-plot-area {
+  position: relative;
+}
+
+.af-grid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--rule-soft);
+  pointer-events: none;
+}
+
+.af-bars {
+  position: relative;
+}
+
+.af-bar-wrap {
+  width: 100%;
+  display: flex;
+}
+
+.af-bar-wrap > .af-bar {
+  height: 100%;
+}
+
+.af-bar-wrap.hov .af-bar.share,
+.af-bar-wrap.hov .af-seg {
+  filter: brightness(1.18);
+}
+
+.af-tip {
+  position: absolute;
+  transform: translate(-50%, -8px);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px;
+  border-radius: 3px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 11px;
+  line-height: 1.35;
+  white-space: nowrap;
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.af-tip.left { transform: translate(-12px, -8px); }
+.af-tip.right { transform: translate(calc(-100% + 12px), -8px); }
+
+.af-tip strong {
+  font-weight: 600;
+}
+
+.af-tip-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.af-tip-row .af-sw {
+  width: 8px;
+  height: 8px;
 }
 
 .af-bar-slot {
@@ -181,3 +279,198 @@
   line-height: 1.55;
   color: var(--muted);
 }
+
+/* Program switches sit above the year slider. */
+.af-switches {
+  margin-bottom: 18px;
+}
+
+.af-switches .pm-basis:first-child {
+  margin-top: 0;
+}
+
+.af-split {
+  margin-top: 10px;
+}
+
+/* Two caveats in a row: the controls grid's 28px row gap would leave a hole
+   above the rule, so pull the second one up to match the space below it. */
+.af-caveat + .af-caveat {
+  margin-top: -16px;
+}
+
+/* Stacked year bars: ARO and tax-credit units never overlap, so stacking
+   is honest here. Out-of-range years fade as on the single-series charts. */
+.af-bar.stack {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  background: transparent;
+}
+
+.af-seg {
+  width: 100%;
+  flex: none;
+}
+
+.af-seg.aro { background: #0d96c9; }
+.af-seg.new { background: #00596f; }
+.af-seg.pres { background: #8fc9de; }
+.af-seg.city { background: #d9822b; }
+.af-seg.cha { background: #6b4c9a; }
+
+.af-bar.stack:not(.in) .af-seg { opacity: 0.28; }
+.af-bar.stack:hover .af-seg { filter: brightness(1.15); }
+
+.af-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin-top: 8px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.af-key span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.af-sw {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.af-sw.aro { background: #0d96c9; }
+.af-sw.new { background: #00596f; }
+.af-sw.pres { background: #8fc9de; }
+.af-sw.city { background: #d9822b; }
+.af-sw.cha { background: #6b4c9a; }
+
+.af-empty {
+  height: 104px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12.5px;
+  color: var(--muted);
+  border: 1px dashed var(--rule);
+  margin: 0;
+}
+
+/* Program and type tags in the ward card. */
+.af-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 5px;
+  font-size: 10px;
+  line-height: 15px;
+  border-radius: 3px;
+  background: #0d96c9;
+  color: #fff;
+  vertical-align: 1px;
+  white-space: nowrap;
+}
+
+.af-tag.soft {
+  background: var(--surface-2);
+  color: var(--muted);
+  border: 1px solid var(--rule);
+}
+
+/* Awarded, not yet permitted. */
+.af-pipeline {
+  background: var(--surface);
+}
+
+.af-pipe-wrap {
+  max-height: 420px;
+  overflow-y: auto;
+  border: 1px solid var(--rule-soft);
+}
+
+.af-pipe td,
+.af-pipe th {
+  text-align: left;
+}
+
+.af-pipe td.num,
+.af-pipe th.num {
+  text-align: right;
+}
+
+.af-addr {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.af-pipe th,
+.af-pipe td {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+/* The ward table carries a column per program in the "All" view; tighten it
+   so all of them fit beside the map, and scroll sideways rather than clip. */
+.affordable .pm-body .pm-table-wrap { overflow-x: auto; }
+.affordable .pm-body .pm-table td { padding-left: 7px; padding-right: 7px; }
+.affordable .pm-body .pm-sort { padding-left: 7px; padding-right: 7px; letter-spacing: 0.05em; }
+
+/* Development dots: toggle and key in the map legend */
+.af-dots-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.af-dot-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.af-dot-key span { display: inline-flex; align-items: center; gap: 4px; }
+.af-dot-key i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  box-shadow: 0 0 0 1px var(--rule);
+}
+.af-dot-size { font-style: italic; }
+
+/* Every development */
+.af-devlist-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.af-devlist-tools { display: flex; gap: 8px; align-items: center; }
+.af-search {
+  font: inherit;
+  font-size: 13px;
+  padding: 7px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--ground);
+  color: inherit;
+  min-width: 240px;
+}
+.af-devlist-wrap { max-height: 560px; overflow-y: auto; }
+.af-of { font-weight: 400; color: var(--muted); font-size: 12px; }
+
+/* These tables have plain headers, not sort buttons, so they need their own padding. */
+.af-pipe thead th { padding: 9px 12px; }
+
+.af-cha-toggle { margin-top: 0; }

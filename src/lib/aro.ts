@@ -37,6 +37,10 @@ export interface AroProject {
   m: "exact" | "address" | "manual" | "estimated" | "preSeries" | "none";
   /** Whether the permit was new construction or a conversion of an existing building. */
   k: "new" | "conversion" | null;
+  /** [lat, lon] from the City's map. */
+  ll?: [number, number];
+  /** The building also received City tax-increment financing. */
+  tif?: boolean;
 }
 
 export interface AroData {
