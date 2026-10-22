@@ -101,6 +101,15 @@
   font-weight: 500;
 }
 
+/* A ward's number inside its dot. */
+.sc-dot-num {
+  font-size: 10px;
+  font-weight: 600;
+  fill: #fff;
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+
 .sc-point-label {
   font-size: 10px;
   fill: var(--muted);

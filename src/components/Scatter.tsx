@@ -21,6 +21,8 @@ interface Props {
   labelled?: number[];
   /** Cap on labels drawn. Enough to orient, not so many it reads as noise. */
   maxLabels?: number;
+  /** Draw every ward's number inside a larger dot instead of labelling beside it. */
+  numbersInDots?: boolean;
 }
 
 /**
@@ -177,6 +179,7 @@ export function Scatter({
   onHoverWard,
   labelled = [],
   maxLabels = 12,
+  numbersInDots = false,
 }: Props) {
   const { xs, ys, ysOff, xt, yt, yTop, bandTop, clipped, breakY, line } = useMemo(() => {
     const xMin = 0;
@@ -212,7 +215,50 @@ export function Scatter({
     };
   }, [points]);
 
+  /**
+   * Where each dot is drawn. With numbers in the dots, dots that would overlap
+   * are pushed apart a few pixels so every number stays readable; the hover
+   * tip still gives the exact figures.
+   */
+  const pos = useMemo(() => {
+    const at = new Map<number, { x: number; y: number }>();
+    for (const p of points) at.set(p.ward, { x: xs(p.x), y: p.y > yTop ? ysOff(p.y) : ys(p.y) });
+    if (!numbersInDots) return at;
+    const R = 10.5;
+    const list = [...at.values()];
+    const home = list.map((q) => ({ x: q.x, y: q.y }));
+    for (let it = 0; it < 120; it++) {
+      let moved = false;
+      for (let i = 0; i < list.length; i++) {
+        for (let j = i + 1; j < list.length; j++) {
+          const a = list[i], b = list[j];
+          let dx = b.x - a.x, dy = b.y - a.y;
+          let d = Math.hypot(dx, dy);
+          if (d >= 2 * R) continue;
+          if (d < 0.01) { dx = 1; dy = 0; d = 1; }
+          const push = (2 * R - d) / 2;
+          a.x -= (dx / d) * push; a.y -= (dy / d) * push;
+          b.x += (dx / d) * push; b.y += (dy / d) * push;
+          moved = true;
+        }
+      }
+      // Keep dots inside the plot and on the zero line or above it.
+      list.forEach((q, k) => {
+        q.y = Math.min(q.y, Math.max(home[k].y, PH - R));
+        q.x = Math.max(R, Math.min(PW - R, q.x));
+      });
+      if (!moved) break;
+    }
+    return at;
+  }, [points, xs, ys, ysOff, yTop, numbersInDots]);
+
   const labels = useMemo(() => {
+    if (numbersInDots) {
+      // The number is in the dot; only a ward above the scale break needs its figure beside it.
+      return points
+        .filter((p) => p.y > yTop)
+        .map((p) => ({ ward: p.ward, text: fmtY(p.y), x: pos.get(p.ward)!.x + 15, y: pos.get(p.ward)!.y + 4 }));
+    }
     const prepared = points.map((p) => {
       const off = p.y > yTop;
       return {
@@ -224,7 +270,7 @@ export function Scatter({
       };
     });
     return placeLabels(prepared, labelled, maxLabels);
-  }, [points, xs, ys, ysOff, yTop, fmtY, labelled, maxLabels]);
+  }, [points, xs, ys, ysOff, yTop, fmtY, labelled, maxLabels, numbersInDots, pos]);
 
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="scatter" role="img" aria-label={`${yLabel} against ${xLabel}`}>
@@ -284,11 +330,16 @@ export function Scatter({
           />
         )}
 
-        {points.map((p) => {
+        {[...points]
+          // The highlighted ward is drawn last so it sits on top of its neighbours.
+          .sort((a, b) =>
+            Number(a.ward === selectedWard || a.ward === hoveredWard) -
+            Number(b.ward === selectedWard || b.ward === hoveredWard))
+          .map((p) => {
           const active = p.ward === selectedWard || p.ward === hoveredWard;
           const off = p.y > yTop;
-          const cx = xs(p.x);
-          const cy = off ? ysOff(p.y) : ys(p.y);
+          const cx = pos.get(p.ward)!.x;
+          const cy = pos.get(p.ward)!.y;
           const handlers = {
             style: { cursor: "pointer" },
             onMouseEnter: () => onHoverWard(p.ward),
@@ -306,15 +357,20 @@ export function Scatter({
               <circle
                 cx={cx}
                 cy={cy}
-                r={active ? 8 : 5}
+                r={numbersInDots ? (active ? 12 : 10) : active ? 8 : 5}
                 fill={active ? DOT_ACTIVE : DOT}
-                fillOpacity={active ? 1 : 0.72}
+                fillOpacity={active ? 1 : numbersInDots ? 0.9 : 0.72}
                 stroke="var(--ground)"
                 strokeWidth={1.5}
                 {...handlers}
               >
                 {tip}
               </circle>
+              {numbersInDots && (
+                <text x={cx} y={cy + 3.5} textAnchor="middle" className="sc-dot-num">
+                  {p.ward}
+                </text>
+              )}
             </g>
           );
         })}

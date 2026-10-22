@@ -162,7 +162,7 @@ export function IncomeBuilding() {
                 : "New housing units approved per year, "}
               {from}&ndash;{to}. Where one ward runs far ahead of the rest, the scale breaks and
               that ward is drawn above the break, labelled with its real figure, so the others
-              stay readable. Hover any point for its numbers.
+              stay readable. Where dots crowd, they are nudged apart so every ward number shows; hover any point for its exact numbers.
             </p>
           </figcaption>
           <Scatter
@@ -172,6 +172,7 @@ export function IncomeBuilding() {
             fmtX={usd}
             fmtY={num}
             labelled={label(rawPoints)}
+            numbersInDots
             selectedWard={selectedWard}
             hoveredWard={hoveredWard}
             onSelectWard={setSelectedWard}
