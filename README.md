@@ -15,9 +15,9 @@ there — deliberate, since the information architecture will shift as data sour
 | Route | Stage | Status |
 |---|---|---|
 | `/` | Landing — hero, section cards, newsletter coverage | Live |
-| `/affordability` | What you can afford — the listings dashboard | Live |
-| `/permitting` | What gets built — units permitted by ward | Live |
+| `/permitting` | What gets built — Permitted Units, units permitted by ward | Live |
 | `/affordable` | What gets built affordable — ARO, tax-credit and City/State-funded units by ward and year | Live |
+| `/affordability` | What you can afford — the listings dashboard | Live |
 | `/income` | Who builds — ward income against units permitted | Live |
 | `/glossary` | Reference — AMI, ARO, and how to read the numbers | Live |
 

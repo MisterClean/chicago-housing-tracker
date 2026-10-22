@@ -27,6 +27,12 @@ export const postUrl = (slug: string) => `${BLOG_URL}/p/${slug}`;
 
 /** Newest first. */
 export const BLOG_POSTS: BlogPost[] = [
+  { date: "2026-10-20", slug: "it-doesnt-have-to-be-this-hard-to", title: "It doesn't have to be this hard to finance affordable housing" , subtitle: "A partial solution to complex capital stacks", author: "Adam Drakulic" },
+  { date: "2026-10-15", slug: "confronting-chicagos-multi-layered", title: "Confronting Chicago's multi-layered housing crisis" , subtitle: "Part four in our series on Chicago's upcoming mayoral election", author: "Richard Day" },
+  { date: "2026-09-30", slug: "a-better-plan-for-growth", title: "A better plan for growth" , subtitle: "Aldermen Yancy and Mosley take a creative and ambitious new approach", author: "Richard Day" },
+  { date: "2026-09-15", slug: "were-in-a-dead-heat-with-omaha-nebraska", title: "A list of places that permitted more housing than Chicago last year" , subtitle: "We're in a dead heat with Omaha, Nebraska", author: "Richard Day" },
+  { date: "2026-09-09", slug: "lets-fix-the-plumbing-code", title: "Let's fix the plumbing code" , subtitle: "Lead and oakum joints belong in museums", author: "Daniel Koslovsky" },
+  { date: "2026-09-02", slug: "illinois-already-killed-parking-mandates", title: "Illinois already killed parking mandates. Chicago should finish the job." , subtitle: "The hard part is done, don't make it harder", author: "Alex Montero" },
   { date: "2026-08-11", slug: "lets-fix-the-building-code", title: "A plan to cut construction costs" , subtitle: "Four changes to boost construction across Chicago", author: "Daniel Koslovsky" },
   { date: "2026-08-06", slug: "an-agenda-for-family-friendly-housing", title: "An agenda for family-friendly housing" , subtitle: "In high-income neighborhoods, Chicago rewards studio apartments and mansions", author: "Adam Drakulic" },
   { date: "2026-07-17", slug: "a-milestone-to-celebrate", title: "A milestone worth celebrating" , subtitle: "Our first posting to policy success", author: "Richard Day" },

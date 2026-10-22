@@ -27,18 +27,9 @@ export interface Section {
 
 export const SECTIONS: Section[] = [
   {
-    slug: "affordability",
-    nav: "Affordability Map",
-    title: "Affordability Map",
-    blurb:
-      "Ward-by-ward view of active for-rent and for-sale listings within reach based on area median income standards.",
-    stage: "What you can afford",
-    status: "live",
-  },
-  {
     slug: "permitting",
-    nav: "Permitting Map",
-    title: "Permitting Map",
+    nav: "Permitted Units",
+    title: "Permitted Units",
     blurb: "New housing permits approved by ward.",
     stage: "What gets built",
     status: "live",
@@ -60,6 +51,15 @@ export const SECTIONS: Section[] = [
     blurb:
       "Income-restricted homes from the Affordable Requirements Ordinance, low-income housing tax credits and City and State funding, by ward and year.",
     stage: "What gets built affordable",
+    status: "live",
+  },
+  {
+    slug: "affordability",
+    nav: "Affordability Map",
+    title: "Affordability Map",
+    blurb:
+      "Ward-by-ward view of active for-rent and for-sale listings within reach based on area median income standards.",
+    stage: "What you can afford",
     status: "live",
   },
   {

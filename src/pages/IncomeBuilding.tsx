@@ -205,7 +205,7 @@ export function IncomeBuilding() {
         Income is median household income from the 2024 American Community Survey five-year
         estimates, measured at census tract level and aggregated to wards by tract centroid,
         weighted by occupied housing units. Permits are new-construction housing units for the
-        selected years; see the <a href="/permitting">Permitting Map</a> for how those are counted.
+        selected years; see the <a href="/permitting">Permitted Units</a> page for how those are counted.
       </p>
     </div>
   );

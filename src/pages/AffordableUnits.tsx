@@ -590,12 +590,12 @@ export function AffordableUnits() {
                   </div>
                 </div>
                 {(() => {
-                  const devs = wardDevelopments(everything, activeRow.ward);
+                  const devs = wardDevelopments(inYears(everything, from, to), activeRow.ward);
                   return (
                     <div className="pm-projects">
-                      <span className="pm-card-label">Largest developments (all years)</span>
+                      <span className="pm-card-label">Largest developments, {from === to ? from : `${from}–${to}`}</span>
                       {devs.length === 0 ? (
-                        <p className="pm-projects-none">None in this ward.</p>
+                        <p className="pm-projects-none">None in this ward in these years.</p>
                       ) : (
                         <ul>
                           {devs.map((d) => (
@@ -896,7 +896,7 @@ export function AffordableUnits() {
           the ordinance&rsquo;s in-lieu fee instead.
         </p>
         <p>
-          Wards are on current (2023) boundaries, as on the Permitting Map. Terms such as AMI,
+          Wards are on current (2023) boundaries, as on the Permitted Units page. Terms such as AMI,
           LIHTC and new versus preserved are explained in the <Link to="/glossary">glossary</Link>.
         </p>
       </div>

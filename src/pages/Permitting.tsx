@@ -109,7 +109,7 @@ export function Permitting() {
     <div className="permitting">
       <header className="pm-header">
         <p className="eyebrow">What gets built</p>
-        <h1 className="page-title">Permitting Map</h1>
+        <h1 className="page-title">Permitted Units</h1>
         <p className="page-lede">
           New housing units approved by ward.
         </p>

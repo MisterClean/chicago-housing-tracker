@@ -1,9 +1,8 @@
 /* Affordable Units — layers on top of permitting.css, which supplies the
    page frame, controls, map overlay and table. Only what differs lives here. */
 
-/* The intro and the method notes run the full width of the boxes between them. */
-.affordable .pm-header,
-.affordable .pm-method {
+/* The intro runs the full width of the controls box below it. */
+.affordable .pm-header {
   max-width: none;
 }
 
