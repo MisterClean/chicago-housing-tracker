@@ -516,7 +516,7 @@ tbody tr.row-selected {
 }
 
 /* ---------- House typography ----------
-   Single geometric sans throughout, matching the partner sites. Labels are
+   Single geometric sans throughout. Labels are
    uppercase and tracked; numerics use tabular figures for column alignment. */
 
 .control-label,
@@ -583,7 +583,7 @@ tbody td {
   letter-spacing: -0.015em;
 }
 
-/* Square everything: both partner sites use hard corners on data chrome. */
+/* Square everything: hard corners on data chrome. */
 .legend,
 .ward-detail,
 .map-status,

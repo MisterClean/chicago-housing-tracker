@@ -1,8 +1,7 @@
 // Sequential blue ramp (light -> dark), matching the validated dataviz palette's
 // step-100..700 sequential hue. Darker = higher affordability share.
 /**
- * Sequential ramp in the partners' azure family (the brand
- * #00abe5 hue). Verified monotone light→dark with every adjacent lightness gap
+ * Sequential ramp in the site's azure family (the #00abe5 accent hue). Verified monotone light→dark with every adjacent lightness gap
  * >= 0.06, so the steps stay distinguishable.
  */
 export const SEQUENTIAL_BLUE = [
@@ -20,7 +19,7 @@ export const NO_DATA_COLOR = "#e4e9eb";
 // Diverging poles from the reference palette (blue = improved, red = worsened),
 // gray = ~flat. Magnitude is encoded as opacity rather than invented intermediate
 // hex steps, since only the poles + neutral midpoint are documented.
-/** Azure improves / coral worsens — one pole per partner palette. */
+/** Azure improves / coral worsens. */
 export const DIVERGING_POSITIVE = "#0d96c9";
 export const DIVERGING_NEGATIVE = "#d85a42";
 export const DIVERGING_NEUTRAL = "#c3cbcf";

@@ -104,19 +104,13 @@
           "pctAffordable100AMI": 10.44,
           "pctAffordable60AMIFlat": 0
         },
-        "alt": {
-          "avgRent": 2184,
-          "avgHomePrice": 531903
-        },
         "ranks": {
           "rentAffordable100AMI": 45,
           "rentAffordable60ARO": 47,
           "medianRent": 44,
-          "altAvgRent": 43,
           "saleAffordable100AMI": 46,
           "saleAffordable60ARO": 37,
           "medianSalePrice": 47,
-          "altAvgHomePrice": 49,
           "combinedAffordable60ARO": 48,
           "average": 45.11111111
         },
@@ -223,19 +217,13 @@
           "pctAffordable100AMI": 7.87,
           "pctAffordable60AMIFlat": 0
         },
-        "alt": {
-          "avgRent": 2184,
-          "avgHomePrice": 531903
-        },
         "ranks": {
           "rentAffordable100AMI": 45,
           "rentAffordable60ARO": 46,
           "medianRent": 45,
-          "altAvgRent": 43,
           "saleAffordable100AMI": 43,
           "saleAffordable60ARO": 39,
           "medianSalePrice": 47,
-          "altAvgHomePrice": 49,
           "combinedAffordable60ARO": 46,
           "average": 44.77777778
         },
@@ -384,19 +372,13 @@
           "pctAffordable100AMI": 5.12,
           "pctAffordable60AMIFlat": 0.16
         },
-        "alt": {
-          "avgRent": 2573,
-          "avgHomePrice": 390621
-        },
         "ranks": {
           "rentAffordable100AMI": 48,
           "rentAffordable60ARO": 48,
           "medianRent": 46,
-          "altAvgRent": 49,
           "saleAffordable100AMI": 44,
           "saleAffordable60ARO": 37,
           "medianSalePrice": 41,
-          "altAvgHomePrice": 40,
           "combinedAffordable60ARO": 49,
           "average": 44.66666667
         },
@@ -503,19 +485,13 @@
           "pctAffordable100AMI": 5.52,
           "pctAffordable60AMIFlat": 0.07
         },
-        "alt": {
-          "avgRent": 2573,
-          "avgHomePrice": 390621
-        },
         "ranks": {
           "rentAffordable100AMI": 49,
           "rentAffordable60ARO": 49,
           "medianRent": 47,
-          "altAvgRent": 49,
           "saleAffordable100AMI": 46,
           "saleAffordable60ARO": 47,
           "medianSalePrice": 43,
-          "altAvgHomePrice": 40,
           "combinedAffordable60ARO": 49,
           "average": 46.55555556
         },
@@ -664,19 +640,13 @@
           "pctAffordable100AMI": 13.75,
           "pctAffordable60AMIFlat": 2.29
         },
-        "alt": {
-          "avgRent": 1807,
-          "avgHomePrice": 275583
-        },
         "ranks": {
           "rentAffordable100AMI": 44,
           "rentAffordable60ARO": 38,
           "medianRent": 45,
-          "altAvgRent": 34,
           "saleAffordable100AMI": 32,
           "saleAffordable60ARO": 25,
           "medianSalePrice": 26,
-          "altAvgHomePrice": 23,
           "combinedAffordable60ARO": 36,
           "average": 33.66666667
         },
@@ -783,19 +753,13 @@
           "pctAffordable100AMI": 14.31,
           "pctAffordable60AMIFlat": 3.28
         },
-        "alt": {
-          "avgRent": 1807,
-          "avgHomePrice": 275583
-        },
         "ranks": {
           "rentAffordable100AMI": 44,
           "rentAffordable60ARO": 27,
           "medianRent": 44,
-          "altAvgRent": 34,
           "saleAffordable100AMI": 32,
           "saleAffordable60ARO": 32,
           "medianSalePrice": 26,
-          "altAvgHomePrice": 23,
           "combinedAffordable60ARO": 28,
           "average": 32.22222222
         },
@@ -944,19 +908,13 @@
           "pctAffordable100AMI": 42.31,
           "pctAffordable60AMIFlat": 2.28
         },
-        "alt": {
-          "avgRent": 1947,
-          "avgHomePrice": 293660
-        },
         "ranks": {
           "rentAffordable100AMI": 29,
           "rentAffordable60ARO": 29,
           "medianRent": 29,
-          "altAvgRent": 39,
           "saleAffordable100AMI": 27,
           "saleAffordable60ARO": 28,
           "medianSalePrice": 24,
-          "altAvgHomePrice": 28,
           "combinedAffordable60ARO": 26,
           "average": 28.77777778
         },
@@ -1063,19 +1021,13 @@
           "pctAffordable100AMI": 47.57,
           "pctAffordable60AMIFlat": 3.57
         },
-        "alt": {
-          "avgRent": 1947,
-          "avgHomePrice": 293660
-        },
         "ranks": {
           "rentAffordable100AMI": 24,
           "rentAffordable60ARO": 22,
           "medianRent": 24,
-          "altAvgRent": 39,
           "saleAffordable100AMI": 19,
           "saleAffordable60ARO": 27,
           "medianSalePrice": 16,
-          "altAvgHomePrice": 28,
           "combinedAffordable60ARO": 21,
           "average": 24.44444444
         },
@@ -1224,19 +1176,13 @@
           "pctAffordable100AMI": 42.98,
           "pctAffordable60AMIFlat": 9.3
         },
-        "alt": {
-          "avgRent": 1450,
-          "avgHomePrice": 189820
-        },
         "ranks": {
           "rentAffordable100AMI": 33,
           "rentAffordable60ARO": 24,
           "medianRent": 31,
-          "altAvgRent": 12,
           "saleAffordable100AMI": 8,
           "saleAffordable60ARO": 15,
           "medianSalePrice": 3,
-          "altAvgHomePrice": 9,
           "combinedAffordable60ARO": 23,
           "average": 17.55555556
         },
@@ -1343,19 +1289,13 @@
           "pctAffordable100AMI": 39.35,
           "pctAffordable60AMIFlat": 6.51
         },
-        "alt": {
-          "avgRent": 1450,
-          "avgHomePrice": 189820
-        },
         "ranks": {
           "rentAffordable100AMI": 34,
           "rentAffordable60ARO": 24,
           "medianRent": 33,
-          "altAvgRent": 12,
           "saleAffordable100AMI": 15,
           "saleAffordable60ARO": 17,
           "medianSalePrice": 3,
-          "altAvgHomePrice": 9,
           "combinedAffordable60ARO": 24,
           "average": 19
         },
@@ -1504,19 +1444,13 @@
           "pctAffordable100AMI": 60.13,
           "pctAffordable60AMIFlat": 17.61
         },
-        "alt": {
-          "avgRent": 1345,
-          "avgHomePrice": 154511
-        },
         "ranks": {
           "rentAffordable100AMI": 5,
           "rentAffordable60ARO": 8,
           "medianRent": 9,
-          "altAvgRent": 4,
           "saleAffordable100AMI": 9,
           "saleAffordable60ARO": 8,
           "medianSalePrice": 11,
-          "altAvgHomePrice": 3,
           "combinedAffordable60ARO": 6,
           "average": 7
         },
@@ -1623,19 +1557,13 @@
           "pctAffordable100AMI": 71.53,
           "pctAffordable60AMIFlat": 15.51
         },
-        "alt": {
-          "avgRent": 1345,
-          "avgHomePrice": 154511
-        },
         "ranks": {
           "rentAffordable100AMI": 3,
           "rentAffordable60ARO": 6,
           "medianRent": 10,
-          "altAvgRent": 4,
           "saleAffordable100AMI": 9,
           "saleAffordable60ARO": 8,
           "medianSalePrice": 8,
-          "altAvgHomePrice": 3,
           "combinedAffordable60ARO": 5,
           "average": 6.222222222
         },
@@ -1784,19 +1712,13 @@
           "pctAffordable100AMI": 77.62,
           "pctAffordable60AMIFlat": 23.57
         },
-        "alt": {
-          "avgRent": 1340,
-          "avgHomePrice": 152301
-        },
         "ranks": {
           "rentAffordable100AMI": 4,
           "rentAffordable60ARO": 5,
           "medianRent": 3,
-          "altAvgRent": 3,
           "saleAffordable100AMI": 2,
           "saleAffordable60ARO": 2,
           "medianSalePrice": 1,
-          "altAvgHomePrice": 2,
           "combinedAffordable60ARO": 2,
           "average": 2.666666667
         },
@@ -1903,19 +1825,13 @@
           "pctAffordable100AMI": 76.07,
           "pctAffordable60AMIFlat": 30.28
         },
-        "alt": {
-          "avgRent": 1340,
-          "avgHomePrice": 152301
-        },
         "ranks": {
           "rentAffordable100AMI": 6,
           "rentAffordable60ARO": 5,
           "medianRent": 3,
-          "altAvgRent": 3,
           "saleAffordable100AMI": 2,
           "saleAffordable60ARO": 1,
           "medianSalePrice": 2,
-          "altAvgHomePrice": 2,
           "combinedAffordable60ARO": 2,
           "average": 2.888888889
         },
@@ -2064,19 +1980,13 @@
           "pctAffordable100AMI": 60.13,
           "pctAffordable60AMIFlat": 19.94
         },
-        "alt": {
-          "avgRent": 1361,
-          "avgHomePrice": 157244
-        },
         "ranks": {
           "rentAffordable100AMI": 8,
           "rentAffordable60ARO": 12,
           "medianRent": 6,
-          "altAvgRent": 5,
           "saleAffordable100AMI": 6,
           "saleAffordable60ARO": 7,
           "medianSalePrice": 8,
-          "altAvgHomePrice": 5,
           "combinedAffordable60ARO": 10,
           "average": 7.444444444
         },
@@ -2183,19 +2093,13 @@
           "pctAffordable100AMI": 72.29,
           "pctAffordable60AMIFlat": 27.71
         },
-        "alt": {
-          "avgRent": 1361,
-          "avgHomePrice": 157244
-        },
         "ranks": {
           "rentAffordable100AMI": 7,
           "rentAffordable60ARO": 7,
           "medianRent": 2,
-          "altAvgRent": 5,
           "saleAffordable100AMI": 4,
           "saleAffordable60ARO": 5,
           "medianSalePrice": 6,
-          "altAvgHomePrice": 5,
           "combinedAffordable60ARO": 4,
           "average": 5
         },
@@ -2344,19 +2248,13 @@
           "pctAffordable100AMI": 59.67,
           "pctAffordable60AMIFlat": 21.81
         },
-        "alt": {
-          "avgRent": 1536,
-          "avgHomePrice": 145143
-        },
         "ranks": {
           "rentAffordable100AMI": 14,
           "rentAffordable60ARO": 13,
           "medianRent": 11,
-          "altAvgRent": 18,
           "saleAffordable100AMI": 1,
           "saleAffordable60ARO": 3,
           "medianSalePrice": 2,
-          "altAvgHomePrice": 1,
           "combinedAffordable60ARO": 5,
           "average": 7.555555556
         },
@@ -2463,19 +2361,13 @@
           "pctAffordable100AMI": 64.42,
           "pctAffordable60AMIFlat": 25.32
         },
-        "alt": {
-          "avgRent": 1536,
-          "avgHomePrice": 145143
-        },
         "ranks": {
           "rentAffordable100AMI": 15,
           "rentAffordable60ARO": 11,
           "medianRent": 11,
-          "altAvgRent": 18,
           "saleAffordable100AMI": 1,
           "saleAffordable60ARO": 2,
           "medianSalePrice": 1,
-          "altAvgHomePrice": 1,
           "combinedAffordable60ARO": 7,
           "average": 7.444444444
         },
@@ -2624,19 +2516,13 @@
           "pctAffordable100AMI": 51.46,
           "pctAffordable60AMIFlat": 15.2
         },
-        "alt": {
-          "avgRent": 1457,
-          "avgHomePrice": 170928
-        },
         "ranks": {
           "rentAffordable100AMI": 7,
           "rentAffordable60ARO": 6,
           "medianRent": 5,
-          "altAvgRent": 13,
           "saleAffordable100AMI": 7,
           "saleAffordable60ARO": 9,
           "medianSalePrice": 7,
-          "altAvgHomePrice": 7,
           "combinedAffordable60ARO": 9,
           "average": 7.777777778
         },
@@ -2743,19 +2629,13 @@
           "pctAffordable100AMI": 63.35,
           "pctAffordable60AMIFlat": 18.85
         },
-        "alt": {
-          "avgRent": 1457,
-          "avgHomePrice": 170928
-        },
         "ranks": {
           "rentAffordable100AMI": 8,
           "rentAffordable60ARO": 3,
           "medianRent": 4,
-          "altAvgRent": 13,
           "saleAffordable100AMI": 5,
           "saleAffordable60ARO": 7,
           "medianSalePrice": 5,
-          "altAvgHomePrice": 7,
           "combinedAffordable60ARO": 6,
           "average": 6.444444444
         },
@@ -2904,19 +2784,13 @@
           "pctAffordable100AMI": 36.67,
           "pctAffordable60AMIFlat": 2
         },
-        "alt": {
-          "avgRent": 1632,
-          "avgHomePrice": 277740
-        },
         "ranks": {
           "rentAffordable100AMI": 19,
           "rentAffordable60ARO": 18,
           "medianRent": 21,
-          "altAvgRent": 26,
           "saleAffordable100AMI": 41,
           "saleAffordable60ARO": 37,
           "medianSalePrice": 35,
-          "altAvgHomePrice": 24,
           "combinedAffordable60ARO": 19,
           "average": 26.66666667
         },
@@ -3023,19 +2897,13 @@
           "pctAffordable100AMI": 40.66,
           "pctAffordable60AMIFlat": 1.65
         },
-        "alt": {
-          "avgRent": 1632,
-          "avgHomePrice": 277740
-        },
         "ranks": {
           "rentAffordable100AMI": 17,
           "rentAffordable60ARO": 20,
           "medianRent": 18,
-          "altAvgRent": 26,
           "saleAffordable100AMI": 37,
           "saleAffordable60ARO": 46,
           "medianSalePrice": 30,
-          "altAvgHomePrice": 24,
           "combinedAffordable60ARO": 20,
           "average": 26.44444444
         },
@@ -3184,19 +3052,13 @@
           "pctAffordable100AMI": 48.39,
           "pctAffordable60AMIFlat": 7.53
         },
-        "alt": {
-          "avgRent": 1421,
-          "avgHomePrice": 270544
-        },
         "ranks": {
           "rentAffordable100AMI": 10,
           "rentAffordable60ARO": 11,
           "medianRent": 7,
-          "altAvgRent": 7,
           "saleAffordable100AMI": 23,
           "saleAffordable60ARO": 17,
           "medianSalePrice": 25,
-          "altAvgHomePrice": 20,
           "combinedAffordable60ARO": 12,
           "average": 14.66666667
         },
@@ -3303,19 +3165,13 @@
           "pctAffordable100AMI": 57.43,
           "pctAffordable60AMIFlat": 4.95
         },
-        "alt": {
-          "avgRent": 1421,
-          "avgHomePrice": 270544
-        },
         "ranks": {
           "rentAffordable100AMI": 2,
           "rentAffordable60ARO": 4,
           "medianRent": 6,
-          "altAvgRent": 7,
           "saleAffordable100AMI": 21,
           "saleAffordable60ARO": 19,
           "medianSalePrice": 18,
-          "altAvgHomePrice": 20,
           "combinedAffordable60ARO": 13,
           "average": 12.22222222
         },
@@ -3464,19 +3320,13 @@
           "pctAffordable100AMI": 38.2,
           "pctAffordable60AMIFlat": 2.25
         },
-        "alt": {
-          "avgRent": 1525,
-          "avgHomePrice": 286167
-        },
         "ranks": {
           "rentAffordable100AMI": 13,
           "rentAffordable60ARO": 15,
           "medianRent": 14,
-          "altAvgRent": 17,
           "saleAffordable100AMI": 34,
           "saleAffordable60ARO": 27,
           "medianSalePrice": 23,
-          "altAvgHomePrice": 25,
           "combinedAffordable60ARO": 17,
           "average": 20.55555556
         },
@@ -3583,19 +3433,13 @@
           "pctAffordable100AMI": 29.49,
           "pctAffordable60AMIFlat": 2.56
         },
-        "alt": {
-          "avgRent": 1525,
-          "avgHomePrice": 286167
-        },
         "ranks": {
           "rentAffordable100AMI": 19,
           "rentAffordable60ARO": 18,
           "medianRent": 22,
-          "altAvgRent": 17,
           "saleAffordable100AMI": 27,
           "saleAffordable60ARO": 29,
           "medianSalePrice": 22,
-          "altAvgHomePrice": 25,
           "combinedAffordable60ARO": 22,
           "average": 22.33333333
         },
@@ -3744,19 +3588,13 @@
           "pctAffordable100AMI": 55.36,
           "pctAffordable60AMIFlat": 14.29
         },
-        "alt": {
-          "avgRent": 1291,
-          "avgHomePrice": 259443
-        },
         "ranks": {
           "rentAffordable100AMI": 1,
           "rentAffordable60ARO": 2,
           "medianRent": 1,
-          "altAvgRent": 1,
           "saleAffordable100AMI": 19,
           "saleAffordable60ARO": 14,
           "medianSalePrice": 14,
-          "altAvgHomePrice": 18,
           "combinedAffordable60ARO": 7,
           "average": 8.555555556
         },
@@ -3863,19 +3701,13 @@
           "pctAffordable100AMI": 53.33,
           "pctAffordable60AMIFlat": 21.67
         },
-        "alt": {
-          "avgRent": 1291,
-          "avgHomePrice": 259443
-        },
         "ranks": {
           "rentAffordable100AMI": 13,
           "rentAffordable60ARO": 9,
           "medianRent": 8,
-          "altAvgRent": 1,
           "saleAffordable100AMI": 8,
           "saleAffordable60ARO": 9,
           "medianSalePrice": 11,
-          "altAvgHomePrice": 18,
           "combinedAffordable60ARO": 11,
           "average": 9.777777778
         },
@@ -4024,19 +3856,13 @@
           "pctAffordable100AMI": 53.27,
           "pctAffordable60AMIFlat": 9.35
         },
-        "alt": {
-          "avgRent": 1426,
-          "avgHomePrice": 215678
-        },
         "ranks": {
           "rentAffordable100AMI": 3,
           "rentAffordable60ARO": 3,
           "medianRent": 2,
-          "altAvgRent": 10,
           "saleAffordable100AMI": 14,
           "saleAffordable60ARO": 12,
           "medianSalePrice": 17,
-          "altAvgHomePrice": 12,
           "combinedAffordable60ARO": 8,
           "average": 9
         },
@@ -4143,19 +3969,13 @@
           "pctAffordable100AMI": 73.11,
           "pctAffordable60AMIFlat": 19.33
         },
-        "alt": {
-          "avgRent": 1426,
-          "avgHomePrice": 215678
-        },
         "ranks": {
           "rentAffordable100AMI": 1,
           "rentAffordable60ARO": 1,
           "medianRent": 1,
-          "altAvgRent": 10,
           "saleAffordable100AMI": 10,
           "saleAffordable60ARO": 12,
           "medianSalePrice": 14,
-          "altAvgHomePrice": 12,
           "combinedAffordable60ARO": 3,
           "average": 7.111111111
         },
@@ -4304,19 +4124,13 @@
           "pctAffordable100AMI": 62.56,
           "pctAffordable60AMIFlat": 16.75
         },
-        "alt": {
-          "avgRent": 1478,
-          "avgHomePrice": 155188
-        },
         "ranks": {
           "rentAffordable100AMI": 6,
           "rentAffordable60ARO": 1,
           "medianRent": 10,
-          "altAvgRent": 15,
           "saleAffordable100AMI": 4,
           "saleAffordable60ARO": 1,
           "medianSalePrice": 9,
-          "altAvgHomePrice": 4,
           "combinedAffordable60ARO": 1,
           "average": 5.666666667
         },
@@ -4423,19 +4237,13 @@
           "pctAffordable100AMI": 68.24,
           "pctAffordable60AMIFlat": 18.92
         },
-        "alt": {
-          "avgRent": 1478,
-          "avgHomePrice": 155188
-        },
         "ranks": {
           "rentAffordable100AMI": 4,
           "rentAffordable60ARO": 2,
           "medianRent": 9,
-          "altAvgRent": 15,
           "saleAffordable100AMI": 7,
           "saleAffordable60ARO": 4,
           "medianSalePrice": 10,
-          "altAvgHomePrice": 4,
           "combinedAffordable60ARO": 1,
           "average": 6.222222222
         },
@@ -4584,19 +4392,13 @@
           "pctAffordable100AMI": 64.59,
           "pctAffordable60AMIFlat": 15.41
         },
-        "alt": {
-          "avgRent": 1317,
-          "avgHomePrice": 166665
-        },
         "ranks": {
           "rentAffordable100AMI": 9,
           "rentAffordable60ARO": 7,
           "medianRent": 8,
-          "altAvgRent": 2,
           "saleAffordable100AMI": 3,
           "saleAffordable60ARO": 4,
           "medianSalePrice": 6,
-          "altAvgHomePrice": 6,
           "combinedAffordable60ARO": 4,
           "average": 5.444444444
         },
@@ -4703,19 +4505,13 @@
           "pctAffordable100AMI": 71.53,
           "pctAffordable60AMIFlat": 25.23
         },
-        "alt": {
-          "avgRent": 1317,
-          "avgHomePrice": 166665
-        },
         "ranks": {
           "rentAffordable100AMI": 5,
           "rentAffordable60ARO": 8,
           "medianRent": 7,
-          "altAvgRent": 2,
           "saleAffordable100AMI": 6,
           "saleAffordable60ARO": 6,
           "medianSalePrice": 9,
-          "altAvgHomePrice": 6,
           "combinedAffordable60ARO": 8,
           "average": 6.333333333
         },
@@ -4864,19 +4660,13 @@
           "pctAffordable100AMI": 38.89,
           "pctAffordable60AMIFlat": 9.26
         },
-        "alt": {
-          "avgRent": 2045,
-          "avgHomePrice": 234501
-        },
         "ranks": {
           "rentAffordable100AMI": 22,
           "rentAffordable60ARO": 20,
           "medianRent": 26,
-          "altAvgRent": 41,
           "saleAffordable100AMI": 10,
           "saleAffordable60ARO": 11,
           "medianSalePrice": 13,
-          "altAvgHomePrice": 14,
           "combinedAffordable60ARO": 18,
           "average": 19.44444444
         },
@@ -4983,19 +4773,13 @@
           "pctAffordable100AMI": 44.36,
           "pctAffordable60AMIFlat": 22.56
         },
-        "alt": {
-          "avgRent": 2045,
-          "avgHomePrice": 234501
-        },
         "ranks": {
           "rentAffordable100AMI": 18,
           "rentAffordable60ARO": 17,
           "medianRent": 17,
-          "altAvgRent": 41,
           "saleAffordable100AMI": 11,
           "saleAffordable60ARO": 15,
           "medianSalePrice": 13,
-          "altAvgHomePrice": 14,
           "combinedAffordable60ARO": 16,
           "average": 18
         },
@@ -5144,19 +4928,13 @@
           "pctAffordable100AMI": 21.48,
           "pctAffordable60AMIFlat": 0.74
         },
-        "alt": {
-          "avgRent": 1512,
-          "avgHomePrice": 259333
-        },
         "ranks": {
           "rentAffordable100AMI": 41,
           "rentAffordable60ARO": 32,
           "medianRent": 39,
-          "altAvgRent": 16,
           "saleAffordable100AMI": 17,
           "saleAffordable60ARO": 21,
           "medianSalePrice": 22,
-          "altAvgHomePrice": 17,
           "combinedAffordable60ARO": 31,
           "average": 26.22222222
         },
@@ -5263,19 +5041,13 @@
           "pctAffordable100AMI": 29.01,
           "pctAffordable60AMIFlat": 4.94
         },
-        "alt": {
-          "avgRent": 1512,
-          "avgHomePrice": 259333
-        },
         "ranks": {
           "rentAffordable100AMI": 31,
           "rentAffordable60ARO": 34,
           "medianRent": 32,
-          "altAvgRent": 16,
           "saleAffordable100AMI": 20,
           "saleAffordable60ARO": 20,
           "medianSalePrice": 24,
-          "altAvgHomePrice": 17,
           "combinedAffordable60ARO": 31,
           "average": 25
         },
@@ -5424,19 +5196,13 @@
           "pctAffordable100AMI": 44.65,
           "pctAffordable60AMIFlat": 6.28
         },
-        "alt": {
-          "avgRent": 1538,
-          "avgHomePrice": 200740
-        },
         "ranks": {
           "rentAffordable100AMI": 25,
           "rentAffordable60ARO": 19,
           "medianRent": 23,
-          "altAvgRent": 19,
           "saleAffordable100AMI": 11,
           "saleAffordable60ARO": 10,
           "medianSalePrice": 16,
-          "altAvgHomePrice": 10,
           "combinedAffordable60ARO": 16,
           "average": 16.55555556
         },
@@ -5543,19 +5309,13 @@
           "pctAffordable100AMI": 49.49,
           "pctAffordable60AMIFlat": 8.7
         },
-        "alt": {
-          "avgRent": 1538,
-          "avgHomePrice": 200740
-        },
         "ranks": {
           "rentAffordable100AMI": 21,
           "rentAffordable60ARO": 15,
           "medianRent": 21,
-          "altAvgRent": 19,
           "saleAffordable100AMI": 13,
           "saleAffordable60ARO": 14,
           "medianSalePrice": 17,
-          "altAvgHomePrice": 10,
           "combinedAffordable60ARO": 14,
           "average": 16
         },
@@ -5704,19 +5464,13 @@
           "pctAffordable100AMI": 42.86,
           "pctAffordable60AMIFlat": 13.49
         },
-        "alt": {
-          "avgRent": 1595,
-          "avgHomePrice": 182116
-        },
         "ranks": {
           "rentAffordable100AMI": 32,
           "rentAffordable60ARO": 17,
           "medianRent": 33,
-          "altAvgRent": 24,
           "saleAffordable100AMI": 5,
           "saleAffordable60ARO": 6,
           "medianSalePrice": 4,
-          "altAvgHomePrice": 8,
           "combinedAffordable60ARO": 14,
           "average": 15.88888889
         },
@@ -5823,19 +5577,13 @@
           "pctAffordable100AMI": 56.36,
           "pctAffordable60AMIFlat": 23.27
         },
-        "alt": {
-          "avgRent": 1595,
-          "avgHomePrice": 182116
-        },
         "ranks": {
           "rentAffordable100AMI": 20,
           "rentAffordable60ARO": 14,
           "medianRent": 20,
-          "altAvgRent": 24,
           "saleAffordable100AMI": 3,
           "saleAffordable60ARO": 3,
           "medianSalePrice": 4,
-          "altAvgHomePrice": 8,
           "combinedAffordable60ARO": 9,
           "average": 11.66666667
         },
@@ -5984,19 +5732,13 @@
           "pctAffordable100AMI": 50,
           "pctAffordable60AMIFlat": 9.62
         },
-        "alt": {
-          "avgRent": 1403,
-          "avgHomePrice": 226658
-        },
         "ranks": {
           "rentAffordable100AMI": 2,
           "rentAffordable60ARO": 4,
           "medianRent": 4,
-          "altAvgRent": 6,
           "saleAffordable100AMI": 24,
           "saleAffordable60ARO": 18,
           "medianSalePrice": 19,
-          "altAvgHomePrice": 13,
           "combinedAffordable60ARO": 11,
           "average": 11.22222222
         },
@@ -6103,19 +5845,13 @@
           "pctAffordable100AMI": 47.89,
           "pctAffordable60AMIFlat": 7.04
         },
-        "alt": {
-          "avgRent": 1403,
-          "avgHomePrice": 226658
-        },
         "ranks": {
           "rentAffordable100AMI": 9,
           "rentAffordable60ARO": 12,
           "medianRent": 5,
-          "altAvgRent": 6,
           "saleAffordable100AMI": 31,
           "saleAffordable60ARO": 18,
           "medianSalePrice": 19,
-          "altAvgHomePrice": 13,
           "combinedAffordable60ARO": 15,
           "average": 14.22222222
         },
@@ -6264,19 +6000,13 @@
           "pctAffordable100AMI": 33.33,
           "pctAffordable60AMIFlat": 2.47
         },
-        "alt": {
-          "avgRent": 1429,
-          "avgHomePrice": 271204
-        },
         "ranks": {
           "rentAffordable100AMI": 15,
           "rentAffordable60ARO": 16,
           "medianRent": 15,
-          "altAvgRent": 11,
           "saleAffordable100AMI": 18,
           "saleAffordable60ARO": 19,
           "medianSalePrice": 20,
-          "altAvgHomePrice": 21,
           "combinedAffordable60ARO": 20,
           "average": 17.22222222
         },
@@ -6383,19 +6113,13 @@
           "pctAffordable100AMI": 39.06,
           "pctAffordable60AMIFlat": 9.38
         },
-        "alt": {
-          "avgRent": 1429,
-          "avgHomePrice": 271204
-        },
         "ranks": {
           "rentAffordable100AMI": 11,
           "rentAffordable60ARO": 16,
           "medianRent": 15,
-          "altAvgRent": 11,
           "saleAffordable100AMI": 25,
           "saleAffordable60ARO": 21,
           "medianSalePrice": 25,
-          "altAvgHomePrice": 21,
           "combinedAffordable60ARO": 19,
           "average": 18.22222222
         },
@@ -6544,19 +6268,13 @@
           "pctAffordable100AMI": 59.33,
           "pctAffordable60AMIFlat": 4.31
         },
-        "alt": {
-          "avgRent": 1424,
-          "avgHomePrice": 208841
-        },
         "ranks": {
           "rentAffordable100AMI": 12,
           "rentAffordable60ARO": 9,
           "medianRent": 12,
-          "altAvgRent": 9,
           "saleAffordable100AMI": 12,
           "saleAffordable60ARO": 5,
           "medianSalePrice": 27,
-          "altAvgHomePrice": 11,
           "combinedAffordable60ARO": 3,
           "average": 11.11111111
         },
@@ -6663,19 +6381,13 @@
           "pctAffordable100AMI": 57.86,
           "pctAffordable60AMIFlat": 5.35
         },
-        "alt": {
-          "avgRent": 1424,
-          "avgHomePrice": 208841
-        },
         "ranks": {
           "rentAffordable100AMI": 12,
           "rentAffordable60ARO": 10,
           "medianRent": 13,
-          "altAvgRent": 9,
           "saleAffordable100AMI": 16,
           "saleAffordable60ARO": 10,
           "medianSalePrice": 23,
-          "altAvgHomePrice": 11,
           "combinedAffordable60ARO": 10,
           "average": 12.66666667
         },
@@ -6824,19 +6536,13 @@
           "pctAffordable100AMI": 37.01,
           "pctAffordable60AMIFlat": 1.41
         },
-        "alt": {
-          "avgRent": 1606,
-          "avgHomePrice": 313093
-        },
         "ranks": {
           "rentAffordable100AMI": 31,
           "rentAffordable60ARO": 30,
           "medianRent": 30,
-          "altAvgRent": 25,
           "saleAffordable100AMI": 38,
           "saleAffordable60ARO": 34,
           "medianSalePrice": 31,
-          "altAvgHomePrice": 30,
           "combinedAffordable60ARO": 29,
           "average": 30.88888889
         },
@@ -6943,19 +6649,13 @@
           "pctAffordable100AMI": 44.14,
           "pctAffordable60AMIFlat": 0.31
         },
-        "alt": {
-          "avgRent": 1606,
-          "avgHomePrice": 313093
-        },
         "ranks": {
           "rentAffordable100AMI": 22,
           "rentAffordable60ARO": 25,
           "medianRent": 27,
-          "altAvgRent": 25,
           "saleAffordable100AMI": 30,
           "saleAffordable60ARO": 31,
           "medianSalePrice": 28,
-          "altAvgHomePrice": 30,
           "combinedAffordable60ARO": 25,
           "average": 27
         },
@@ -7104,19 +6804,13 @@
           "pctAffordable100AMI": 32.22,
           "pctAffordable60AMIFlat": 1.11
         },
-        "alt": {
-          "avgRent": 1883,
-          "avgHomePrice": 420353
-        },
         "ranks": {
           "rentAffordable100AMI": 36,
           "rentAffordable60ARO": 26,
           "medianRent": 35,
-          "altAvgRent": 38,
           "saleAffordable100AMI": 46,
           "saleAffordable60ARO": 37,
           "medianSalePrice": 40,
-          "altAvgHomePrice": 43,
           "combinedAffordable60ARO": 25,
           "average": 36.22222222
         },
@@ -7223,19 +6917,13 @@
           "pctAffordable100AMI": 27.92,
           "pctAffordable60AMIFlat": 1.67
         },
-        "alt": {
-          "avgRent": 1883,
-          "avgHomePrice": 420353
-        },
         "ranks": {
           "rentAffordable100AMI": 37,
           "rentAffordable60ARO": 29,
           "medianRent": 37,
-          "altAvgRent": 38,
           "saleAffordable100AMI": 42,
           "saleAffordable60ARO": 30,
           "medianSalePrice": 44,
-          "altAvgHomePrice": 43,
           "combinedAffordable60ARO": 29,
           "average": 36.55555556
         },
@@ -7384,19 +7072,13 @@
           "pctAffordable100AMI": 10.13,
           "pctAffordable60AMIFlat": 0.38
         },
-        "alt": {
-          "avgRent": 2314,
-          "avgHomePrice": 364369
-        },
         "ranks": {
           "rentAffordable100AMI": 46,
           "rentAffordable60ARO": 42,
           "medianRent": 49,
-          "altAvgRent": 45,
           "saleAffordable100AMI": 37,
           "saleAffordable60ARO": 32,
           "medianSalePrice": 39,
-          "altAvgHomePrice": 37,
           "combinedAffordable60ARO": 42,
           "average": 41
         },
@@ -7503,19 +7185,13 @@
           "pctAffordable100AMI": 8.33,
           "pctAffordable60AMIFlat": 0.26
         },
-        "alt": {
-          "avgRent": 2314,
-          "avgHomePrice": 364369
-        },
         "ranks": {
           "rentAffordable100AMI": 46,
           "rentAffordable60ARO": 39,
           "medianRent": 49,
-          "altAvgRent": 45,
           "saleAffordable100AMI": 41,
           "saleAffordable60ARO": 43,
           "medianSalePrice": 42,
-          "altAvgHomePrice": 37,
           "combinedAffordable60ARO": 39,
           "average": 42.33333333
         },
@@ -7664,19 +7340,13 @@
           "pctAffordable100AMI": 27.92,
           "pctAffordable60AMIFlat": 4.27
         },
-        "alt": {
-          "avgRent": 1762,
-          "avgHomePrice": 274107
-        },
         "ranks": {
           "rentAffordable100AMI": 40,
           "rentAffordable60ARO": 22,
           "medianRent": 41,
-          "altAvgRent": 31,
           "saleAffordable100AMI": 22,
           "saleAffordable60ARO": 16,
           "medianSalePrice": 21,
-          "altAvgHomePrice": 22,
           "combinedAffordable60ARO": 22,
           "average": 26.33333333
         },
@@ -7783,19 +7453,13 @@
           "pctAffordable100AMI": 38.08,
           "pctAffordable60AMIFlat": 7.35
         },
-        "alt": {
-          "avgRent": 1762,
-          "avgHomePrice": 274107
-        },
         "ranks": {
           "rentAffordable100AMI": 32,
           "rentAffordable60ARO": 21,
           "medianRent": 31,
-          "altAvgRent": 31,
           "saleAffordable100AMI": 18,
           "saleAffordable60ARO": 11,
           "medianSalePrice": 20,
-          "altAvgHomePrice": 22,
           "combinedAffordable60ARO": 18,
           "average": 22.66666667
         },
@@ -7944,19 +7608,13 @@
           "pctAffordable100AMI": 51.11,
           "pctAffordable60AMIFlat": 10.56
         },
-        "alt": {
-          "avgRent": 1423,
-          "avgHomePrice": 263225
-        },
         "ranks": {
           "rentAffordable100AMI": 16,
           "rentAffordable60ARO": 14,
           "medianRent": 19,
-          "altAvgRent": 8,
           "saleAffordable100AMI": 26,
           "saleAffordable60ARO": 20,
           "medianSalePrice": 28,
-          "altAvgHomePrice": 19,
           "combinedAffordable60ARO": 15,
           "average": 18.33333333
         },
@@ -8063,19 +7721,13 @@
           "pctAffordable100AMI": 46.5,
           "pctAffordable60AMIFlat": 6.29
         },
-        "alt": {
-          "avgRent": 1423,
-          "avgHomePrice": 263225
-        },
         "ranks": {
           "rentAffordable100AMI": 25,
           "rentAffordable60ARO": 19,
           "medianRent": 23,
-          "altAvgRent": 8,
           "saleAffordable100AMI": 14,
           "saleAffordable60ARO": 16,
           "medianSalePrice": 27,
-          "altAvgHomePrice": 19,
           "combinedAffordable60ARO": 17,
           "average": 18.66666667
         },
@@ -8224,19 +7876,13 @@
           "pctAffordable100AMI": 36.05,
           "pctAffordable60AMIFlat": 1.16
         },
-        "alt": {
-          "avgRent": 1587,
-          "avgHomePrice": 368101
-        },
         "ranks": {
           "rentAffordable100AMI": 28,
           "rentAffordable60ARO": 25,
           "medianRent": 28,
-          "altAvgRent": 23,
           "saleAffordable100AMI": 36,
           "saleAffordable60ARO": 37,
           "medianSalePrice": 42,
-          "altAvgHomePrice": 39,
           "combinedAffordable60ARO": 28,
           "average": 31.77777778
         },
@@ -8343,19 +7989,13 @@
           "pctAffordable100AMI": 38.31,
           "pctAffordable60AMIFlat": 2.6
         },
-        "alt": {
-          "avgRent": 1587,
-          "avgHomePrice": 368101
-        },
         "ranks": {
           "rentAffordable100AMI": 26,
           "rentAffordable60ARO": 26,
           "medianRent": 19,
-          "altAvgRent": 23,
           "saleAffordable100AMI": 24,
           "saleAffordable60ARO": 26,
           "medianSalePrice": 32,
-          "altAvgHomePrice": 39,
           "combinedAffordable60ARO": 26,
           "average": 26.77777778
         },
@@ -8504,19 +8144,13 @@
           "pctAffordable100AMI": 49.29,
           "pctAffordable60AMIFlat": 0.71
         },
-        "alt": {
-          "avgRent": 1559,
-          "avgHomePrice": 341322
-        },
         "ranks": {
           "rentAffordable100AMI": 18,
           "rentAffordable60ARO": 21,
           "medianRent": 17,
-          "altAvgRent": 21,
           "saleAffordable100AMI": 30,
           "saleAffordable60ARO": 24,
           "medianSalePrice": 38,
-          "altAvgHomePrice": 33,
           "combinedAffordable60ARO": 21,
           "average": 24.77777778
         },
@@ -8623,19 +8257,13 @@
           "pctAffordable100AMI": 42.61,
           "pctAffordable60AMIFlat": 3.98
         },
-        "alt": {
-          "avgRent": 1559,
-          "avgHomePrice": 341322
-        },
         "ranks": {
           "rentAffordable100AMI": 23,
           "rentAffordable60ARO": 23,
           "medianRent": 25,
-          "altAvgRent": 21,
           "saleAffordable100AMI": 28,
           "saleAffordable60ARO": 23,
           "medianSalePrice": 33,
-          "altAvgHomePrice": 33,
           "combinedAffordable60ARO": 23,
           "average": 25.77777778
         },
@@ -8784,19 +8412,13 @@
           "pctAffordable100AMI": 7.69,
           "pctAffordable60AMIFlat": 0.24
         },
-        "alt": {
-          "avgRent": 2246,
-          "avgHomePrice": 510879
-        },
         "ranks": {
           "rentAffordable100AMI": 47,
           "rentAffordable60ARO": 43,
           "medianRent": 48,
-          "altAvgRent": 44,
           "saleAffordable100AMI": 46,
           "saleAffordable60ARO": 37,
           "medianSalePrice": 50,
-          "altAvgHomePrice": 48,
           "combinedAffordable60ARO": 43,
           "average": 45.11111111
         },
@@ -8903,19 +8525,13 @@
           "pctAffordable100AMI": 7.11,
           "pctAffordable60AMIFlat": 0.47
         },
-        "alt": {
-          "avgRent": 2246,
-          "avgHomePrice": 510879
-        },
         "ranks": {
           "rentAffordable100AMI": 47,
           "rentAffordable60ARO": 45,
           "medianRent": 48,
-          "altAvgRent": 44,
           "saleAffordable100AMI": 48,
           "saleAffordable60ARO": 48,
           "medianSalePrice": 48,
-          "altAvgHomePrice": 48,
           "combinedAffordable60ARO": 45,
           "average": 46.77777778
         },
@@ -9064,19 +8680,13 @@
           "pctAffordable100AMI": 48.39,
           "pctAffordable60AMIFlat": 3.58
         },
-        "alt": {
-          "avgRent": 1826,
-          "avgHomePrice": 443772
-        },
         "ranks": {
           "rentAffordable100AMI": 21,
           "rentAffordable60ARO": 31,
           "medianRent": 22,
-          "altAvgRent": 35,
           "saleAffordable100AMI": 35,
           "saleAffordable60ARO": 29,
           "medianSalePrice": 37,
-          "altAvgHomePrice": 46,
           "combinedAffordable60ARO": 30,
           "average": 31.77777778
         },
@@ -9183,19 +8793,13 @@
           "pctAffordable100AMI": 43.67,
           "pctAffordable60AMIFlat": 2.45
         },
-        "alt": {
-          "avgRent": 1826,
-          "avgHomePrice": 443772
-        },
         "ranks": {
           "rentAffordable100AMI": 27,
           "rentAffordable60ARO": 33,
           "medianRent": 29,
-          "altAvgRent": 35,
           "saleAffordable100AMI": 33,
           "saleAffordable60ARO": 28,
           "medianSalePrice": 34,
-          "altAvgHomePrice": 46,
           "combinedAffordable60ARO": 32,
           "average": 33
         },
@@ -9344,19 +8948,13 @@
           "pctAffordable100AMI": 4.99,
           "pctAffordable60AMIFlat": 0.07
         },
-        "alt": {
-          "avgRent": 2546,
-          "avgHomePrice": 341683
-        },
         "ranks": {
           "rentAffordable100AMI": 49,
           "rentAffordable60ARO": 46,
           "medianRent": 47,
-          "altAvgRent": 47,
           "saleAffordable100AMI": 43,
           "saleAffordable60ARO": 37,
           "medianSalePrice": 30,
-          "altAvgHomePrice": 34,
           "combinedAffordable60ARO": 47,
           "average": 42.22222222
         },
@@ -9463,19 +9061,13 @@
           "pctAffordable100AMI": 6.11,
           "pctAffordable60AMIFlat": 0.56
         },
-        "alt": {
-          "avgRent": 2546,
-          "avgHomePrice": 341683
-        },
         "ranks": {
           "rentAffordable100AMI": 48,
           "rentAffordable60ARO": 42,
           "medianRent": 46,
-          "altAvgRent": 47,
           "saleAffordable100AMI": 44,
           "saleAffordable60ARO": 44,
           "medianSalePrice": 29,
-          "altAvgHomePrice": 34,
           "combinedAffordable60ARO": 42,
           "average": 41.77777778
         },
@@ -9624,19 +9216,13 @@
           "pctAffordable100AMI": 28.75,
           "pctAffordable60AMIFlat": 0.49
         },
-        "alt": {
-          "avgRent": 1956,
-          "avgHomePrice": 484824
-        },
         "ranks": {
           "rentAffordable100AMI": 38,
           "rentAffordable60ARO": 39,
           "medianRent": 38,
-          "altAvgRent": 40,
           "saleAffordable100AMI": 40,
           "saleAffordable60ARO": 30,
           "medianSalePrice": 44,
-          "altAvgHomePrice": 47,
           "combinedAffordable60ARO": 39,
           "average": 39.44444444
         },
@@ -9743,19 +9329,13 @@
           "pctAffordable100AMI": 23.97,
           "pctAffordable60AMIFlat": 0.63
         },
-        "alt": {
-          "avgRent": 1956,
-          "avgHomePrice": 484824
-        },
         "ranks": {
           "rentAffordable100AMI": 40,
           "rentAffordable60ARO": 41,
           "medianRent": 39,
-          "altAvgRent": 40,
           "saleAffordable100AMI": 36,
           "saleAffordable60ARO": 33,
           "medianSalePrice": 46,
-          "altAvgHomePrice": 47,
           "combinedAffordable60ARO": 40,
           "average": 40.22222222
         },
@@ -9904,19 +9484,13 @@
           "pctAffordable100AMI": 19.61,
           "pctAffordable60AMIFlat": 1.18
         },
-        "alt": {
-          "avgRent": 1770,
-          "avgHomePrice": 364612
-        },
         "ranks": {
           "rentAffordable100AMI": 42,
           "rentAffordable60ARO": 37,
           "medianRent": 40,
-          "altAvgRent": 33,
           "saleAffordable100AMI": 42,
           "saleAffordable60ARO": 26,
           "medianSalePrice": 43,
-          "altAvgHomePrice": 38,
           "combinedAffordable60ARO": 37,
           "average": 37.55555556
         },
@@ -10023,19 +9597,13 @@
           "pctAffordable100AMI": 17.67,
           "pctAffordable60AMIFlat": 1.5
         },
-        "alt": {
-          "avgRent": 1770,
-          "avgHomePrice": 364612
-        },
         "ranks": {
           "rentAffordable100AMI": 42,
           "rentAffordable60ARO": 37,
           "medianRent": 41,
-          "altAvgRent": 33,
           "saleAffordable100AMI": 40,
           "saleAffordable60ARO": 35,
           "medianSalePrice": 39,
-          "altAvgHomePrice": 38,
           "combinedAffordable60ARO": 38,
           "average": 38.11111111
         },
@@ -10184,19 +9752,13 @@
           "pctAffordable100AMI": 49.38,
           "pctAffordable60AMIFlat": 5
         },
-        "alt": {
-          "avgRent": 1471,
-          "avgHomePrice": 244125
-        },
         "ranks": {
           "rentAffordable100AMI": 11,
           "rentAffordable60ARO": 10,
           "medianRent": 13,
-          "altAvgRent": 14,
           "saleAffordable100AMI": 15,
           "saleAffordable60ARO": 13,
           "medianSalePrice": 29,
-          "altAvgHomePrice": 16,
           "combinedAffordable60ARO": 13,
           "average": 14.88888889
         },
@@ -10303,19 +9865,13 @@
           "pctAffordable100AMI": 55.98,
           "pctAffordable60AMIFlat": 11
         },
-        "alt": {
-          "avgRent": 1471,
-          "avgHomePrice": 244125
-        },
         "ranks": {
           "rentAffordable100AMI": 14,
           "rentAffordable60ARO": 13,
           "medianRent": 14,
-          "altAvgRent": 14,
           "saleAffordable100AMI": 12,
           "saleAffordable60ARO": 13,
           "medianSalePrice": 21,
-          "altAvgHomePrice": 16,
           "combinedAffordable60ARO": 12,
           "average": 14.33333333
         },
@@ -10464,19 +10020,13 @@
           "pctAffordable100AMI": 21.85,
           "pctAffordable60AMIFlat": 0.84
         },
-        "alt": {
-          "avgRent": 1577,
-          "avgHomePrice": 344429
-        },
         "ranks": {
           "rentAffordable100AMI": 34,
           "rentAffordable60ARO": 27,
           "medianRent": 36,
-          "altAvgRent": 22,
           "saleAffordable100AMI": 29,
           "saleAffordable60ARO": 37,
           "medianSalePrice": 33,
-          "altAvgHomePrice": 35,
           "combinedAffordable60ARO": 33,
           "average": 31.77777778
         },
@@ -10583,19 +10133,13 @@
           "pctAffordable100AMI": 22.48,
           "pctAffordable60AMIFlat": 3.88
         },
-        "alt": {
-          "avgRent": 1577,
-          "avgHomePrice": 344429
-        },
         "ranks": {
           "rentAffordable100AMI": 38,
           "rentAffordable60ARO": 28,
           "medianRent": 38,
-          "altAvgRent": 22,
           "saleAffordable100AMI": 26,
           "saleAffordable60ARO": 24,
           "medianSalePrice": 38,
-          "altAvgHomePrice": 35,
           "combinedAffordable60ARO": 30,
           "average": 31
         },
@@ -10744,19 +10288,13 @@
           "pctAffordable100AMI": 36.26,
           "pctAffordable60AMIFlat": 0
         },
-        "alt": {
-          "avgRent": 1766,
-          "avgHomePrice": 420435
-        },
         "ranks": {
           "rentAffordable100AMI": 23,
           "rentAffordable60ARO": 35,
           "medianRent": 25,
-          "altAvgRent": 32,
           "saleAffordable100AMI": 28,
           "saleAffordable60ARO": 37,
           "medianSalePrice": 36,
-          "altAvgHomePrice": 44,
           "combinedAffordable60ARO": 38,
           "average": 33.11111111
         },
@@ -10863,19 +10401,13 @@
           "pctAffordable100AMI": 33.89,
           "pctAffordable60AMIFlat": 1.11
         },
-        "alt": {
-          "avgRent": 1766,
-          "avgHomePrice": 420435
-        },
         "ranks": {
           "rentAffordable100AMI": 29,
           "rentAffordable60ARO": 31,
           "medianRent": 28,
-          "altAvgRent": 32,
           "saleAffordable100AMI": 34,
           "saleAffordable60ARO": 36,
           "medianSalePrice": 40,
-          "altAvgHomePrice": 44,
           "combinedAffordable60ARO": 34,
           "average": 34.22222222
         },
@@ -11024,19 +10556,13 @@
           "pctAffordable100AMI": 42.69,
           "pctAffordable60AMIFlat": 0.77
         },
-        "alt": {
-          "avgRent": 1704,
-          "avgHomePrice": 328835
-        },
         "ranks": {
           "rentAffordable100AMI": 30,
           "rentAffordable60ARO": 36,
           "medianRent": 32,
-          "altAvgRent": 28,
           "saleAffordable100AMI": 13,
           "saleAffordable60ARO": 22,
           "medianSalePrice": 18,
-          "altAvgHomePrice": 32,
           "combinedAffordable60ARO": 32,
           "average": 27
         },
@@ -11143,19 +10669,13 @@
           "pctAffordable100AMI": 33.55,
           "pctAffordable60AMIFlat": 0.66
         },
-        "alt": {
-          "avgRent": 1704,
-          "avgHomePrice": 328835
-        },
         "ranks": {
           "rentAffordable100AMI": 36,
           "rentAffordable60ARO": 44,
           "medianRent": 36,
-          "altAvgRent": 28,
           "saleAffordable100AMI": 17,
           "saleAffordable60ARO": 22,
           "medianSalePrice": 31,
-          "altAvgHomePrice": 32,
           "combinedAffordable60ARO": 43,
           "average": 32.11111111
         },
@@ -11304,19 +10824,13 @@
           "pctAffordable100AMI": 42.65,
           "pctAffordable60AMIFlat": 0.37
         },
-        "alt": {
-          "avgRent": 2464,
-          "avgHomePrice": 363803
-        },
         "ranks": {
           "rentAffordable100AMI": 24,
           "rentAffordable60ARO": 49,
           "medianRent": 20,
-          "altAvgRent": 46,
           "saleAffordable100AMI": 31,
           "saleAffordable60ARO": 33,
           "medianSalePrice": 32,
-          "altAvgHomePrice": 36,
           "combinedAffordable60ARO": 46,
           "average": 35.22222222
         },
@@ -11423,19 +10937,13 @@
           "pctAffordable100AMI": 53.52,
           "pctAffordable60AMIFlat": 0.94
         },
-        "alt": {
-          "avgRent": 2464,
-          "avgHomePrice": 363803
-        },
         "ranks": {
           "rentAffordable100AMI": 10,
           "rentAffordable60ARO": 40,
           "medianRent": 12,
-          "altAvgRent": 46,
           "saleAffordable100AMI": 38,
           "saleAffordable60ARO": 37,
           "medianSalePrice": 36,
-          "altAvgHomePrice": 36,
           "combinedAffordable60ARO": 41,
           "average": 32.88888889
         },
@@ -11584,19 +11092,13 @@
           "pctAffordable100AMI": 1.27,
           "pctAffordable60AMIFlat": 0.06
         },
-        "alt": {
-          "avgRent": 2558,
-          "avgHomePrice": 318526
-        },
         "ranks": {
           "rentAffordable100AMI": 50,
           "rentAffordable60ARO": 50,
           "medianRent": 50,
-          "altAvgRent": 48,
           "saleAffordable100AMI": 45,
           "saleAffordable60ARO": 36,
           "medianSalePrice": 45,
-          "altAvgHomePrice": 31,
           "combinedAffordable60ARO": 50,
           "average": 45
         },
@@ -11703,19 +11205,13 @@
           "pctAffordable100AMI": 0.94,
           "pctAffordable60AMIFlat": 0.1
         },
-        "alt": {
-          "avgRent": 2558,
-          "avgHomePrice": 318526
-        },
         "ranks": {
           "rentAffordable100AMI": 50,
           "rentAffordable60ARO": 50,
           "medianRent": 50,
-          "altAvgRent": 48,
           "saleAffordable100AMI": 47,
           "saleAffordable60ARO": 45,
           "medianSalePrice": 37,
-          "altAvgHomePrice": 31,
           "combinedAffordable60ARO": 50,
           "average": 45.33333333
         },
@@ -11864,19 +11360,13 @@
           "pctAffordable100AMI": 15.85,
           "pctAffordable60AMIFlat": 0.15
         },
-        "alt": {
-          "avgRent": 2576,
-          "avgHomePrice": 546801
-        },
         "ranks": {
           "rentAffordable100AMI": 43,
           "rentAffordable60ARO": 45,
           "medianRent": 43,
-          "altAvgRent": 50,
           "saleAffordable100AMI": 46,
           "saleAffordable60ARO": 37,
           "medianSalePrice": 49,
-          "altAvgHomePrice": 50,
           "combinedAffordable60ARO": 45,
           "average": 45.33333333
         },
@@ -11983,19 +11473,13 @@
           "pctAffordable100AMI": 18.16,
           "pctAffordable60AMIFlat": 0.41
         },
-        "alt": {
-          "avgRent": 2576,
-          "avgHomePrice": 546801
-        },
         "ranks": {
           "rentAffordable100AMI": 43,
           "rentAffordable60ARO": 48,
           "medianRent": 43,
-          "altAvgRent": 50,
           "saleAffordable100AMI": 45,
           "saleAffordable60ARO": 41,
           "medianSalePrice": 49,
-          "altAvgHomePrice": 50,
           "combinedAffordable60ARO": 48,
           "average": 46.33333333
         },
@@ -12144,19 +11628,13 @@
           "pctAffordable100AMI": 29.18,
           "pctAffordable60AMIFlat": 0.41
         },
-        "alt": {
-          "avgRent": 2101,
-          "avgHomePrice": 420521
-        },
         "ranks": {
           "rentAffordable100AMI": 39,
           "rentAffordable60ARO": 44,
           "medianRent": 42,
-          "altAvgRent": 42,
           "saleAffordable100AMI": 46,
           "saleAffordable60ARO": 37,
           "medianSalePrice": 46,
-          "altAvgHomePrice": 45,
           "combinedAffordable60ARO": 44,
           "average": 42.77777778
         },
@@ -12263,19 +11741,13 @@
           "pctAffordable100AMI": 22.58,
           "pctAffordable60AMIFlat": 0.22
         },
-        "alt": {
-          "avgRent": 2101,
-          "avgHomePrice": 420521
-        },
         "ranks": {
           "rentAffordable100AMI": 41,
           "rentAffordable60ARO": 47,
           "medianRent": 42,
-          "altAvgRent": 42,
           "saleAffordable100AMI": 49,
           "saleAffordable60ARO": 49,
           "medianSalePrice": 45,
-          "altAvgHomePrice": 45,
           "combinedAffordable60ARO": 47,
           "average": 45.22222222
         },
@@ -12424,19 +11896,13 @@
           "pctAffordable100AMI": 39.68,
           "pctAffordable60AMIFlat": 1.59
         },
-        "alt": {
-          "avgRent": 1745,
-          "avgHomePrice": 416731
-        },
         "ranks": {
           "rentAffordable100AMI": 26,
           "rentAffordable60ARO": 33,
           "medianRent": 24,
-          "altAvgRent": 30,
           "saleAffordable100AMI": 25,
           "saleAffordable60ARO": 37,
           "medianSalePrice": 34,
-          "altAvgHomePrice": 42,
           "combinedAffordable60ARO": 34,
           "average": 31.66666667
         },
@@ -12543,19 +12009,13 @@
           "pctAffordable100AMI": 32.2,
           "pctAffordable60AMIFlat": 0.98
         },
-        "alt": {
-          "avgRent": 1745,
-          "avgHomePrice": 416731
-        },
         "ranks": {
           "rentAffordable100AMI": 30,
           "rentAffordable60ARO": 36,
           "medianRent": 30,
-          "altAvgRent": 30,
           "saleAffordable100AMI": 39,
           "saleAffordable60ARO": 38,
           "medianSalePrice": 41,
-          "altAvgHomePrice": 42,
           "combinedAffordable60ARO": 36,
           "average": 35.77777778
         },
@@ -12704,19 +12164,13 @@
           "pctAffordable100AMI": 36.48,
           "pctAffordable60AMIFlat": 2.89
         },
-        "alt": {
-          "avgRent": 1851,
-          "avgHomePrice": 310477
-        },
         "ranks": {
           "rentAffordable100AMI": 35,
           "rentAffordable60ARO": 41,
           "medianRent": 34,
-          "altAvgRent": 36,
           "saleAffordable100AMI": 33,
           "saleAffordable60ARO": 31,
           "medianSalePrice": 12,
-          "altAvgHomePrice": 29,
           "combinedAffordable60ARO": 41,
           "average": 32.44444444
         },
@@ -12823,19 +12277,13 @@
           "pctAffordable100AMI": 37.6,
           "pctAffordable60AMIFlat": 1.76
         },
-        "alt": {
-          "avgRent": 1851,
-          "avgHomePrice": 310477
-        },
         "ranks": {
           "rentAffordable100AMI": 35,
           "rentAffordable60ARO": 38,
           "medianRent": 35,
-          "altAvgRent": 36,
           "saleAffordable100AMI": 35,
           "saleAffordable60ARO": 40,
           "medianSalePrice": 15,
-          "altAvgHomePrice": 29,
           "combinedAffordable60ARO": 37,
           "average": 33.33333333
         },
@@ -12984,19 +12432,13 @@
           "pctAffordable100AMI": 34.97,
           "pctAffordable60AMIFlat": 0.89
         },
-        "alt": {
-          "avgRent": 1853,
-          "avgHomePrice": 394572
-        },
         "ranks": {
           "rentAffordable100AMI": 37,
           "rentAffordable60ARO": 40,
           "medianRent": 37,
-          "altAvgRent": 37,
           "saleAffordable100AMI": 39,
           "saleAffordable60ARO": 37,
           "medianSalePrice": 48,
-          "altAvgHomePrice": 41,
           "combinedAffordable60ARO": 40,
           "average": 39.55555556
         },
@@ -13103,19 +12545,13 @@
           "pctAffordable100AMI": 26.96,
           "pctAffordable60AMIFlat": 0.85
         },
-        "alt": {
-          "avgRent": 1853,
-          "avgHomePrice": 394572
-        },
         "ranks": {
           "rentAffordable100AMI": 39,
           "rentAffordable60ARO": 43,
           "medianRent": 40,
-          "altAvgRent": 37,
           "saleAffordable100AMI": 50,
           "saleAffordable60ARO": 50,
           "medianSalePrice": 50,
-          "altAvgHomePrice": 41,
           "combinedAffordable60ARO": 44,
           "average": 43.77777778
         },
@@ -13264,19 +12700,13 @@
           "pctAffordable100AMI": 43.16,
           "pctAffordable60AMIFlat": 3.75
         },
-        "alt": {
-          "avgRent": 1726,
-          "avgHomePrice": 286706
-        },
         "ranks": {
           "rentAffordable100AMI": 27,
           "rentAffordable60ARO": 34,
           "medianRent": 27,
-          "altAvgRent": 29,
           "saleAffordable100AMI": 21,
           "saleAffordable60ARO": 35,
           "medianSalePrice": 5,
-          "altAvgHomePrice": 26,
           "combinedAffordable60ARO": 35,
           "average": 26.55555556
         },
@@ -13383,19 +12813,13 @@
           "pctAffordable100AMI": 38.47,
           "pctAffordable60AMIFlat": 3.14
         },
-        "alt": {
-          "avgRent": 1726,
-          "avgHomePrice": 286706
-        },
         "ranks": {
           "rentAffordable100AMI": 33,
           "rentAffordable60ARO": 35,
           "medianRent": 34,
-          "altAvgRent": 29,
           "saleAffordable100AMI": 23,
           "saleAffordable60ARO": 42,
           "medianSalePrice": 7,
-          "altAvgHomePrice": 26,
           "combinedAffordable60ARO": 35,
           "average": 29.33333333
         },
@@ -13544,19 +12968,13 @@
           "pctAffordable100AMI": 60.25,
           "pctAffordable60AMIFlat": 4.81
         },
-        "alt": {
-          "avgRent": 1544,
-          "avgHomePrice": 239476
-        },
         "ranks": {
           "rentAffordable100AMI": 17,
           "rentAffordable60ARO": 28,
           "medianRent": 16,
-          "altAvgRent": 20,
           "saleAffordable100AMI": 16,
           "saleAffordable60ARO": 23,
           "medianSalePrice": 10,
-          "altAvgHomePrice": 15,
           "combinedAffordable60ARO": 24,
           "average": 18.77777778
         },
@@ -13663,19 +13081,13 @@
           "pctAffordable100AMI": 57.2,
           "pctAffordable60AMIFlat": 3.53
         },
-        "alt": {
-          "avgRent": 1544,
-          "avgHomePrice": 239476
-        },
         "ranks": {
           "rentAffordable100AMI": 16,
           "rentAffordable60ARO": 30,
           "medianRent": 16,
-          "altAvgRent": 20,
           "saleAffordable100AMI": 22,
           "saleAffordable60ARO": 25,
           "medianSalePrice": 12,
-          "altAvgHomePrice": 15,
           "combinedAffordable60ARO": 27,
           "average": 20.33333333
         },
@@ -13824,19 +13236,13 @@
           "pctAffordable100AMI": 45.2,
           "pctAffordable60AMIFlat": 1.13
         },
-        "alt": {
-          "avgRent": 1644,
-          "avgHomePrice": 290822
-        },
         "ranks": {
           "rentAffordable100AMI": 20,
           "rentAffordable60ARO": 23,
           "medianRent": 18,
-          "altAvgRent": 27,
           "saleAffordable100AMI": 20,
           "saleAffordable60ARO": 37,
           "medianSalePrice": 15,
-          "altAvgHomePrice": 27,
           "combinedAffordable60ARO": 27,
           "average": 23.77777778
         },
@@ -13943,19 +13349,13 @@
           "pctAffordable100AMI": 41.89,
           "pctAffordable60AMIFlat": 1.51
         },
-        "alt": {
-          "avgRent": 1644,
-          "avgHomePrice": 290822
-        },
         "ranks": {
           "rentAffordable100AMI": 28,
           "rentAffordable60ARO": 32,
           "medianRent": 26,
-          "altAvgRent": 27,
           "saleAffordable100AMI": 29,
           "saleAffordable60ARO": 34,
           "medianSalePrice": 35,
-          "altAvgHomePrice": 27,
           "combinedAffordable60ARO": 33,
           "average": 30.11111111
         },

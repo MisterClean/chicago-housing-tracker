@@ -33,11 +33,9 @@ export interface Ranks {
   rentAffordable100AMI: number | null;
   rentAffordable60ARO: number | null;
   medianRent: number | null;
-  altAvgRent: number | null;
   saleAffordable100AMI: number | null;
   saleAffordable60ARO: number | null;
   medianSalePrice: number | null;
-  altAvgHomePrice: number | null;
   combinedAffordable60ARO: number | null;
   average: number | null;
 }
@@ -48,7 +46,6 @@ export interface YearDetail {
   rentals: ListingGroup;
   forSale: ListingGroup;
   combined: CombinedGroup;
-  alt: { avgRent: number | null; avgHomePrice: number | null };
   ranks: Ranks;
   zillowRentalRatio: number | null;
 }

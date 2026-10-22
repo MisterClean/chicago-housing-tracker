@@ -1,7 +1,7 @@
 # Chicago Housing Tracker
 
-A ward-by-ward site tracking housing in Chicago for *A City That Works* — what's on the market and who can
-afford it, and what's getting permitted.
+A ward-by-ward site tracking housing in Chicago for *A City That Works* — what's on the market
+and who can afford it, and what's getting permitted.
 
 Audience is advocates and the general public, with policymakers as a secondary read, so the
 site explains its terms rather than assuming them.
@@ -32,16 +32,12 @@ that says only "coming soon" tells a reader nothing and a collaborator less.
 
 ## House style
 
-Design tokens in [`src/index.css`](src/index.css) are anchored on the two partner sites, which
-converge on the same base: geometric sans, white ground, cool near-black ink, one saturated
-cyan-family accent.
+Design tokens in [`src/index.css`](src/index.css): geometric sans, white ground, cool
+near-black ink, one saturated cyan-family accent.
 
-- **Base palette** — Geologica, ink `#0a1014`, muted `#56626a`,
-  azure `#00abe5`, square corners, uppercase tracked eyebrows in the accent.
-- **Accent:** coral `#d85a42`, used for selection state and the
-  "less affordable" diverging pole.
-
-Geologica is used throughout; it is freely available.
+- Geologica throughout (freely available); ink `#0a1014`, muted `#56626a`, azure `#00abe5`,
+  square corners, uppercase tracked eyebrows in the accent.
+- Coral `#d85a42` is used for selection state and the "less affordable" diverging pole.
 
 Contrast on white: ink 19.1:1, muted 6.3:1, `--accent-text` 5.6:1, coral-text 5.4:1 — all clear
 WCAG AA. Brand azure is only 2.6:1, so it is split into `--accent` (fills, rules, marks) and

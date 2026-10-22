@@ -141,7 +141,7 @@ export const PERMIT_BREAK_LABELS = [
   "600+",
 ];
 
-/** Sequential ramp in the partner azure, matching the affordability map. */
+/** Sequential ramp in the site azure, matching the affordability map. */
 export const PERMIT_RAMP = [
   "#e2f4fc",
   "#b3e2f6",
