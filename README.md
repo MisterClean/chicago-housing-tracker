@@ -149,7 +149,7 @@ dependency — it is a one-shot tool, so run it via `npx` when needed.
 | `src/data/permits.json` | **Automated.** `.github/workflows/refresh-permits.yml` re-runs the importer monthly and commits any change. Also runnable by hand from the Actions tab. |
 | `src/data/aro.json` | Manual — `python3 scripts/import_aro.py`. Needs `.permits_cache.json` present, so run the permit importer first. |
 | `src/data/wards_data.json` | Manual — Zillow listing counts collected by hand, see the pipeline notes above. |
-| `src/data/lihtc.json` | Manual — `python3 scripts/import_lihtc.py`. Tax-credit and City/State-funded developments; hand-reviewed records live in the script, source documents in `sources/` (git-ignored). See BACKLOG item 4 for the refresh pass. |
+| `src/data/lihtc.json` | Manual — `python3 scripts/import_lihtc.py`. Tax-credit and City/State-funded developments; hand-reviewed records live in the script, source documents in `sources/` (git-ignored). |
 
 The permit importer is safe to run unattended because it fails loudly rather
 than committing bad data:
@@ -167,10 +167,6 @@ Requires `shapely` and `certifi`, both build-time only.
 - [docs/affordable-housing-categories.md](docs/affordable-housing-categories.md) —
   what counts as an affordable unit in Chicago, which programs overlap, where
   CHA fits, and why the categories must never be summed.
-
-## What's next
-
-Planned work, in priority order, lives in [BACKLOG.md](BACKLOG.md).
 
 ## Known issues
 
