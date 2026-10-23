@@ -50,7 +50,7 @@ export function SiteLayout() {
             <a href={BLOG_URL} target="_blank" rel="noreferrer">
               Newsletter
             </a>
-            <a href={`${PARENT_URL}/pac`}>PAC</a>
+            <a href={`${PARENT_URL}/donate`}>PAC</a>
           </div>
         </div>
       </footer>
