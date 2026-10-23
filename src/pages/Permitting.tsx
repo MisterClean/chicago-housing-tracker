@@ -1,11 +1,14 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "../styles/permitting.css";
-import { PermitMap } from "../components/PermitMap";
+import { PermitView } from "../components/PermitView";
+import type { PermitViewport } from "../components/PermitMap";
+import boundaryPeriods from "../data/wardBoundaryPeriods.json";
 import {
-  PERMIT_BREAK_LABELS,
-  PERMIT_RAMP,
   COUNT_MODE_LABELS,
   summarise,
+  summarisePeriods,
+  periodsToCsv,
+  previousDay,
   toCsv,
   wardProjects,
   WARD_BASIS_LABELS,
@@ -21,55 +24,60 @@ const FIRST = data.meta.firstYear;
 const LAST = data.meta.lastYear;
 /** The current City Council was seated in May 2023. */
 const CYCLE_START = 2023;
-const PERMITS_DATASET_URL = "https://data.cityofchicago.org/Buildings/Building-Permits/ydr8-5enu";
+const PERMITS_DATASET_URL =
+  "https://data.cityofchicago.org/Buildings/Building-Permits/ydr8-5enu";
 
-/** Columns the table can be sorted on. */
-type SortKey = "rank" | "ward" | "units" | "sfh" | "mfh" | "mfhShare" | "perYear";
+function formatDate(date: string): string {
+  return new Date(`${date}T00:00:00Z`).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+}
 
 export function Permitting() {
   const [from, setFrom] = useState(CYCLE_START);
   const [to, setTo] = useState(LAST);
-  const [selectedWard, setSelectedWard] = useState<number | null>(null);
-  const [hoveredWard, setHoveredWard] = useState<number | null>(null);
+  const [viewport, setViewport] = useState<PermitViewport | null>(null);
   const [basis, setBasis] = useState<WardBasis>("current");
   const [mode, setMode] = useState<CountMode>("new");
-  const [sort, setSort] = useState<{ key: SortKey; desc: boolean }>({
-    key: "units",
-    desc: true,
-  });
-
-  const { rows, years, total } = useMemo(
+  const summary = useMemo(
     () => summarise(data, from, to, basis, mode),
-    [from, to, basis, mode]
+    [from, to, basis, mode],
   );
   const atIssue = basis === "atIssue";
+  const periods = useMemo(
+    () =>
+      atIssue ? summarisePeriods(data, boundaryPeriods, from, to, mode) : [],
+    [atIssue, from, to, mode],
+  );
+  useEffect(() => {
+    setViewport(null);
+  }, [basis, periods.length]);
+  const { rows } = summary;
+  const years = atIssue
+    ? periods.reduce((sum, p) => sum + p.years, 0)
+    : summary.years;
+  const total = atIssue
+    ? periods.reduce((sum, p) => sum + p.total, 0)
+    : summary.total;
   const withConv = mode === "withConversions";
-  const trend = useMemo(() => yearlyTotals(data, withConv ? "withConversions" : "new"), [withConv]);
+  const trend = useMemo(
+    () => yearlyTotals(data, withConv ? "withConversions" : "new"),
+    [withConv],
+  );
   const maxTrend = Math.max(...trend.map((t) => t.units));
 
-  const sortedRows = useMemo(() => {
-    const dir = sort.desc ? -1 : 1;
-    return [...rows].sort((a, b) => {
-      const av = a[sort.key];
-      const bv = b[sort.key];
-      // wards that built nothing have no MFH share; keep them last either way
-      if (av == null && bv == null) return a.ward - b.ward;
-      if (av == null) return 1;
-      if (bv == null) return -1;
-      return av === bv ? a.ward - b.ward : (av < bv ? -1 : 1) * dir;
-    });
-  }, [rows, sort]);
-
-  const toggleSort = (key: SortKey) =>
-    setSort((s) =>
-      s.key === key
-        ? { key, desc: !s.desc }
-        // numbers read high-to-low first; ward number reads 1-50 first
-        : { key, desc: key !== "ward" }
-    );
-
   const downloadCsv = () => {
-    const blob = new Blob([toCsv(rows, from, to, basis, mode)], { type: "text/csv;charset=utf-8" });
+    const blob = new Blob(
+      [
+        atIssue
+          ? periodsToCsv(periods, mode)
+          : toCsv(rows, from, to, basis, mode),
+      ],
+      { type: "text/csv;charset=utf-8" },
+    );
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -78,23 +86,6 @@ export function Permitting() {
     URL.revokeObjectURL(url);
   };
 
-  const sortHead = (key: SortKey, label: string) => {
-    const on = sort.key === key;
-    return (
-      <button
-        type="button"
-        className={on ? "pm-sort on" : "pm-sort"}
-        onClick={() => toggleSort(key)}
-        aria-sort={on ? (sort.desc ? "descending" : "ascending") : "none"}
-      >
-        {label}
-        <span className="pm-sort-arrow">{on ? (sort.desc ? "\u2193" : "\u2191") : ""}</span>
-      </button>
-    );
-  };
-
-  const active = selectedWard ?? hoveredWard;
-  const activeRow = active != null ? rows.find((r) => r.ward === active) : null;
   const isCycle = from === CYCLE_START && to === LAST;
 
   // keep the two handles from crossing
@@ -110,9 +101,7 @@ export function Permitting() {
       <header className="pm-header">
         <p className="eyebrow">What gets built</p>
         <h1 className="page-title">Permitted Units</h1>
-        <p className="page-lede">
-          New housing units approved by ward.
-        </p>
+        <p className="page-lede">New housing units approved by ward.</p>
       </header>
 
       <section className="pm-controls">
@@ -121,7 +110,12 @@ export function Permitting() {
             <span className="eyebrow">Years</span>
             <strong className="pm-range-val">
               {from}–{to}
-              {to === LAST && <span className="pm-partial"> (through {data.meta.lastDate})</span>}
+              {to === LAST && (
+                <span className="pm-partial">
+                  {" "}
+                  (through {data.meta.lastDate})
+                </span>
+              )}
             </strong>
             {!isCycle && (
               <button
@@ -138,7 +132,13 @@ export function Permitting() {
 
           {/* One track, two thumbs. Both are real range inputs so the control
               stays keyboard-accessible; the track itself is a styled div. */}
-          <div className="pm-slider" style={{ ["--lo" as string]: `${lo}%`, ["--hi" as string]: `${hi}%` }}>
+          <div
+            className="pm-slider"
+            style={{
+              ["--lo" as string]: `${lo}%`,
+              ["--hi" as string]: `${hi}%`,
+            }}
+          >
             <div className="pm-slider-track" />
             <div className="pm-slider-fill" />
             <input
@@ -160,7 +160,11 @@ export function Permitting() {
           </div>
 
           {/* citywide trend; selected span highlighted */}
-          <div className="pm-trend" aria-hidden="true">
+          <div
+            className="pm-trend"
+            role="group"
+            aria-label="Select a single year"
+          >
             {trend.map((t) => {
               const inRange = t.year >= from && t.year <= to;
               const partial = t.year === LAST;
@@ -168,7 +172,10 @@ export function Permitting() {
                 <button
                   key={t.year}
                   className={`pm-bar${inRange ? " in" : ""}${partial ? " partial" : ""}`}
-                  style={{ height: `${Math.max(3, (t.units / maxTrend) * 100)}%` }}
+                  style={{
+                    height: `${Math.max(3, (t.units / maxTrend) * 100)}%`,
+                  }}
+                  aria-label={`Show ${t.year}`}
                   title={
                     partial
                       ? `${t.year}: ${t.units.toLocaleString()} units so far (through ${data.meta.lastDate})`
@@ -184,7 +191,9 @@ export function Permitting() {
           </div>
           <div className="pm-trend-axis">
             <span>{FIRST}</span>
-            <span className="pm-trend-note">citywide units per year — click a bar for one year</span>
+            <span className="pm-trend-note">
+              citywide units per year — click a bar for one year
+            </span>
             <span>{LAST}*</span>
           </div>
           <p className="pm-footnote">
@@ -193,12 +202,17 @@ export function Permitting() {
 
           <div className="pm-basis">
             <span className="eyebrow">Boundaries</span>
-            <div className="pm-toggle" role="group" aria-label="Ward boundaries">
+            <div
+              className="pm-toggle"
+              role="group"
+              aria-label="Ward boundaries"
+            >
               {(Object.keys(WARD_BASIS_LABELS) as WardBasis[]).map((b) => (
                 <button
                   key={b}
                   type="button"
                   className={basis === b ? "pm-tog on" : "pm-tog"}
+                  aria-pressed={basis === b}
                   onClick={() => setBasis(b)}
                 >
                   {WARD_BASIS_LABELS[b]}
@@ -215,6 +229,7 @@ export function Permitting() {
                   key={m}
                   type="button"
                   className={mode === m ? "pm-tog on" : "pm-tog"}
+                  aria-pressed={mode === m}
                   onClick={() => setMode(m)}
                 >
                   {COUNT_MODE_LABELS[m]}
@@ -225,7 +240,6 @@ export function Permitting() {
               {withConv
                 ? "Gross new construction plus net units created via conversion. Note this does not include full demolitions."
                 : "Gross new construction only. Conversions of existing buildings are excluded."}
-
             </p>
           </div>
         </div>
@@ -238,7 +252,9 @@ export function Permitting() {
             </span>
           </div>
           <div className="pm-stat">
-            <span className="pm-stat-value">{Math.round(total / years).toLocaleString()}</span>
+            <span className="pm-stat-value">
+              {Math.round(total / years).toLocaleString()}
+            </span>
             <span className="pm-stat-label">per year</span>
           </div>
           <button className="pm-export" onClick={downloadCsv}>
@@ -247,165 +263,106 @@ export function Permitting() {
         </div>
       </section>
 
-      <section className="pm-body">
-        <div className="pm-map">
-          <PermitMap
-            rows={rows}
-            unshaded={atIssue}
-            selectedWard={selectedWard}
-            hoveredWard={hoveredWard}
-            onSelectWard={setSelectedWard}
-            onHoverWard={setHoveredWard}
-          />
-          <div className="pm-overlay">
-            {atIssue ? (
-              <div className="pm-legend pm-map-note">
-                <span className="pm-legend-title">Map unshaded in this view</span>
-                <p>
-                  These ward numbers are as drawn when each permit was issued. Boundaries moved
-                  in 2015 and 2023, so they don&rsquo;t line up with the outlines here. The table
-                  carries the figures; the map is for orientation only.
-                </p>
-              </div>
-            ) : (
-              <div className="pm-legend">
-                <span className="pm-legend-title">Units permitted per year</span>
-                <div className="pm-legend-steps">
-                  {PERMIT_RAMP.map((c, i) => (
-                    <div key={c} className="pm-legend-step">
-                      <span className="pm-chip" style={{ background: c }} />
-                      <span className="pm-chip-label">{PERMIT_BREAK_LABELS[i]}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            {activeRow && (
-              <div className="pm-card">
-                <div className="pm-card-head">
-                  <strong>Ward {activeRow.ward}</strong>
-                  <span className="pm-card-rank">#{activeRow.rank} of 50</span>
-                </div>
-                <div className="pm-card-grid">
-                  <div>
-                    <span className="pm-card-label">Units</span>
-                    <span className="pm-card-value">{activeRow.units.toLocaleString()}</span>
-                  </div>
-                  <div>
-                    <span className="pm-card-label">Per year</span>
-                    <span className="pm-card-value">{activeRow.perYear.toFixed(0)}</span>
-                  </div>
-                  <div>
-                    <span className="pm-card-label">SFH / MFH</span>
-                    <span className="pm-card-value">
-                      {activeRow.sfh.toLocaleString()} / {activeRow.mfh.toLocaleString()}
-                    </span>
-                  </div>
-                </div>
-                {(() => {
-                  const projects = wardProjects(data, activeRow.ward, from, to, 5, basis);
-                  return (
-                    <div className="pm-projects">
-                      <span className="pm-card-label">
-                        Largest projects ({data.projectMinUnits}+ units)
-                      </span>
-                      {projects.length === 0 ? (
-                        <p className="pm-projects-none">
-                          No projects of {data.projectMinUnits} or more units in this period.
-                        </p>
-                      ) : (
-                        <ul>
-                          {projects.map((pr) => (
-                            <li key={pr.p + pr.d}>
-                              <span className="pm-proj-units">{pr.u}</span>
-                              <span className="pm-proj-addr">{pr.a}</span>
-                              <span className="pm-proj-date">{pr.d.slice(0, 7)}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  );
-                })()}
-              </div>
-            )}
+      {atIssue ? (
+        <section
+          className="pm-history"
+          aria-label="Permits by historical ward boundaries"
+        >
+          <div className="pm-history-head">
+            <h2 className="eyebrow">
+              {periods.length === 1
+                ? "One boundary period"
+                : `${periods.length} boundary periods`}
+            </h2>
+            <p>
+              Each map uses the ward boundaries and permits from its dates.
+              Colors show units per year on the same scale; a ward number can
+              cover different areas across maps.
+            </p>
           </div>
-        </div>
-
-        <div className="pm-table-wrap">
-          <table className="pm-table">
-            <thead>
-              <tr>
-                <th className="num">{sortHead("rank", "#")}</th>
-                <th className="num">{sortHead("ward", "Ward")}</th>
-                <th className="num">{sortHead("units", "Units")}</th>
-                <th className="num" title="Units in single-family (1-unit) buildings">
-                  {sortHead("sfh", "SFH")}
-                </th>
-                <th className="num" title="Units in multi-family (2+ unit) buildings">
-                  {sortHead("mfh", "MFH")}
-                </th>
-                <th className="num" title="Share of units in multi-family buildings">
-                  {sortHead("mfhShare", "MFH %")}
-                </th>
-
-                <th className="num">{sortHead("perYear", "Per year")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedRows.map((r) => (
-                <tr
-                  key={r.ward}
-                  className={
-                    r.ward === selectedWard
-                      ? "pm-row sel"
-                      : r.ward === hoveredWard
-                        ? "pm-row hov"
-                        : "pm-row"
+          <div
+            className={`pm-period-grid${periods.length === 1 ? " single" : ""}`}
+          >
+            {periods.map((p) => (
+              <section
+                className="pm-period"
+                key={p.period.id}
+                aria-label={p.period.label}
+              >
+                <header className="pm-period-head">
+                  <h3>{p.period.label}</h3>
+                  <p>
+                    {formatDate(p.start)} – {formatDate(previousDay(p.end))}
+                  </p>
+                  <p>
+                    <strong>{p.total.toLocaleString()}</strong> units ·{" "}
+                    <strong>
+                      {Math.round(p.total / p.years).toLocaleString()}
+                    </strong>{" "}
+                    per year
+                  </p>
+                </header>
+                <PermitView
+                  rows={p.rows}
+                  geometry={p.period.geometry}
+                  label={p.period.label}
+                  compact={periods.length > 1}
+                  projectMinUnits={data.projectMinUnits}
+                  projectsForWard={(ward) =>
+                    (p.tables.projects[String(ward)] ?? [])
+                      .filter((pr) => pr.d >= p.start && pr.d < p.end)
+                      .slice(0, 5)
                   }
-                  onMouseEnter={() => setHoveredWard(r.ward)}
-                  onMouseLeave={() => setHoveredWard(null)}
-                  onClick={() => setSelectedWard(selectedWard === r.ward ? null : r.ward)}
-                >
-                  <td className="num muted">{r.rank}</td>
-                  <td className="num">{r.ward}</td>
-                  <td className="num strong">{r.units.toLocaleString()}</td>
-                  <td className="num muted">{r.sfh.toLocaleString()}</td>
-                  <td className="num">{r.mfh.toLocaleString()}</td>
-                  <td className="num muted">
-                    {r.mfhShare == null ? "—" : `${(r.mfhShare * 100).toFixed(0)}%`}
-                  </td>
-
-                  <td className="num">{r.perYear.toFixed(0)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+                  viewport={viewport}
+                  onViewportChange={setViewport}
+                />
+              </section>
+            ))}
+          </div>
+        </section>
+      ) : (
+        <PermitView
+          key="current"
+          rows={rows}
+          label="Current (2023) boundaries"
+          projectMinUnits={data.projectMinUnits}
+          projectsForWard={(ward) =>
+            wardProjects(data, ward, from, to, 5, basis)
+          }
+          viewport={viewport}
+          onViewportChange={setViewport}
+        />
+      )}
 
       <div className="pm-method">
         <p>
-          Gross new construction units per ward. This map extracts unit counts from the
-          city&rsquo;s dataset on building permits. It covers permits typed as new construction,
-          plus permits typed as renovations whose own description is of a new building.
-          Conversions of existing buildings are excluded unless toggled on. Unit counts are
-          extracted from each permit&rsquo;s work description, since the source dataset has no
+          Gross new construction units per ward. This map extracts unit counts
+          from the city&rsquo;s dataset on building permits. It covers permits
+          typed as new construction, plus permits typed as renovations whose own
+          description is of a new building. Conversions of existing buildings
+          are excluded unless toggled on. Unit counts are extracted from each
+          permit&rsquo;s work description, since the source dataset has no
           unit-count field; note that these figures are not exact, as about{" "}
-          {Math.round(data.meta.unclassifiedShare * 100)}% of permits could not be classified
-          (and are ignored). Permits staged across several filings for one project are counted
-          once. Ward boundaries were redrawn in 2015 and 2023: by default every permit is placed
-          on today&rsquo;s map by its coordinates, while the &ldquo;at time of permit&rdquo; view
-          keeps the ward number recorded on the permit itself.
+          {Math.round(data.meta.unclassifiedShare * 100)}% of permits could not
+          be classified (and are ignored). Permits staged across several filings
+          for one project are counted once. Ward boundaries were redrawn in 2015
+          and 2023: by default every permit is placed on today&rsquo;s map by
+          its coordinates, while the &ldquo;at time of permit&rdquo; view keeps
+          the ward number recorded on the permit itself. It splits the selected
+          dates at May 18, 2015 and May 15, 2023, showing a separate map and
+          table for each boundary period. Per-year rates in this view use the
+          actual days covered, including partial years.
         </p>
         <p>
-          Including conversions adds units created by turning existing buildings into housing and
-          subtracts units lost when a building is deconverted into fewer, larger homes. These land
-          in the same single-family and multi-family columns as new construction, on the same
-          rule: a building counts as single-family at one unit and multi-family at two or more. So
-          a two-flat becoming one house removes two multi-family units and adds one single-family
-          one. Only permits that state the change plainly are counted. Note that this does not
-          give us a true &lsquo;net&rsquo; figure, as demolitions are excluded.
+          Including conversions adds units created by turning existing buildings
+          into housing and subtracts units lost when a building is deconverted
+          into fewer, larger homes. These land in the same single-family and
+          multi-family columns as new construction, on the same rule: a building
+          counts as single-family at one unit and multi-family at two or more.
+          So a two-flat becoming one house removes two multi-family units and
+          adds one single-family one. Only permits that state the change plainly
+          are counted. Note that this does not give us a true &lsquo;net&rsquo;
+          figure, as demolitions are excluded.
         </p>
         <p>
           Source:{" "}

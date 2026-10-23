@@ -69,6 +69,7 @@ import sys
 import ssl
 import urllib.parse
 import urllib.request
+from pathlib import Path
 
 API = "https://data.cityofchicago.org/resource/ydr8-5enu.json"
 WARDS = "https://data.cityofchicago.org/resource/p293-wvbd.geojson"
@@ -362,6 +363,53 @@ def tables(agg):
     return out
 
 
+def in_period(date: str, start: str, end: str | None) -> bool:
+    """Boundary periods are half-open: a cutoff-day permit uses the new map."""
+    return date >= start and (end is None or date < end)
+
+
+def conversion_tables(
+    records: list[tuple[str, int | None, int | None, int, int, str]],
+    ward_index: int,
+    *,
+    start: str | None = None,
+    end: str | None = None,
+) -> tuple[dict[int, dict[str, int]], dict[int, dict[str, int]], int]:
+    """Deduplicate globally, then optionally restrict to one boundary period."""
+    seen = {}
+    sfh = collections.defaultdict(lambda: collections.defaultdict(int))
+    mfh = collections.defaultdict(lambda: collections.defaultdict(int))
+    kept_n = 0
+    for rec in records:
+        date, before, after, a = rec[0], rec[3], rec[4], rec[5]
+        k = (a, before, after)
+        prev = seen.get(k)
+        if prev and (datetime.date.fromisoformat(date)
+                     - datetime.date.fromisoformat(prev)).days <= 730:
+            continue
+        seen[k] = date
+        # Filter AFTER deduplication, so staged conversion permits spanning
+        # a redistricting date are still counted only once across maps.
+        if start is not None and not in_period(date, start, end):
+            continue
+        w = rec[ward_index]
+        if w is None:
+            continue
+        kept_n += 1
+        y = date[:4]
+        # a building leaves the column its old size put it in and joins
+        # the one its new size puts it in
+        if before == 1:
+            sfh[w][y] -= before
+        elif before > 1:
+            mfh[w][y] -= before
+        if after == 1:
+            sfh[w][y] += after
+        elif after > 1:
+            mfh[w][y] += after
+    return sfh, mfh, kept_n
+
+
 def main():
     from shapely.geometry import shape, Point
     from shapely.strtree import STRtree
@@ -466,38 +514,8 @@ def main():
                       before, after, a))
     crecs.sort(key=lambda x: x[0])
 
-    def conv_tables(ward_index):
-        seen = {}
-        sfh = collections.defaultdict(lambda: collections.defaultdict(int))
-        mfh = collections.defaultdict(lambda: collections.defaultdict(int))
-        kept_n = 0
-        for rec in crecs:
-            date, before, after, a = rec[0], rec[3], rec[4], rec[5]
-            k = (a, before, after)
-            prev = seen.get(k)
-            if prev and (datetime.date.fromisoformat(date)
-                         - datetime.date.fromisoformat(prev)).days <= 730:
-                continue
-            seen[k] = date
-            w = rec[ward_index]
-            if w is None:
-                continue
-            kept_n += 1
-            y = date[:4]
-            # a building leaves the column its old size put it in and joins
-            # the one its new size puts it in
-            if before == 1:
-                sfh[w][y] -= before
-            elif before > 1:
-                mfh[w][y] -= before
-            if after == 1:
-                sfh[w][y] += after
-            elif after > 1:
-                mfh[w][y] += after
-        return sfh, mfh, kept_n
-
-    conv_sfh, conv_mfh, ckept = conv_tables(1)
-    ai_sfh, ai_mfh, _ = conv_tables(2)
+    conv_sfh, conv_mfh, ckept = conversion_tables(crecs, 1)
+    ai_sfh, ai_mfh, _ = conversion_tables(crecs, 2)
     ts = sum(sum(v.values()) for v in conv_sfh.values())
     tm = sum(sum(v.values()) for v in conv_mfh.values())
     print(f"  conversions: {ckept:,} permits, single-family {ts:+,}, "
@@ -505,6 +523,22 @@ def main():
 
     last_date = max(rec[0] for rec in kept)
     years = sorted({rec[0][:4] for rec in kept})
+    boundary_periods = json.loads(
+        (Path(__file__).resolve().parents[1] / "src/data/wardBoundaryPeriods.json")
+        .read_text(encoding="utf-8")
+    )
+    by_period = {}
+    for period in boundary_periods:
+        period_records = [rec for rec in kept
+                          if in_period(rec[0], period["start"], period["end"])]
+        psfh, pmfh, _ = conversion_tables(crecs, 2, start=period["start"], end=period["end"])
+        by_period[period["id"]] = {
+            **tables(aggregate(period_records, ward_index=2)),
+            "conversions": {
+                "sfh": {str(w): dict(psfh[w]) for w in sorted(psfh)},
+                "mfh": {str(w): dict(pmfh[w]) for w in sorted(pmfh)},
+            },
+        }
     payload = {
         "meta": {
             "source": "Chicago Building Permits (ydr8-5enu)",
@@ -539,6 +573,7 @@ def main():
         },
         **tables(current),
         "atIssue": tables(at_issue),
+        "byBoundaryPeriod": by_period,
     }
     # Guard against an upstream change silently gutting the data. Permits only
     # accumulate, so a materially smaller pull means the API, the permit_type
