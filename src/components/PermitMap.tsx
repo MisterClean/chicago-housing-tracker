@@ -101,6 +101,7 @@ function WardKeyboard({ layer }: { layer: LeafletGeoJSON | null }) {
 interface Props extends ViewProps {
   rows: WardPermits[];
   geometry?: string;
+  boundarySource: string;
   selectedWard: number | null;
   hoveredWard: number | null;
   onSelectWard: (w: number | null) => void;
@@ -110,6 +111,7 @@ interface Props extends ViewProps {
 export function PermitMap({
   rows,
   geometry = "chicago_wards.json",
+  boundarySource,
   selectedWard,
   hoveredWard,
   onSelectWard,
@@ -237,6 +239,7 @@ export function PermitMap({
             key={geometry}
             ref={setLayer}
             data={geoData}
+            attribution={`Ward boundaries: <a href="${boundarySource}">City of Chicago</a> (modified)`}
             style={styleFeature}
             onEachFeature={onEachFeature}
           />

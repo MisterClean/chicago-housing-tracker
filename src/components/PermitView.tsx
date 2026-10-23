@@ -13,6 +13,7 @@ type SortKey =
 interface Props {
   rows: WardPermits[];
   geometry?: string;
+  boundarySource: string;
   label: string;
   compact?: boolean;
   projectMinUnits: number;
@@ -24,6 +25,7 @@ interface Props {
 export function PermitView({
   rows,
   geometry,
+  boundarySource,
   label,
   compact = false,
   projectMinUnits,
@@ -147,6 +149,7 @@ export function PermitView({
         <PermitMap
           rows={rows}
           geometry={geometry}
+            boundarySource={boundarySource}
           viewport={viewport}
           onViewportChange={onViewportChange}
           selectedWard={selectedWard}

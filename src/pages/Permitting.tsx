@@ -3,6 +3,7 @@ import "../styles/permitting.css";
 import { PermitView } from "../components/PermitView";
 import type { PermitViewport } from "../components/PermitMap";
 import boundaryPeriods from "../data/wardBoundaryPeriods.json";
+import chicagoAttribution from "../data/chicagoDataAttribution.json";
 import {
   COUNT_MODE_LABELS,
   summarise,
@@ -305,6 +306,7 @@ export function Permitting() {
                 <PermitView
                   rows={p.rows}
                   geometry={p.period.geometry}
+                  boundarySource={p.period.source}
                   label={p.period.label}
                   compact={periods.length > 1}
                   projectMinUnits={data.projectMinUnits}
@@ -325,6 +327,7 @@ export function Permitting() {
           key="current"
           rows={rows}
           label="Current (2023) boundaries"
+          boundarySource={boundaryPeriods.find((p) => p.id === "2023")!.source}
           projectMinUnits={data.projectMinUnits}
           projectsForWard={(ward) =>
             wardProjects(data, ward, from, to, 5, basis)
@@ -373,6 +376,23 @@ export function Permitting() {
           {data.meta.permitsFetched.toLocaleString()} permits from {FIRST} to{" "}
           {data.meta.lastDate}.
         </p>
+        <p>
+          Ward boundaries: {chicagoAttribution.publisher} Data Portal —{" "}
+          {boundaryPeriods.map((period, index) => (
+            <span key={period.id}>
+              {index > 0 && "; "}
+              <a href={period.source} target="_blank" rel="noreferrer">
+                {period.label}
+              </a>
+            </span>
+          ))}
+          . Geometry has been simplified for display. See the{" "}
+          <a href={chicagoAttribution.termsUrl} target="_blank" rel="noreferrer">
+            City of Chicago Data Terms of Use
+          </a>
+          .
+        </p>
+        <p>{chicagoAttribution.notice}</p>
       </div>
     </div>
   );

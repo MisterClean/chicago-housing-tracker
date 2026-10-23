@@ -220,6 +220,22 @@ The old source also has three `OUT` features; these are deliberately excluded.
 Both bundled historical files contain exactly wards 1–50, with valid geometries.
 If a geometry file fails to load, its panel keeps the table and offers **Retry**.
 
+**Attribution:** the data publisher is the **City of Chicago**. Each permit map
+links its ward-boundary credit to the corresponding City Data Portal dataset,
+and the page footer links all three sources and the
+[City Data Terms of Use](https://www.chicago.gov/city/en/narr/foia/data_disclaimer.html).
+The City's required modified-data notice is published in that footer; its text
+is also available on the [City's TIF portal](https://webapps1.chicago.gov/ChicagoTif/disclaimer.html)
+and is maintained in `src/data/chicagoDataAttribution.json`. This source credit
+is separate from the existing Esri/OpenStreetMap basemap attribution.
+
+Each historical GeoJSON includes a top-level `attribution` foreign member with
+the publisher, dataset title/ID, source and download URLs, retrieval date, raw
+source SHA-256, terms links, modified-data notice, and a description of the
+filtering/simplification. Preserve or refresh this metadata when regenerating
+the files above. The portal identifies the license as **See Terms of Use**;
+the boundary files are not relicensed under a project software license.
+
 Focused regression checks (no network requests):
 
 ```bash
