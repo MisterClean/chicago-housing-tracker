@@ -183,7 +183,13 @@ export function PermitView({
       </div>
 
       {compact && (
-        <div className="pm-period-detail" aria-live="polite">
+        <div
+          className="pm-period-detail"
+          tabIndex={0}
+          role="region"
+          aria-label={`${label} ward details`}
+          aria-live="polite"
+        >
           {wardCard ?? (
             <p className="pm-basis-hint">
               Select a ward on the map or in the table to see its projects.

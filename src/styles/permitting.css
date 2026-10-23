@@ -699,6 +699,11 @@
 }
 
 .pm-period-detail {
+  /* Keep hovered rows under the pointer when the hint becomes a project card.
+     A minimum height alone still lets longer cards move the table. */
+  height: 18rem;
+  flex-shrink: 0;
+  overflow: auto;
   padding: 12px;
   border-bottom: 1px solid var(--rule);
 }
