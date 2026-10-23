@@ -4,6 +4,7 @@ import "../styles/permitting.css";
 import "../styles/income.css";
 import { Scatter, type ScatterPoint } from "../components/Scatter";
 import { summarise, type PermitsData } from "../lib/permits";
+import { wardNeighborhoods } from "../lib/wards";
 import permitsRaw from "../data/permits.json";
 import incomeRaw from "../data/wardIncome.json";
 
@@ -184,7 +185,10 @@ export function IncomeBuilding() {
 
       {activeRow && (
         <div className="in-readout">
-          <strong>Ward {activeRow.ward}</strong>
+          <span className="in-ward">
+            <strong>Ward {activeRow.ward}</strong>{" "}
+            <span className="in-hood">{wardNeighborhoods(activeRow.ward)}</span>
+          </span>
           <span>
             median household income{" "}
             <strong>${activeRow.income.toLocaleString()}</strong>

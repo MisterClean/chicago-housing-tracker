@@ -131,9 +131,15 @@
   color: var(--muted);
 }
 
-.in-readout > strong:first-child {
+.in-ward strong {
   font-size: 15px;
   color: var(--ink);
+}
+
+/* The ward's neighborhoods, a word-space after its number. */
+.in-hood {
+  margin-left: 4px;
+  font-size: 12.5px;
 }
 
 .in-readout strong {

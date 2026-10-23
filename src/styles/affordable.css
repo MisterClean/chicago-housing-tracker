@@ -467,6 +467,12 @@
   min-width: 240px;
 }
 .af-devlist-wrap { max-height: 560px; overflow-y: auto; }
+/* On a phone the search box shares its line with the CSV button and gives
+   up its minimum width; the button drops below if there's still no room. */
+@media (max-width: 600px) {
+  .af-devlist-tools { flex-wrap: wrap; width: 100%; }
+  .af-search { min-width: 0; flex: 1 1 180px; }
+}
 .af-of { font-weight: 400; color: var(--muted); font-size: 12px; }
 
 /* These tables have plain headers, not sort buttons, so they need their own padding. */

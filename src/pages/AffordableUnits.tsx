@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 // the dual-handle range slider, toggles and table styling live with the permitting page
 import "../styles/permitting.css";
 import "../styles/affordable.css";
+import { wardNeighborhoods } from "../lib/wards";
 import { AroMap, type MapPoint } from "../components/AroMap";
 import type { AroData } from "../lib/aro";
 import {
@@ -573,6 +574,7 @@ export function AffordableUnits() {
                   <strong>Ward {activeRow.ward}</strong>
                   <span className="pm-card-rank">#{activeRow.rank} of 50</span>
                 </div>
+                <div className="pm-card-hood">{wardNeighborhoods(activeRow.ward)}</div>
                 <div className="pm-card-grid">
                   <div>
                     <span className="pm-card-label">Units</span>

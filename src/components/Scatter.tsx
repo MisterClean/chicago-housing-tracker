@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { wardNeighborhoods } from "../lib/wards";
 
 export interface ScatterPoint {
   ward: number;
@@ -348,7 +349,7 @@ export function Scatter({
           };
           const tip = (
             <title>
-              {`Ward ${p.ward}\n${xLabel}: ${fmtX(p.x)}\n${yLabel}: ${fmtY(p.y)}` +
+              {`Ward ${p.ward} · ${wardNeighborhoods(p.ward)}\n${xLabel}: ${fmtX(p.x)}\n${yLabel}: ${fmtY(p.y)}` +
                 (off ? "  (above the scale break)" : "")}
             </title>
           );

@@ -217,6 +217,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  max-width: calc(100% - 24px);
   pointer-events: none;
 }
 
@@ -267,6 +268,12 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* On the narrowest phones the colour steps take a second line rather than
+   spilling out of the legend box. */
+@media (max-width: 600px) {
+  .pm-legend-steps { flex-wrap: wrap; row-gap: 4px; }
+}
+
 .pm-card-head {
   display: flex;
   align-items: baseline;
@@ -276,6 +283,17 @@
 
 .pm-card-rank {
   font-size: 11px;
+  color: var(--muted);
+}
+
+/* The ward's neighborhoods, under its number. Zero width plus full min-width
+   lets it wrap to the card's width instead of stretching the card. */
+.pm-card-hood {
+  width: 0;
+  min-width: 100%;
+  margin: -4px 0 8px;
+  font-size: 11.5px;
+  line-height: 1.4;
   color: var(--muted);
 }
 
@@ -375,8 +393,10 @@
   .permitting {
     padding: 36px 20px 24px;
   }
+  /* minmax(0, …) throughout: a bare 1fr can't shrink below its widest
+     unwrappable child, which pushed the page off the side of a phone. */
   .pm-controls {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
   }
   .pm-summary {
@@ -386,7 +406,7 @@
     text-align: left;
   }
   .pm-body {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: 46vh 1fr;
     height: auto;
   }
@@ -581,6 +601,27 @@
 .pm-tog.on {
   background: var(--accent);
   color: #fff;
+}
+
+/* On a phone, a row of options wraps instead of running off the screen.
+   Each button grows to fill its line, and the 1px gaps over a rule-coloured
+   background keep the dividers on every line. */
+@media (max-width: 600px) {
+  .pm-toggle {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1px;
+    background: var(--rule);
+  }
+  .pm-tog {
+    flex: 1 1 auto;
+    border-right: none;
+  }
+  /* The headline numbers and the CSV button take as many lines as they need. */
+  .pm-summary {
+    flex-wrap: wrap;
+    gap: 12px 22px;
+  }
 }
 
 .pm-basis-hint {

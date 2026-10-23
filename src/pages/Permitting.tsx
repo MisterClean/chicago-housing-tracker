@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import "../styles/permitting.css";
 import { PermitMap } from "../components/PermitMap";
+import { wardNeighborhoods } from "../lib/wards";
 import {
   PERMIT_BREAK_LABELS,
   PERMIT_RAMP,
@@ -286,6 +287,8 @@ export function Permitting() {
                   <strong>Ward {activeRow.ward}</strong>
                   <span className="pm-card-rank">#{activeRow.rank} of 50</span>
                 </div>
+                {/* Names follow today's boundaries, so not against a ward as stated on an older permit. */}
+                {!atIssue && <div className="pm-card-hood">{wardNeighborhoods(activeRow.ward)}</div>}
                 <div className="pm-card-grid">
                   <div>
                     <span className="pm-card-label">Units</span>

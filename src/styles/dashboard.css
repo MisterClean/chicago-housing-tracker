@@ -87,7 +87,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-width: 320px;
+  max-width: min(320px, calc(100% - 24px));
   pointer-events: none;
 }
 
@@ -505,8 +505,11 @@ tbody tr.row-selected {
 }
 
 @media (max-width: 900px) {
+  /* minmax(0, …): a bare 1fr won't shrink below the ward table's natural
+     width, which pushed the page off the side of a phone. The table scrolls
+     inside its panel instead. */
   .app-main {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: 45vh 1fr;
   }
   .map-panel {
