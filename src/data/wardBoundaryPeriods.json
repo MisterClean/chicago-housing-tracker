@@ -1,0 +1,26 @@
+[
+  {
+    "id": "2003",
+    "label": "2003 boundaries",
+    "start": "2010-01-01",
+    "end": "2015-05-18",
+    "geometry": "chicago_wards_2003.json",
+    "source": "https://data.cityofchicago.org/d/72b6-8fe8"
+  },
+  {
+    "id": "2015",
+    "label": "2015 boundaries",
+    "start": "2015-05-18",
+    "end": "2023-05-15",
+    "geometry": "chicago_wards_2015.json",
+    "source": "https://data.cityofchicago.org/d/k9yb-bpqx"
+  },
+  {
+    "id": "2023",
+    "label": "2023 boundaries",
+    "start": "2023-05-15",
+    "end": null,
+    "geometry": "chicago_wards.json",
+    "source": "https://data.cityofchicago.org/d/p293-wvbd"
+  }
+]

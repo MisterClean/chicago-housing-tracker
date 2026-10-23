@@ -164,6 +164,90 @@ Requires `shapely` and `certifi`, both build-time only.
 
 ## Reference
 
+### Historical permit maps
+
+In `/permitting`, **At time of permit** shows one shaded map and ward table for
+each boundary period touched by the year range. Two maps appear when a selection
+crosses one redistricting; 2010–2026 shows three. Ward selection and sorting stay
+local to each period; pan and zoom are shared. On narrow screens the panels stack,
+and each table can scroll independently. Map zoom controls sit below the legend.
+
+`src/data/wardBoundaryPeriods.json` is the shared configuration used by the site
+and permit importer. Periods are start-inclusive and end-exclusive, switching on
+**2015-05-18** and **2023-05-15**, when the new Councils were sworn in. The first
+period starts at the permit dataset's 2010 coverage boundary, not the start of the
+2003 ward map. Sources:
+
+- [City's 2003–2015 ward geometry](https://data.cityofchicago.org/d/72b6-8fe8)
+- [City's 2015–2023 ward geometry](https://data.cityofchicago.org/d/k9yb-bpqx)
+- [City's 2023 onward ward geometry](https://data.cityofchicago.org/d/p293-wvbd)
+- [May 18, 2015 inaugural address](https://news.wttw.com/sites/default/files/article/file-attachments/Emanuel%20Inaugural%20Speech.pdf)
+- [City Clerk's record referencing the May 15, 2023 inaugural proceedings](https://chicityclerk.s3.us-west-2.amazonaws.com/s3fs-public-1/reports/2024_02_15%20Journal%20of%20the%20Proceedings%20%282%29.pdf)
+
+The importer publishes `byBoundaryPeriod` alongside the original tables. It splits
+both new construction and conversions **after** deduplication, including within
+transition years, and retains the permit's recorded ward number. Those numbers
+are not perfect: a check against the corresponding full-resolution City geometries
+found >99.7% agreement in every period among geocoded permits with stated wards.
+The period maps retain the existing data's limitations; they do not reconstruct
+missing locations or repair individual ward assignments.
+
+Historical per-year rates divide by actual covered days as fractions of their
+calendar years, including leap years and the final data date. This keeps the
+shared, fixed color breaks comparable for a short transition-year interval and
+a longer period. The historical CSV exports 50 rows per period, with boundary ID
+and exact start/end dates, so ward numbers from different geometries never merge.
+Current-boundary totals and CSV format retain their existing behavior.
+
+The historical boundary files are fetched locally at runtime, like the current
+map. To regenerate them, download the GeoJSON from the corresponding resource
+endpoint and use the same topology-preserving simplification as the current map:
+
+```bash
+curl -sSfL 'https://data.cityofchicago.org/resource/72b6-8fe8.geojson?$limit=60' -o wards-2003.geojson
+npx mapshaper wards-2003.geojson \
+  -filter 'Number(ward) >= 1 && Number(ward) <= 50' \
+  -each 'ward=Number(ward)' -filter-fields ward -simplify 8% keep-shapes \
+  -o precision=0.00001 public/chicago_wards_2003.json
+
+curl -sSfL 'https://data.cityofchicago.org/resource/k9yb-bpqx.geojson?$limit=60' -o wards-2015.geojson
+npx mapshaper wards-2015.geojson \
+  -each 'ward=Number(ward)' -filter-fields ward -simplify 8% keep-shapes \
+  -o precision=0.00001 public/chicago_wards_2015.json
+```
+
+The old source also has three `OUT` features; these are deliberately excluded.
+Both bundled historical files contain exactly wards 1–50, with valid geometries.
+If a geometry file fails to load, its panel keeps the table and offers **Retry**.
+
+**Attribution:** the data publisher is the **City of Chicago**. Each permit map
+links its ward-boundary credit to the corresponding City Data Portal dataset,
+and the page footer links all three sources and the
+[City Data Terms of Use](https://www.chicago.gov/city/en/narr/foia/data_disclaimer.html).
+The City's required modified-data notice is published in that footer; its text
+is also available on the [City's TIF portal](https://webapps1.chicago.gov/ChicagoTif/disclaimer.html)
+and is maintained in `src/data/chicagoDataAttribution.json`. This source credit
+is separate from the existing Esri/OpenStreetMap basemap attribution.
+
+Each historical GeoJSON includes a top-level `attribution` foreign member with
+the publisher, dataset title/ID, source and download URLs, retrieval date, raw
+source SHA-256, terms links, modified-data notice, and a description of the
+filtering/simplification. Preserve or refresh this metadata when regenerating
+the files above. The portal identifies the license as **See Terms of Use**;
+the boundary files are not relicensed under a project software license.
+
+Focused regression checks (no network requests):
+
+```bash
+npm test
+python3 -m unittest discover -s tests -p 'test_permit_periods.py'
+```
+
+These cover period selection, exact cutoffs, leap/partial years, all supported
+year ranges in both count modes, project ownership, CSV period keys, and staged
+conversion deduplication across a cutoff. The PR also records browser validation
+of the affected controls and responsive layouts.
+
 - [docs/affordable-housing-categories.md](docs/affordable-housing-categories.md) —
   what counts as an affordable unit in Chicago, which programs overlap, where
   CHA fits, and why the categories must never be summed.

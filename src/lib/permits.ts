@@ -66,6 +66,8 @@ export interface PermitsData extends PermitTables {
    * force when it was issued — rather than on today's boundaries.
    */
   atIssue: PermitTables;
+  /** Stated-ward tables split at the exact redistricting dates, after deduplication. */
+  byBoundaryPeriod: Record<string, PermitTables & { conversions: ConversionTables }>;
 }
 
 /**
@@ -181,6 +183,18 @@ export function summarise(
   const partial = to === data.meta.lastYear ? lastMonth / 12 : 1;
   const years = Math.max(0.25, to - from + partial);
 
+  return summariseTables(t, ct, from, to, conv, years);
+}
+
+function summariseTables(
+  t: PermitTables,
+  ct: ConversionTables,
+  from: number,
+  to: number,
+  conv: boolean,
+  years: number
+): { rows: WardPermits[]; years: number; total: number } {
+
   const rows: WardPermits[] = [];
   let total = 0;
   for (let w = 1; w <= 50; w++) {
@@ -218,6 +232,92 @@ export function summarise(
   rows.sort((a, b) => b.units - a.units);
   rows.forEach((r, i) => (r.rank = i + 1));
   return { rows, years, total };
+}
+
+export interface BoundaryPeriod {
+  id: string;
+  label: string;
+  /** Start inclusive, end exclusive; the oldest period starts at data coverage. */
+  start: string;
+  end: string | null;
+  geometry: string;
+  source: string;
+}
+
+/** Fractional calendar years, including leap days and the final day of coverage. */
+export function coveredYears(start: string, end: string): number {
+  let cursor = Date.parse(`${start}T00:00:00Z`);
+  const stop = Date.parse(`${end}T00:00:00Z`);
+  let years = 0;
+  while (cursor < stop) {
+    const year = new Date(cursor).getUTCFullYear();
+    const next = Date.UTC(year + 1, 0, 1);
+    const until = Math.min(next, stop);
+    years += (until - cursor) / (next - Date.UTC(year, 0, 1));
+    cursor = until;
+  }
+  return years;
+}
+
+export function nextDay(date: string): string {
+  const d = new Date(`${date}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + 1);
+  return d.toISOString().slice(0, 10);
+}
+
+export interface PeriodSummary {
+  period: BoundaryPeriod;
+  start: string;
+  /** Exclusive, consistent with the importer. */
+  end: string;
+  rows: WardPermits[];
+  years: number;
+  total: number;
+  tables: PermitTables;
+}
+
+export function summarisePeriods(
+  data: PermitsData,
+  periods: BoundaryPeriod[],
+  from: number,
+  to: number,
+  mode: CountMode = "new"
+): PeriodSummary[] {
+  const start = `${Math.max(from, data.meta.firstYear)}-01-01`;
+  const end = [nextDay(data.meta.lastDate), `${to + 1}-01-01`].sort()[0];
+  return periods.flatMap((period) => {
+    const lo = [start, period.start].sort().at(-1)!;
+    const hi = [end, period.end ?? end].sort()[0];
+    if (lo >= hi) return [];
+    const tables = data.byBoundaryPeriod[period.id];
+    if (!tables) throw new Error(`Missing permit totals for ${period.label}`);
+    return [{
+      period, start: lo, end: hi, tables,
+      ...summariseTables(tables, tables.conversions, from, to,
+        mode === "withConversions", coveredYears(lo, hi)),
+    }];
+  });
+}
+
+/** A period-aware export never merges the same ward number across maps. */
+export function periodsToCsv(periods: PeriodSummary[], mode: CountMode): string {
+  const lines: string[] = [];
+  for (const p of periods) {
+    const csv = toCsv(p.rows, Number(p.start.slice(0, 4)),
+      Number(previousDay(p.end).slice(0, 4)), "atIssue", mode).split("\n");
+    if (lines.length === 0) {
+      lines.push(`boundary_period,period_start,period_end,${csv[0]}`);
+    }
+    lines.push(...csv.slice(1).map((line) =>
+      `${p.period.id},${p.start},${previousDay(p.end)},${line}`));
+  }
+  return lines.join("\n");
+}
+
+export function previousDay(date: string): string {
+  const d = new Date(`${date}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() - 1);
+  return d.toISOString().slice(0, 10);
 }
 
 /** Citywide units per year, for the trend strip. */
