@@ -1,13 +1,23 @@
 /* Affordable vs. Market — layers on income.css, which supplies the page frame,
    controls, chart boxes, readout and method text. Only what differs lives here. */
 
-/* Where each kind of building went: the headline, above the charts. */
+/* The title runs the full width of the boxes below it; the lede keeps a
+   readable measure. */
+.mix .in-header {
+  max-width: none;
+}
+
+.mix .page-lede {
+  max-width: var(--measure);
+}
+
+/* How much of each kind of building the biggest market-rate wards hold. */
 .mix-summary {
   display: flex;
   align-items: flex-end;
   gap: 20px;
   flex-wrap: wrap;
-  margin-bottom: 20px;
+  margin-top: 20px;
   border: 1px solid var(--rule);
   padding: 16px 20px;
 }

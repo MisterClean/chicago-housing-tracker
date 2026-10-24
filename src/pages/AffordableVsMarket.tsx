@@ -42,7 +42,7 @@ function NoneLine({ wards, what }: { wards: number[]; what: string }) {
 export function AffordableVsMarket() {
   const [selectedWard, setSelectedWard] = useState<number | null>(null);
   const [hoveredWard, setHoveredWard] = useState<number | null>(null);
-  const [from, setFrom] = useState(FIRST);
+  const [from, setFrom] = useState(CYCLE_START);
   const [to, setTo] = useState(LAST);
 
   const rows = useMemo(() => wardMix(aro, lihtc, permits, from, to), [from, to]);
@@ -77,11 +77,11 @@ export function AffordableVsMarket() {
   return (
     <div className="income mix">
       <header className="in-header">
-        <p className="eyebrow">Where affordable goes</p>
+        <p className="eyebrow">Who builds what</p>
         <h1 className="page-title">Affordable and market-rate building</h1>
         <p className="page-lede">
-          Does affordable housing get built where the market builds? Each dot is a ward: the
-          market-rate homes it permitted against its new income-restricted ones.
+          Plotting wards&rsquo; market-rate construction against their affordable housing
+          construction.
         </p>
       </header>
 
@@ -111,39 +111,6 @@ export function AffordableVsMarket() {
           <input type="range" min={FIRST} max={LAST} value={to} aria-label="Last permit year"
             onChange={(e) => setToSafe(Number(e.target.value))} />
         </div>
-      </section>
-
-      <section className="mix-summary" aria-label="Where each kind of building went">
-        <table className="mix-table">
-          <thead>
-            <tr>
-              <th />
-              <th className="num">Market-rate homes</th>
-              <th className="num">Affordable units</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">
-                The {TOP_N} wards that permitted the most market-rate homes
-                <span className="mix-wards">Wards {conc.top.join(", ")}</span>
-              </th>
-              <td className="num strong" data-label="Market-rate">{pct(conc.market)}</td>
-              <td className="num strong" data-label="Affordable">{pct(conc.affordable)}</td>
-            </tr>
-            <tr>
-              <th scope="row">The other {50 - TOP_N} wards</th>
-              <td className="num" data-label="Market-rate">{pct(1 - conc.market)}</td>
-              <td className="num" data-label="Affordable">{pct(1 - conc.affordable)}</td>
-            </tr>
-            <tr className="mix-total">
-              <th scope="row">Citywide, {from === to ? from : `${from}–${to}`}</th>
-              <td className="num" data-label="Market-rate">{totals.market.toLocaleString()}</td>
-              <td className="num" data-label="Affordable">{totals.affordable.toLocaleString()}</td>
-            </tr>
-          </tbody>
-        </table>
-        <button className="pm-export" onClick={downloadCsv}>Download CSV</button>
       </section>
 
       <section className="mix-charts">
@@ -193,6 +160,39 @@ export function AffordableVsMarket() {
           downtown wards permit over a hundred times what most wards do. Hover or tap a dot for
           its numbers.
         </p>
+      </section>
+
+      <section className="mix-summary" aria-label="Where each kind of building went">
+        <table className="mix-table">
+          <thead>
+            <tr>
+              <th />
+              <th className="num">Market-rate homes</th>
+              <th className="num">Affordable units</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">
+                The {TOP_N} wards that permitted the most market-rate homes
+                <span className="mix-wards">Wards {conc.top.join(", ")}</span>
+              </th>
+              <td className="num strong" data-label="Market-rate">{pct(conc.market)}</td>
+              <td className="num strong" data-label="Affordable">{pct(conc.affordable)}</td>
+            </tr>
+            <tr>
+              <th scope="row">The other {50 - TOP_N} wards</th>
+              <td className="num" data-label="Market-rate">{pct(1 - conc.market)}</td>
+              <td className="num" data-label="Affordable">{pct(1 - conc.affordable)}</td>
+            </tr>
+            <tr className="mix-total">
+              <th scope="row">Citywide, {from === to ? from : `${from}–${to}`}</th>
+              <td className="num" data-label="Market-rate">{totals.market.toLocaleString()}</td>
+              <td className="num" data-label="Affordable">{totals.affordable.toLocaleString()}</td>
+            </tr>
+          </tbody>
+        </table>
+        <button className="pm-export" onClick={downloadCsv}>Download CSV</button>
       </section>
 
       <div className="in-method">

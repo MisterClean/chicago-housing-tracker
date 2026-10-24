@@ -59,7 +59,7 @@ export const SECTIONS: Section[] = [
     title: "Affordable and market-rate building",
     blurb:
       "Do affordable homes get built where the market builds? ARO and subsidized units against market-rate permits, ward by ward.",
-    stage: "Where affordable goes",
+    stage: "Who builds what",
     status: "live",
   },
   {

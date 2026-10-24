@@ -26,8 +26,9 @@ interface Props {
   numbersInDots?: boolean;
   /**
    * Log scale on both axes, for counts that span several orders of magnitude.
-   * Zero stays at the corner (the scale is log of 1 + value); no scale break or
-   * trend line is drawn.
+   * Zero stays at the corner (the scale is log of 1 + value). There is no
+   * scale break, and the trend line is fitted to the logged values, so it is
+   * straight on the chart.
    */
   log?: boolean;
   /**
@@ -213,12 +214,30 @@ export function Scatter({
   zeroMarks = false,
 }: Props) {
   const isMark = (p: ScatterPoint) => zeroMarks && p.y === 0;
-  const { xs, ys, ysOff, xt, yt, yTop, bandTop, clipped, breakY, line } = useMemo(() => {
+  const { xs, ys, ysOff, xt, yt, yTop, bandTop, clipped, breakY, fit } = useMemo(() => {
     const dataXMax = Math.max(...points.map((p) => p.x));
     if (log) {
       const xa = logAxis(dataXMax);
       const ya = logAxis(Math.max(...points.map((p) => p.y)));
       const yMaxV = Math.max(...points.map((p) => p.y));
+      const t = trend(points.map((p) => ({ ward: p.ward, x: lg(p.x), y: lg(p.y) })));
+      // In logged units the fit is a straight line; trim it to the plot box.
+      let logFit: { x1: number; y1: number; x2: number; y2: number } | null = null;
+      if (t) {
+        const at = (lx: number) => t.intercept + t.slope * lx;
+        let x1 = 0, x2 = xa.top;
+        const clampX = (ly: number) => (t.slope ? (ly - t.intercept) / t.slope : 0);
+        if (at(x1) < 0) x1 = clampX(0);
+        if (at(x1) > ya.top) x1 = clampX(ya.top);
+        if (at(x2) > ya.top) x2 = clampX(ya.top);
+        if (at(x2) < 0) x2 = clampX(0);
+        if (x2 > x1) {
+          logFit = {
+            x1: (x1 / xa.top) * PW, y1: PH * (1 - at(x1) / ya.top),
+            x2: (x2 / xa.top) * PW, y2: PH * (1 - at(x2) / ya.top),
+          };
+        }
+      }
       return {
         xs: (v: number) => (lg(v) / xa.top) * PW,
         ys: (v: number) => PH * (1 - lg(v) / ya.top),
@@ -230,7 +249,7 @@ export function Scatter({
         bandTop: yMaxV,
         clipped: false,
         breakY: 0,
-        line: null,
+        fit: logFit,
       };
     }
     const xMin = 0;
@@ -251,9 +270,13 @@ export function Scatter({
       top + step,
       Math.ceil((offMax * (1 + BAND_HEADROOM)) / step) * step
     );
+    const xs = (v: number) => ((v - xMin) / (xTicks[xTicks.length - 1] - xMin)) * PW;
+    const ys = (v: number) => offset + mainH * (1 - Math.min(v, top) / top);
+    const line = trend(points);
+    const x0 = xTicks[0], xN = xTicks[xTicks.length - 1];
     return {
-      xs: (v: number) => ((v - xMin) / (xTicks[xTicks.length - 1] - xMin)) * PW,
-      ys: (v: number) => offset + mainH * (1 - Math.min(v, top) / top),
+      xs,
+      ys,
       /** Position within the band, on its own scale from `top` to `bandTop`. */
       ysOff: (v: number) => BAND_H * (1 - (v - top) / (bandTop - top)),
       xt: xTicks,
@@ -262,7 +285,10 @@ export function Scatter({
       bandTop,
       clipped,
       breakY: offset / 2,
-      line: trend(points),
+      fit: line && {
+        x1: xs(x0), y1: ys(Math.max(0, line.intercept + line.slope * x0)),
+        x2: xs(xN), y2: ys(Math.max(0, line.intercept + line.slope * xN)),
+      },
     };
   }, [points, log]);
 
@@ -369,12 +395,12 @@ export function Scatter({
           />
         )}
 
-        {line && (
+        {fit && (
           <line
-            x1={xs(xt[0])}
-            y1={ys(Math.max(0, line.intercept + line.slope * xt[0]))}
-            x2={xs(xt[xt.length - 1])}
-            y2={ys(Math.max(0, line.intercept + line.slope * xt[xt.length - 1]))}
+            x1={fit.x1}
+            y1={fit.y1}
+            x2={fit.x2}
+            y2={fit.y2}
             stroke="var(--muted)"
             strokeWidth={1}
             strokeDasharray="5 4"
