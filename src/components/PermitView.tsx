@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import { PermitMap, type PermitViewport } from "./PermitMap";
 import {
   PERMIT_BREAK_LABELS,
@@ -37,6 +37,8 @@ export function PermitView({
   viewport,
   onViewportChange,
 }: Props) {
+  const detailsId = useId();
+  const tableRef = useRef<HTMLDivElement>(null);
   const [selectedWard, setSelectedWard] = useState<number | null>(null);
   const [hoveredWard, setHoveredWard] = useState<number | null>(null);
   const [sort, setSort] = useState<{ key: SortKey; desc: boolean }>({
@@ -83,7 +85,9 @@ export function PermitView({
     );
   };
 
-  const active = selectedWard ?? hoveredWard;
+  // Hover is for comparing map/table highlights. Compact project details open
+  // only on selection, below the table, so browsing cannot move the rows.
+  const active = selectedWard ?? (compact ? null : hoveredWard);
   const activeRow = active != null ? rows.find((r) => r.ward === active) : null;
 
   const wardCard = activeRow ? (
@@ -94,6 +98,11 @@ export function PermitView({
         <button
           className="pm-link pm-dismiss"
           onClick={() => {
+            if (compact) {
+              tableRef.current
+                ?.querySelector<HTMLButtonElement>('button[aria-pressed="true"]')
+                ?.focus();
+            }
             setSelectedWard(null);
             setHoveredWard(null);
           }}
@@ -156,7 +165,7 @@ export function PermitView({
         <PermitMap
           rows={rows}
           geometry={geometry}
-            boundarySource={boundarySource}
+          boundarySource={boundarySource}
           viewport={viewport}
           onViewportChange={onViewportChange}
           selectedWard={selectedWard}
@@ -183,15 +192,18 @@ export function PermitView({
       </div>
 
       {compact && (
-        <div className="pm-period-detail" aria-live="polite">
-          {wardCard ?? (
-            <p className="pm-basis-hint">
-              Select a ward on the map or in the table to see its projects.
-            </p>
+        <p className="pm-period-hint">
+          {selectedWard == null ? (
+            "Select a ward for projects."
+          ) : (
+            <a href={`#${detailsId}`}>
+              View Ward {selectedWard} projects<span aria-hidden="true"> ↓</span>
+            </a>
           )}
-        </div>
+        </p>
       )}
       <div
+        ref={tableRef}
         className="pm-table-wrap"
         tabIndex={0}
         role="region"
@@ -263,6 +275,8 @@ export function PermitView({
                     className="pm-ward-button"
                     aria-label={`Ward ${r.ward}`}
                     aria-pressed={r.ward === selectedWard}
+                    aria-expanded={compact ? r.ward === selectedWard : undefined}
+                    aria-controls={compact ? detailsId : undefined}
                   >
                     {r.ward}
                   </button>
@@ -282,6 +296,18 @@ export function PermitView({
           </tbody>
         </table>
       </div>
+      {compact && (
+        <div
+          id={detailsId}
+          className="pm-period-detail"
+          hidden={wardCard == null}
+          tabIndex={-1}
+          role="region"
+          aria-label={`${label} ward details`}
+        >
+          {wardCard}
+        </div>
+      )}
     </section>
   );
 }
