@@ -25,16 +25,17 @@ test("every ward, every year range: the three series reconcile with Affordable U
       for (const r of rows) {
         assert.ok(r.market >= 0, `ward ${r.ward} ${from}-${to}: negative market-rate`);
         // Market-rate is the remainder, except where it had to be floored at zero.
-        if (r.market > 0) assert.equal(r.market + r.aro + r.subsidized, r.all, `ward ${r.ward} ${from}-${to}`);
+        assert.equal(r.affordable, r.aro + r.subsidized);
+        if (r.market > 0) assert.equal(r.market + r.affordable, r.all, `ward ${r.ward} ${from}-${to}`);
       }
     }
   }
 });
 
-test("the top wards' shares are the biggest market-rate wards, and stay within 0-1", () => {
+test("the top wards are the biggest market-rate wards, and every share stays within 0-1", () => {
   const rows = wardMix(aro, lihtc, permits, FIRST, LAST);
   const c = concentration(rows, 10);
   const byMarket = [...rows].sort((a, b) => b.market - a.market || a.ward - b.ward).slice(0, 10).map((r) => r.ward);
   assert.deepEqual(c.top, byMarket);
-  for (const v of [c.market, c.aro, c.subsidized]) assert.ok(v >= 0 && v <= 1);
+  for (const v of [c.market, c.affordable, c.aroShareTop, c.aroShareRest]) assert.ok(v >= 0 && v <= 1);
 });

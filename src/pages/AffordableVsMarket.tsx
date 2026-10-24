@@ -52,15 +52,16 @@ export function AffordableVsMarket() {
   const rows = useMemo(() => wardMix(aro, lihtc, permits, from, to), [from, to]);
   const conc = useMemo(() => concentration(rows, TOP_N), [rows]);
   const totals = useMemo(
-    () => rows.reduce((t, r) => ({ market: t.market + r.market, aro: t.aro + r.aro, subsidized: t.subsidized + r.subsidized }),
-      { market: 0, aro: 0, subsidized: 0 }),
+    () => rows.reduce((t, r) => ({ market: t.market + r.market, affordable: t.affordable + r.affordable, aro: t.aro + r.aro }),
+      { market: 0, affordable: 0, aro: 0 }),
     [rows]
   );
-  const xMax = Math.max(...rows.map((r) => r.market));
-  const aroPoints: ScatterPoint[] = rows.map((r) => ({ ward: r.ward, x: r.market, y: r.aro }));
-  const subPoints: ScatterPoint[] = rows.map((r) => ({ ward: r.ward, x: r.market, y: r.subsidized }));
-  const noAro = rows.filter((r) => r.aro === 0).map((r) => r.ward);
-  const noSub = rows.filter((r) => r.subsidized === 0).map((r) => r.ward);
+  const points: ScatterPoint[] = rows.map((r) => ({ ward: r.ward, x: r.market, y: r.affordable }));
+  const aroShare = useMemo(
+    () => new Map(rows.filter((r) => r.affordable > 0).map((r) => [r.ward, r.aro / r.affordable])),
+    [rows]
+  );
+  const none = rows.filter((r) => r.affordable === 0).map((r) => r.ward);
 
   const setFromSafe = (v: number) => setFrom(Math.min(v, to));
   const setToSafe = (v: number) => setTo(Math.max(v, from));
@@ -81,29 +82,15 @@ export function AffordableVsMarket() {
     URL.revokeObjectURL(url);
   };
 
-  const scatterProps = {
-    xLabel: "Market-rate homes permitted",
-    fmtX: count,
-    fmtY: count,
-    log: true,
-    xMax,
-    numbersInDots: true,
-    zeroMarks: true,
-    selectedWard,
-    hoveredWard,
-    onSelectWard: setSelectedWard,
-    onHoverWard: setHoveredWard,
-  };
-
   return (
     <div className="income mix">
       <header className="in-header">
         <p className="eyebrow">Where affordable goes</p>
         <h1 className="page-title">Affordable and market-rate building</h1>
         <p className="page-lede">
-          Do affordable homes get built where the market builds? Two kinds go different ways: ARO
-          units are set aside inside market-rate buildings, while subsidized units go where public
-          money sends them.
+          Does affordable housing get built where the market builds? Each dot is a ward: the
+          market-rate homes it permitted against its new income-restricted ones, shaded by how
+          many of those come from the Affordable Requirements Ordinance.
         </p>
       </header>
 
@@ -141,8 +128,8 @@ export function AffordableVsMarket() {
             <tr>
               <th />
               <th className="num">Market-rate homes</th>
-              <th className="num">ARO units</th>
-              <th className="num">Subsidized units</th>
+              <th className="num">Affordable units</th>
+              <th className="num">ARO share of affordable</th>
             </tr>
           </thead>
           <tbody>
@@ -152,20 +139,22 @@ export function AffordableVsMarket() {
                 <span className="mix-wards">Wards {conc.top.join(", ")}</span>
               </th>
               <td className="num strong" data-label="Market-rate">{pct(conc.market)}</td>
-              <td className="num strong" data-label="ARO">{pct(conc.aro)}</td>
-              <td className="num strong" data-label="Subsidized">{pct(conc.subsidized)}</td>
+              <td className="num strong" data-label="Affordable">{pct(conc.affordable)}</td>
+              <td className="num" data-label="ARO share">{pct(conc.aroShareTop)}</td>
             </tr>
             <tr>
               <th scope="row">The other {50 - TOP_N} wards</th>
               <td className="num" data-label="Market-rate">{pct(1 - conc.market)}</td>
-              <td className="num" data-label="ARO">{pct(1 - conc.aro)}</td>
-              <td className="num" data-label="Subsidized">{pct(1 - conc.subsidized)}</td>
+              <td className="num" data-label="Affordable">{pct(1 - conc.affordable)}</td>
+              <td className="num" data-label="ARO share">{pct(conc.aroShareRest)}</td>
             </tr>
             <tr className="mix-total">
               <th scope="row">Citywide, {from === to ? from : `${from}–${to}`}</th>
               <td className="num" data-label="Market-rate">{totals.market.toLocaleString()}</td>
-              <td className="num" data-label="ARO">{totals.aro.toLocaleString()}</td>
-              <td className="num" data-label="Subsidized">{totals.subsidized.toLocaleString()}</td>
+              <td className="num" data-label="Affordable">{totals.affordable.toLocaleString()}</td>
+              <td className="num" data-label="ARO share">
+                {totals.affordable > 0 ? pct(totals.aro / totals.affordable) : "—"}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -175,28 +164,37 @@ export function AffordableVsMarket() {
       <section className="mix-charts">
         <figure className="in-chart">
           <figcaption>
-            <h2>ARO units against market-rate homes</h2>
+            <h2>Affordable units against market-rate homes</h2>
             <p>
-              Units the Affordable Requirements Ordinance sets aside inside market-rate buildings,
-              by ward, {from}&ndash;{to}. If they follow the market, the dots rise from left to right.
+              New income-restricted units (ARO, CHA owned, tax credit and Other City/State) against
+              market-rate homes permitted, by ward, {from}&ndash;{to}.
             </p>
+            <div className="mix-key">
+              <span><i style={{ background: SUB_COLOR }} /> Subsidized: CHA owned, tax credit, Other City/State</span>
+              <span><i style={{ background: ARO_COLOR }} /> ARO, set aside in market-rate buildings</span>
+              <span className="mix-key-note">Each dot is split by its ward&rsquo;s mix of the two.</span>
+            </div>
           </figcaption>
-          <Scatter {...scatterProps} points={aroPoints} yLabel="ARO units" color={ARO_COLOR} />
-          <NoneLine wards={noAro} what="ARO units" />
+          <Scatter
+            points={points}
+            xLabel="Market-rate homes permitted"
+            yLabel="Affordable units"
+            fmtX={count}
+            fmtY={count}
+            log
+            numbersInDots
+            zeroMarks
+            color={SUB_COLOR}
+            split={aroShare}
+            splitColor={ARO_COLOR}
+            selectedWard={selectedWard}
+            hoveredWard={hoveredWard}
+            onSelectWard={setSelectedWard}
+            onHoverWard={setHoveredWard}
+          />
+          <NoneLine wards={none} what="affordable units" />
         </figure>
-        <figure className="in-chart">
-          <figcaption>
-            <h2>Subsidized units against market-rate homes</h2>
-            <p>
-              CHA-owned, tax-credit and Other City/State units, which public money places, by ward,{" "}
-              {from}&ndash;{to}. Same horizontal scale as above, so each ward sits in the same
-              left-to-right position in both charts.
-            </p>
-          </figcaption>
-          <Scatter {...scatterProps} points={subPoints} yLabel="Subsidized units" color={SUB_COLOR} />
-          <NoneLine wards={noSub} what="subsidized units" />
-        </figure>
-        {/* Inside the charts section and sticky, so it stays on screen whichever chart is hovered. */}
+        {/* Sticky inside the chart section, so it stays on screen while the chart is in view. */}
         {activeRow && (
           <div className="in-readout mix-readout" aria-live="polite">
             <span className="in-ward">
@@ -204,8 +202,12 @@ export function AffordableVsMarket() {
               <span className="in-hood">{wardNeighborhoods(activeRow.ward)}</span>
             </span>
             <span><strong>{activeRow.market.toLocaleString()}</strong> market-rate homes</span>
-            <span><strong>{activeRow.aro.toLocaleString()}</strong> ARO units</span>
-            <span><strong>{activeRow.subsidized.toLocaleString()}</strong> subsidized units</span>
+            <span>
+              <strong>{activeRow.affordable.toLocaleString()}</strong> affordable units
+              {activeRow.affordable > 0 && (
+                <> ({activeRow.aro.toLocaleString()} ARO, {activeRow.subsidized.toLocaleString()} subsidized)</>
+              )}
+            </span>
             <span>{from}&ndash;{to}</span>
           </div>
         )}
@@ -216,7 +218,6 @@ export function AffordableVsMarket() {
         </p>
       </section>
 
-
       <div className="in-method">
         <p>
           <strong>What is counted.</strong> New homes only, dated by building permit and placed on
@@ -224,11 +225,14 @@ export function AffordableVsMarket() {
           the net homes created by converting existing buildings, as on{" "}
           <Link to="/permitting">Permitted Units</Link>) less the income-restricted ones counted on{" "}
           <Link to="/affordable">Affordable Units</Link>; the market-rate homes in a mixed-income
-          building count here as market-rate. A few wards&rsquo; restricted homes outnumber the
+          building count here as market-rate. Affordable units are the new units Affordable Units
+          counts under ARO, CHA owned, tax credit and Other City/State; ARO units are set aside
+          inside market-rate buildings, so they come with market-rate building by design, which is
+          why the chart shows each ward&rsquo;s ARO share rather than leaving it in the total
+          unremarked. A few wards&rsquo; restricted homes outnumber the
           permits whose unit counts could be read, because some affordable homes come from rehabs and
           conversions whose permits state none, so their market-rate figure is shown as zero.
-          Subsidized units are those Affordable Units counts as CHA owned, tax credit or Other
-          City/State; preserved units are left out, since the question is where new homes go.
+          Preserved units are left out, since the question is where new homes go.
           Wards are drawn to roughly equal populations, so totals compare fairly without dividing by
           households.
         </p>

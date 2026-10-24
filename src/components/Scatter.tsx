@@ -41,6 +41,20 @@ interface Props {
    * the page lists those wards in words instead.
    */
   zeroMarks?: boolean;
+  /**
+   * Each ward's dot split in two: the share (0-1) drawn as a wedge in
+   * `splitColor` from twelve o'clock, the rest in `color`.
+   */
+  split?: Map<number, number>;
+  splitColor?: string;
+}
+
+/** A pie wedge of a circle, clockwise from twelve o'clock. */
+function wedge(cx: number, cy: number, r: number, share: number): string {
+  const a = share * 2 * Math.PI;
+  const x = cx + r * Math.sin(a);
+  const y = cy - r * Math.cos(a);
+  return `M${cx},${cy} L${cx},${cy - r} A${r},${r} 0 ${share > 0.5 ? 1 : 0} 1 ${x.toFixed(2)},${y.toFixed(2)} Z`;
 }
 
 /**
@@ -217,6 +231,8 @@ export function Scatter({
   xMax,
   color = DOT,
   zeroMarks = false,
+  split,
+  splitColor = DOT,
 }: Props) {
   const isMark = (p: ScatterPoint) => zeroMarks && p.y === 0;
   const { xs, ys, ysOff, xt, yt, yTop, bandTop, clipped, breakY, line } = useMemo(() => {
@@ -423,13 +439,15 @@ export function Scatter({
               </g>
             );
           }
+          const r = numbersInDots ? (active ? 12 : 10) : active ? 8 : 5;
+          const share = split?.get(p.ward) ?? 0;
           return (
             <g key={p.ward}>
               <circle
                 cx={cx}
                 cy={cy}
-                r={numbersInDots ? (active ? 12 : 10) : active ? 8 : 5}
-                fill={active ? DOT_ACTIVE : color}
+                r={r}
+                fill={active ? DOT_ACTIVE : share >= 1 ? splitColor : color}
                 fillOpacity={active ? 1 : numbersInDots ? 0.9 : 0.72}
                 stroke="var(--ground)"
                 strokeWidth={1.5}
@@ -437,6 +455,9 @@ export function Scatter({
               >
                 {tip}
               </circle>
+              {!active && share > 0 && share < 1 && (
+                <path d={wedge(cx, cy, r - 0.75, share)} fill={splitColor} fillOpacity={0.95} pointerEvents="none" />
+              )}
               {numbersInDots && (
                 <text x={cx} y={cy + 3.5} textAnchor="middle" className="sc-dot-num">
                   {p.ward}
