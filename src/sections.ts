@@ -63,21 +63,21 @@ export const SECTIONS: Section[] = [
     status: "live",
   },
   {
+    slug: "income",
+    nav: "Income vs. Building",
+    title: "Income and housing production",
+    blurb:
+      "Does a ward's wealth predict how much housing it approves? Median household income plotted against permits.",
+    stage: "Who builds",
+    status: "live",
+  },
+  {
     slug: "affordability",
     nav: "Affordability Map",
     title: "Affordability Map",
     blurb:
       "Ward-by-ward view of active for-rent and for-sale listings within reach based on area median income standards.",
     stage: "What you can afford",
-    status: "live",
-  },
-  {
-    slug: "income",
-    nav: "Income & Building",
-    title: "Income and housing production",
-    blurb:
-      "Does a ward's wealth predict how much housing it approves? Median household income plotted against permits.",
-    stage: "Who builds",
     status: "live",
   },
 ];

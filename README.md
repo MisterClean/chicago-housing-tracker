@@ -17,9 +17,9 @@ there — deliberate, since the information architecture will shift as data sour
 | `/` | Landing — hero, section cards, newsletter coverage | Live |
 | `/permitting` | What gets built — Permitted Units, units permitted by ward | Live |
 | `/affordable` | What gets built affordable — ARO, tax-credit and City/State-funded units by ward and year | Live |
-| `/affordable-vs-market` | Who builds what — ARO and subsidized units against market-rate permits, by ward | Live |
-| `/affordability` | What you can afford — the listings dashboard | Live |
+| `/affordable-vs-market` | Who builds what — affordable units against market-rate units permitted, by ward | Live |
 | `/income` | Who builds — ward income against units permitted | Live |
+| `/affordability` | What you can afford — the listings dashboard | Live |
 | `/glossary` | Reference — AMI, ARO, and how to read the numbers | Live |
 
 `/glossary` is intentionally not in the top nav; it is reached from the footer and from the
