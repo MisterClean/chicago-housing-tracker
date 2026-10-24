@@ -182,7 +182,7 @@ SPA rewrite. The same titles set the browser tab as you move between pages.
 | Dataset | How it refreshes |
 |---|---|
 | `src/data/permits.json` | **Automated.** `.github/workflows/refresh-permits.yml` re-runs the importer monthly and commits any change. Also runnable by hand from the Actions tab. |
-| `src/data/blogPosts.json` | **Automated.** `.github/workflows/refresh-posts.yml` runs `scripts/import_posts.py` daily: every public newsletter post tagged "Housing" on Substack, which is the source of truth. Commits only when the list changes. |
+| `src/data/blogPosts.json` | Manual — `python3 scripts/import_posts.py`, then commit. Every public newsletter post tagged "Housing" on Substack, which is the source of truth. Can't be scheduled: Substack blocks requests from GitHub's servers. |
 | `src/data/aro.json` | Manual — `python3 scripts/import_aro.py`. Needs `.permits_cache.json` present, so run the permit importer first. |
 | `src/data/wards_data.json` | Manual — Zillow listing counts collected by hand, see the pipeline notes above. |
 | `src/data/lihtc.json` | Manual — `python3 scripts/import_lihtc.py`. Tax-credit and City/State-funded developments; hand-reviewed records live in the script, source documents in `sources/` (git-ignored). |
@@ -211,9 +211,9 @@ Requires `shapely` and `certifi`, both build-time only.
   the geometry.
 - Data collection is still manual. The `customRegionId` values in the sheet's column C are the
   hook for automating it.
-- The newsletter list in `src/data/blogPosts.ts` is hand-maintained. To make it self-updating,
-  point it at `citythatworks.substack.com/feed`. Note that titles drift from slugs — several
-  posts were retitled after publishing — so read titles from the feed, never from the URL.
+- The newsletter list refreshes by hand (`scripts/import_posts.py`). Substack answers 403 to
+  every request from GitHub's servers, archive API, RSS and pages alike, so a scheduled
+  workflow can't run it.
 - **Permitting data is unresolved.** Chicago's Building Permits dataset (`ydr8-5enu`) has a ward
   on every record but no unit count in any of its 122 columns, and `PERMIT - NEW CONSTRUCTION`
   is polluted with garages, permit revisions, and temporary event structures. Producing a

@@ -3,7 +3,10 @@
 Writes src/data/blogPosts.json: every public post on
 citythatworks.substack.com tagged "Housing", newest first. The tag on Substack
 is the source of truth; to add or drop a post from the site, tag or untag it
-there and re-run this (the weekly workflow does it automatically).
+there, re-run this and commit the result.
+
+Run it by hand: Substack refuses requests from GitHub's servers (403 on every
+URL, checked 2026-10-24), so it can't run as a scheduled workflow.
 
 Reads Substack's archive API, which pages 50 posts at a time. Fails loudly and
 writes nothing if the API errors, changes shape, or returns far fewer posts

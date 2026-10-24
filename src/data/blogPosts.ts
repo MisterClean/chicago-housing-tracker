@@ -3,8 +3,8 @@
  *
  * Every public post tagged "Housing" on Substack, newest first, written to
  * blogPosts.json by scripts/import_posts.py. The tag is the source of truth:
- * tag or untag a post on Substack to add or drop it here. A weekly workflow
- * (.github/workflows/refresh-posts.yml) re-runs the import and commits changes.
+ * tag or untag a post on Substack to add or drop it here, then re-run the
+ * import by hand (Substack blocks GitHub's servers, so it can't be scheduled).
  */
 import posts from "./blogPosts.json";
 
