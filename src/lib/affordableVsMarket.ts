@@ -1,9 +1,6 @@
 /**
  * Affordable against market-rate building, ward by ward, for the Affordable vs.
  * Market page: does affordable housing get built where the market builds?
- * ARO units are set aside inside market-rate buildings, so they come with the
- * market by construction; the page shows how much of each ward's affordable
- * building is ARO rather than treating it as a separate finding.
  *
  * Built from the same counts as the Affordable Units page, new units only:
  * building is the question, and market-rate permits are new building too.
@@ -60,43 +57,23 @@ export interface Concentration {
   /** Share of each series that the top wards hold. */
   market: number;
   affordable: number;
-  /** ARO's share of the affordable units in the top wards, and in the rest. */
-  aroShareTop: number;
-  aroShareRest: number;
 }
 
 /** How much of each kind of building the `n` biggest market-rate wards hold. */
 export function concentration(rows: MixRow[], n = 10): Concentration {
   const top = [...rows].sort((a, b) => b.market - a.market || a.ward - b.ward).slice(0, n);
-  const topSet = new Set(top.map((r) => r.ward));
-  const rest = rows.filter((r) => !topSet.has(r.ward));
   const sum = (rs: MixRow[], k: keyof MixRow) => rs.reduce((s, r) => s + r[k], 0);
   const share = (k: "market" | "affordable") => {
     const all = sum(rows, k);
     return all > 0 ? sum(top, k) / all : 0;
   };
-  const aroShare = (rs: MixRow[]) => (sum(rs, "affordable") > 0 ? sum(rs, "aro") / sum(rs, "affordable") : 0);
-  return {
-    top: top.map((r) => r.ward),
-    market: share("market"),
-    affordable: share("affordable"),
-    aroShareTop: aroShare(top),
-    aroShareRest: aroShare(rest),
-  };
+  return { top: top.map((r) => r.ward), market: share("market"), affordable: share("affordable") };
 }
 
 export function mixToCsv(rows: MixRow[], from: number, to: number): string {
-  const head = [
-    "ward", "market_rate_units", "affordable_units", "aro_units", "subsidized_units", "aro_share_of_affordable",
-    "all_new_units", "years",
-  ];
+  const head = ["ward", "market_rate_units", "affordable_units", "aro_units", "other_affordable_units", "all_new_units", "years"];
   return [
     head.join(","),
-    ...rows.map((r) =>
-      [
-        r.ward, r.market, r.affordable, r.aro, r.subsidized,
-        r.affordable > 0 ? (r.aro / r.affordable).toFixed(3) : "", r.all, `${from}-${to}`,
-      ].join(",")
-    ),
+    ...rows.map((r) => [r.ward, r.market, r.affordable, r.aro, r.subsidized, r.all, `${from}-${to}`].join(",")),
   ].join("\n");
 }

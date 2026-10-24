@@ -37,5 +37,5 @@ test("the top wards are the biggest market-rate wards, and every share stays wit
   const c = concentration(rows, 10);
   const byMarket = [...rows].sort((a, b) => b.market - a.market || a.ward - b.ward).slice(0, 10).map((r) => r.ward);
   assert.deepEqual(c.top, byMarket);
-  for (const v of [c.market, c.affordable, c.aroShareTop, c.aroShareRest]) assert.ok(v >= 0 && v <= 1);
+  for (const v of [c.market, c.affordable]) assert.ok(v >= 0 && v <= 1);
 });
