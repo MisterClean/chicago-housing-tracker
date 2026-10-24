@@ -409,8 +409,10 @@ export function Scatter({
         )}
 
         {[...points]
-          // The highlighted ward is drawn last so it sits on top of its neighbours.
+          // Zero marks first, so numbered dots near the zero line sit on top of
+          // them; the highlighted ward last, on top of its neighbours.
           .sort((a, b) =>
+            Number(!isMark(a)) - Number(!isMark(b)) ||
             Number(a.ward === selectedWard || a.ward === hoveredWard) -
             Number(b.ward === selectedWard || b.ward === hoveredWard))
           .map((p) => {

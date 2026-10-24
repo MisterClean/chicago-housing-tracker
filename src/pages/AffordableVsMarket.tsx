@@ -44,6 +44,7 @@ export function AffordableVsMarket() {
   const [hoveredWard, setHoveredWard] = useState<number | null>(null);
   const [from, setFrom] = useState(CYCLE_START);
   const [to, setTo] = useState(LAST);
+  const [log, setLog] = useState(true);
 
   const rows = useMemo(() => wardMix(aro, lihtc, permits, from, to), [from, to]);
   const conc = useMemo(() => concentration(rows, TOP_N), [rows]);
@@ -111,24 +112,40 @@ export function AffordableVsMarket() {
           <input type="range" min={FIRST} max={LAST} value={to} aria-label="Last permit year"
             onChange={(e) => setToSafe(Number(e.target.value))} />
         </div>
+        <div className="in-toggle-row">
+          <div className="in-toggle" role="group" aria-label="Chart scale">
+            <button className={log ? "in-tog on" : "in-tog"} aria-pressed={log} onClick={() => setLog(true)}>
+              Log scale
+            </button>
+            <button className={log ? "in-tog" : "in-tog on"} aria-pressed={!log} onClick={() => setLog(false)}>
+              Linear scale
+            </button>
+          </div>
+          <p className="in-hint">
+            {log
+              ? "Each gridline is ten times the last, so wards that built little stay readable beside the few that built a lot."
+              : "Plain counts: a few downtown wards dominate, and most sit near the corner."}
+          </p>
+        </div>
       </section>
 
       <section className="mix-charts">
         <figure className="in-chart">
           <figcaption>
-            <h2>Affordable units against market-rate homes</h2>
+            <h2>Affordable units against market-rate units</h2>
             <p>
-              New income-restricted units (CHA owned, tax credit, Other City/State and ARO) against
-              market-rate homes permitted, by ward, {from}&ndash;{to}.
+              New income-restricted units (see the <Link to="/affordable">Affordable Units</Link> tab)
+              against market-rate units (see the <Link to="/permitting">Permitted Units</Link> tab), by
+              ward, {from}&ndash;{to}.
             </p>
           </figcaption>
           <Scatter
             points={points}
-            xLabel="Market-rate homes permitted"
-            yLabel="Affordable units"
+            xLabel={`Market-rate units permitted${log ? " (log scale)" : ""}`}
+            yLabel={`Affordable units permitted${log ? " (log scale)" : ""}`}
             fmtX={count}
             fmtY={count}
-            log
+            log={log}
             numbersInDots
             zeroMarks
             selectedWard={selectedWard}
@@ -145,7 +162,7 @@ export function AffordableVsMarket() {
               <strong>Ward {activeRow.ward}</strong>{" "}
               <span className="in-hood">{wardNeighborhoods(activeRow.ward)}</span>
             </span>
-            <span><strong>{activeRow.market.toLocaleString()}</strong> market-rate homes</span>
+            <span><strong>{activeRow.market.toLocaleString()}</strong> market-rate units</span>
             <span>
               <strong>{activeRow.affordable.toLocaleString()}</strong> affordable units
               {activeRow.affordable > 0 && (
@@ -156,9 +173,8 @@ export function AffordableVsMarket() {
           </div>
         )}
         <p className="mix-scale-note">
-          Both axes use a log scale: each gridline is ten times the one before, because a few
-          downtown wards permit over a hundred times what most wards do. Hover or tap a dot for
-          its numbers.
+          Market-rate units here are all units permitted less the affordable ones; preserved
+          affordable units are not counted.
         </p>
       </section>
 
@@ -167,14 +183,14 @@ export function AffordableVsMarket() {
           <thead>
             <tr>
               <th />
-              <th className="num">Market-rate homes</th>
+              <th className="num">Market-rate units</th>
               <th className="num">Affordable units</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <th scope="row">
-                The {TOP_N} wards that permitted the most market-rate homes
+                The {TOP_N} wards that permitted the most market-rate units
                 <span className="mix-wards">Wards {conc.top.join(", ")}</span>
               </th>
               <td className="num strong" data-label="Market-rate">{pct(conc.market)}</td>
@@ -195,22 +211,6 @@ export function AffordableVsMarket() {
         <button className="pm-export" onClick={downloadCsv}>Download CSV</button>
       </section>
 
-      <div className="in-method">
-        <p>
-          <strong>What is counted.</strong> New homes only, dated by building permit and placed on
-          today&rsquo;s ward map. Market-rate homes are every new home permitted (new construction plus
-          the net homes created by converting existing buildings, as on{" "}
-          <Link to="/permitting">Permitted Units</Link>) less the income-restricted ones counted on{" "}
-          <Link to="/affordable">Affordable Units</Link>; the market-rate homes in a mixed-income
-          building count here as market-rate. Affordable units are the new units Affordable Units
-          counts under CHA owned, tax credit, Other City/State and ARO. A few wards&rsquo; restricted
-          homes outnumber the permits whose unit counts could be read, because some affordable homes
-          come from rehabs and conversions whose permits state none, so their market-rate figure is
-          shown as zero. Preserved units are left out, since the question is where new homes go.
-          Wards are drawn to roughly equal populations, so totals compare fairly without dividing by
-          households.
-        </p>
-      </div>
     </div>
   );
 }
