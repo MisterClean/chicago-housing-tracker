@@ -24,6 +24,23 @@ interface Props {
   maxLabels?: number;
   /** Draw every ward's number inside a larger dot instead of labelling beside it. */
   numbersInDots?: boolean;
+  /**
+   * Log scale on both axes, for counts that span several orders of magnitude.
+   * Zero stays at the corner (the scale is log of 1 + value); no scale break or
+   * trend line is drawn.
+   */
+  log?: boolean;
+  /** Top of the x axis, so side-by-side charts share a scale. */
+  xMax?: number;
+  /** Dot colour, where a page shows more than one series. */
+  color?: string;
+  /**
+   * Draw wards with a y of zero as small unnumbered marks at their exact
+   * place on the zero line, never nudged. Many zeros otherwise pile into a
+   * row of numbered dots that overlap and drift from their true positions;
+   * the page lists those wards in words instead.
+   */
+  zeroMarks?: boolean;
 }
 
 /**
@@ -82,6 +99,21 @@ function ticks(min: number, max: number, count = 5): number[] {
     out.push(Number((out[out.length - 1] + step).toFixed(6)));
   }
   return out;
+}
+
+/** log10(1 + v): a log scale that still has a place for zero. */
+const lg = (v: number) => Math.log10(1 + Math.max(0, v));
+
+/**
+ * A log axis ends a little past its largest value, not at the next power of
+ * ten, which can leave most of the plot empty. Ticks are 0 and the powers of
+ * ten inside that range; 1 only while it has room beside 0.
+ */
+function logAxis(max: number): { top: number; ticks: number[] } {
+  const top = Math.max(lg(10), lg(max) + 0.08);
+  const ticks = [0];
+  for (let v = max >= 10000 ? 10 : 1; lg(v) <= top; v *= 10) ticks.push(v);
+  return { top, ticks };
 }
 
 /** Least-squares fit, drawn only to show the direction of the relationship. */
@@ -181,10 +213,34 @@ export function Scatter({
   labelled = [],
   maxLabels = 12,
   numbersInDots = false,
+  log = false,
+  xMax,
+  color = DOT,
+  zeroMarks = false,
 }: Props) {
+  const isMark = (p: ScatterPoint) => zeroMarks && p.y === 0;
   const { xs, ys, ysOff, xt, yt, yTop, bandTop, clipped, breakY, line } = useMemo(() => {
+    const dataXMax = Math.max(xMax ?? 0, ...points.map((p) => p.x));
+    if (log) {
+      const xa = logAxis(dataXMax);
+      const ya = logAxis(Math.max(...points.map((p) => p.y)));
+      const yMaxV = Math.max(...points.map((p) => p.y));
+      return {
+        xs: (v: number) => (lg(v) / xa.top) * PW,
+        ys: (v: number) => PH * (1 - lg(v) / ya.top),
+        ysOff: (v: number) => PH * (1 - lg(v) / ya.top),
+        xt: xa.ticks,
+        yt: ya.ticks,
+        // Nothing is ever above the scale on a log axis.
+        yTop: yMaxV,
+        bandTop: yMaxV,
+        clipped: false,
+        breakY: 0,
+        line: null,
+      };
+    }
     const xMin = 0;
-    const xTicks = ticks(xMin, Math.max(...points.map((p) => p.x)));
+    const xTicks = ticks(xMin, dataXMax);
     const { max: yMax, clipped } = domainMax(points.map((p) => p.y));
     const yTicks = ticks(0, yMax);
     const top = yTicks[yTicks.length - 1];
@@ -214,7 +270,7 @@ export function Scatter({
       breakY: offset / 2,
       line: trend(points),
     };
-  }, [points]);
+  }, [points, log, xMax]);
 
   /**
    * Where each dot is drawn. With numbers in the dots, dots that would overlap
@@ -226,7 +282,8 @@ export function Scatter({
     for (const p of points) at.set(p.ward, { x: xs(p.x), y: p.y > yTop ? ysOff(p.y) : ys(p.y) });
     if (!numbersInDots) return at;
     const R = 10.5;
-    const list = [...at.values()];
+    // Zero marks stay exactly where they belong; only numbered dots move.
+    const list = points.filter((p) => !(zeroMarks && p.y === 0)).map((p) => at.get(p.ward)!);
     const home = list.map((q) => ({ x: q.x, y: q.y }));
     for (let it = 0; it < 120; it++) {
       let moved = false;
@@ -251,7 +308,7 @@ export function Scatter({
       if (!moved) break;
     }
     return at;
-  }, [points, xs, ys, ysOff, yTop, numbersInDots]);
+  }, [points, xs, ys, ysOff, yTop, numbersInDots, zeroMarks]);
 
   const labels = useMemo(() => {
     if (numbersInDots) {
@@ -353,13 +410,26 @@ export function Scatter({
                 (off ? "  (above the scale break)" : "")}
             </title>
           );
+          if (isMark(p)) {
+            return (
+              <g key={p.ward}>
+                <circle cx={cx} cy={cy} r={active ? 6 : 4} fill={active ? DOT_ACTIVE : color}
+                  fillOpacity={active ? 1 : 0.55} stroke="var(--ground)" strokeWidth={1} {...handlers}>
+                  {tip}
+                </circle>
+                {active && (
+                  <text x={cx} y={cy - 10} textAnchor="middle" className="sc-point-label active">{p.ward}</text>
+                )}
+              </g>
+            );
+          }
           return (
             <g key={p.ward}>
               <circle
                 cx={cx}
                 cy={cy}
                 r={numbersInDots ? (active ? 12 : 10) : active ? 8 : 5}
-                fill={active ? DOT_ACTIVE : DOT}
+                fill={active ? DOT_ACTIVE : color}
                 fillOpacity={active ? 1 : numbersInDots ? 0.9 : 0.72}
                 stroke="var(--ground)"
                 strokeWidth={1.5}

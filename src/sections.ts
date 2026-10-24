@@ -54,6 +54,15 @@ export const SECTIONS: Section[] = [
     status: "live",
   },
   {
+    slug: "affordable-vs-market",
+    nav: "Affordable vs. Market",
+    title: "Affordable and market-rate building",
+    blurb:
+      "Do affordable homes get built where the market builds? ARO and subsidized units against market-rate permits, ward by ward.",
+    stage: "Where affordable goes",
+    status: "live",
+  },
+  {
     slug: "affordability",
     nav: "Affordability Map",
     title: "Affordability Map",

@@ -1,0 +1,145 @@
+/* Affordable vs. Market — layers on income.css, which supplies the page frame,
+   controls, chart boxes, readout and method text. Only what differs lives here. */
+
+/* Where each kind of building went: the headline, above the charts. */
+.mix-summary {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  border: 1px solid var(--rule);
+  padding: 16px 20px;
+}
+
+.mix-table {
+  flex: 1 1 520px;
+  border-collapse: collapse;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mix-table th,
+.mix-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--rule-soft);
+  text-align: left;
+  vertical-align: baseline;
+}
+
+.mix-table thead th {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.mix-table tbody th {
+  font-weight: 500;
+  color: var(--ink-2);
+}
+
+.mix-table .num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.mix-table td.strong {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent-text);
+}
+
+.mix-wards {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.mix-total th,
+.mix-total td {
+  border-bottom: none;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+.mix-charts {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.mix-readout {
+  position: sticky;
+  bottom: 12px;
+  z-index: 5;
+  margin-top: 0;
+  box-shadow: 0 2px 10px rgba(10, 16, 20, 0.12);
+}
+
+.mix-none {
+  margin: 6px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.mix-scale-note {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0;
+}
+
+.mix .in-method p + p {
+  margin-top: 10px;
+}
+
+/* On a phone each row of the table becomes a block: the label on its own
+   line, the three figures beneath it, each named. */
+@media (max-width: 600px) {
+  .mix-summary {
+    padding: 12px;
+  }
+  .mix-table,
+  .mix-table tbody,
+  .mix-table tr {
+    display: block;
+    width: 100%;
+  }
+  .mix-table thead {
+    display: none;
+  }
+  .mix-table tr {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2px 8px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .mix-table tr th {
+    grid-column: 1 / -1;
+    padding: 0 0 4px;
+    border: none;
+  }
+  .mix-table td {
+    padding: 0;
+    border: none;
+    text-align: left;
+  }
+  .mix-table td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .mix-table .num {
+    text-align: left;
+  }
+}

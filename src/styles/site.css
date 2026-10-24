@@ -544,9 +544,10 @@
   }
 }
 
-@media (max-width: 760px) {
-  /* Stack the header: wordmark on its own line, nav scrolling horizontally
-     beneath it rather than wrapping into an unreadable block. */
+/* Stack the header once the wordmark and every tab no longer fit one row:
+   wordmark on its own line, nav beneath it, scrolling sideways on a phone
+   rather than wrapping into an unreadable block. */
+@media (max-width: 1180px) {
   .site-header-inner {
     flex-direction: column;
     align-items: stretch;
@@ -561,6 +562,9 @@
   .site-nav::-webkit-scrollbar {
     display: none;
   }
+}
+
+@media (max-width: 760px) {
   .hero-title {
     font-size: 34px;
   }
