@@ -1825,6 +1825,89 @@ def cha_split(dev_id, new, pres):
     return {"chu": n, "chn": chn, "chp": n - chn}
 
 
+# CHA project-based vouchers: rent subsidy CHA attaches to a unit, not to a
+# tenant, under a contract with the building's owner (it stays with the unit
+# when a household moves out). Tenant-based vouchers are not included. Source:
+# CHA's FY2027 MTW Annual Plan, draft for public comment (July 2026), tables
+# "Planned New Project Based Vouchers" and "Existing Project Based Vouchers":
+# regular PBV, RAD PBV (including CHA's own public housing converted under
+# RAD, which overlaps the CHA_UNITS above) and Mod Rehab, summed per
+# development where CHA lists several contracts (e.g. a VASH contract beside a
+# regular one). Matched by address and name and checked by hand, 2026-10-23.
+# A label only: these units are already counted in li_units.
+CHA_PBV = {
+    # New PBVs, under agreement or contract for FY2027
+    "IHDA2024-3959-LINCOLN": 64, "CITY2023-5853-BROADWAY": 23,
+    "CITY2023-JANET-SMITH": 30,       # CHA calls it Joyce Chapman Apartments, 505 W 119th
+    "CITY2025-METROPOLITAN-L": 24,
+    "CITY2021-PRAIRIE-DISTRICT-4": 12,  # CHA lists 1801 S Wabash / 1801 S Michigan as one
+    "IHDA2026-SARAHS-SUNNYSIDE": 54,
+    # New RAD PBVs
+    "CITYPL-TEACHERS-VILLAGE": 61, "CITY2021-LECLAIRE-NORTH": 68, "IHDA2022-LECLAIRE-SOUTH": 23,
+    "IHDA2021-OAK-LARRABEE": 37, "CITY2021-NORTH-TOWN-VILLAGE": 40,
+    "ILA20110100": 46,                # Westhaven Park IIC
+    "ILA20110933": 65,                # West End II, 340-342 S Artesian
+    "CITY2023-HILLIARD": 315,         # RAD 153 plus existing PBV 81 + 81 (Hilliard Homes I and II)
+    # Existing PBVs
+    "CITY2021-1237-CALIFORNIA": 18, "ILA20220002": 30, "ILB0000X021": 48, "ILB0000X023": 38,
+    "CITY2021-ARCHER-SENIOR": 12, "DOH-BARBARA-JEAN-WRIGHT": 82, "CITY2021-BOULEVARD": 12,
+    "NSP-6205-15-S-LANGLEY-AVE": 6,   # Boxelder Court
+    "ILB20181001": 9, "ILB20136003": 51, "ILA20200005": 23, "CITY2021-4715-WESTERN": 16,
+    "ILB0000X027": 39, "CITY2019-CASA-DURANGO": 9, "DOH-CASA-VERACRUZ": 60, "ILB0000X030": 15,
+    "DOH-COVENT": 30, "NSP-8031-35-S-DREXEL-AVE": 12, "ILB20177089": 150,
+    "CITYF-ENGLEWOOD-FAMILY": 7, "ILA20110920": 18,
+    "ILA20120001": 89,                # Harvest Commons, the former Viceroy
+    "IHDA4-HEART-OF-UPTOWN": 25,      # at 927 W Wilson, one of its five buildings
+    "CITY2025-HOLLYWOOD-HOUSE": 51,
+    "ILA20110917": 38,                # Hope Manor I, 3053 W Franklin
+    "ILB20141001": 72, "ILB0000X039": 31, "DOH-HUMBOLDT-PARK-RESIDENCE": 20, "ILA20110916": 9,
+    "NSP-6015-31-S-INDIANA-AVE": 14,  # Ironwood Courts
+    "ILA20110908": 10,                # King Legacy
+    "ILA20140017": 61, "ILB0000X044": 65, "IHDA4-LAKEVIEW-LANDING": 37, "ILA20240009": 130,
+    "CITY2025-LELAND": 66, "CITYPL-LEVY-HOUSE": 57, "CITYF-LINCOLN-PARK-SHELTER": 20,
+    "IHDA4-MAJOR-JENKINS": 76,
+    "ILB0000X073": 114,               # Maple Pointe, 150 W Maple
+    "DOH-MARK-TWAIN": 148,
+    "ILB0000X076": 90,                # The Marshall, 1232 N LaSalle
+    "ILA20158126": 11, "DOH-MONTCLARE-AVALON-PARK": 38, "DOH-MONTCLARE-CALUMET": 34,
+    "CITYF-NEW-MOMS": 40, "ILA20120006": 8, "ILA20230015": 74, "IHDA2021-ALBIZU-CAMPOS": 31,
+    "CITYF-PIERCE-HOUSE": 25, "ILB0000X066": 6,
+    "ILA20210007": 75,                # Roosevelt Road Veterans (VASH)
+    "DOH-ROSENWALD-COURTS": 60, "CITYF-SAN-MIGUEL": 11, "CITYF-SARAHS-LAKESIDE": 24,
+    "CITYF-SARAHS-SHERIDAN": 38, "ILA20220047": 24, "IHDA4-SHEFFIELD-LINCOLN-PARK": 50,
+    "IHDA4-SOUTH-PARK-PLAZA": 34, "NSP-5921-39-S-WABASH-AVE": 10, "CITYF-RESURRECTION-HOMES": 5,
+    "IHDA4-THRESHOLDS-RAD2-ROWAN": 44, "IHDA4-THRESHOLDS-RAD2-AUSTIN": 57, "ILA20190017": 44,
+    "ILB20180009": 14, "ILB20147016": 79, "ILA20158127": 48,
+    "DOH-WARREN-APARTMENTS": 21, "CITYF-WEST-HUMBOLDT-PLACE": 4,
+    "NSP-4800-14-S-CALUMET-AVE": 6,   # Winterberry Place
+    "ILA20130826": 18,                # Zapata
+    # Existing RAD PBVs
+    "CITY2021-ALBANY-TERRACE": 350, "ILB20194001": 45, "ILB0000X026": 450,
+    "IHDA4-CONCORD-SHERIDAN": 65, "IHDA4-SPURLOCK-SAMPSON": 405,
+    "CITY2025-ENCUENTRO-2": 13,       # CHA's "Phase 1", 3745 W Cortland
+    "CITY2019-ENCUENTRO-1": 42,       # CHA's "Phase 2", 1844 N Ridgeway
+    "ILB0000X038": 180, "DOH-GRACE-MANOR": 19, "ILB20195001": 30, "CITY2021-GAINES": 150,
+    "DOH-PENNYCUFF": 47, "DOH-LAKE-PARK-CRESCENT": 60, "DOH-LATHROP-1A": 151, "ILA20230011": 28,
+    "CITY2021-LEGENDS-A3": 21,
+    "DOH-EMMETT-STREET": 50,          # Lucy Gonzalez Parsons
+    "ILB20195003": 30, "IHDA2020-OAKWOOD-3-1": 19, "ILA20240010": 37, "IHDA2021-OGDEN-A2": 30,
+    "ILA20190012": 32, "CITY2019-PARK-BLVD-3B": 36,
+    "ILB20212001": 54,                # Parkside 4 Phase 2
+    "IHDA4-RAVENSWOOD-SENIOR": 74, "CITYF-RENAISSANCE-WABASH": 100,
+    "DOH-ROOSEVELT-SQUARE-1-REHAB": 125, "CITY2019-ROOSEVELT-3B": 75,
+    "ILA20230021": 34, "ILA20220048": 34, "IHDA2022-SOUTHBRIDGE-1C": 29,
+    "ILB0000X080": 95, "CITY2019-WESTHAVEN-IID": 38,
+    # Mod Rehab
+    "CITY2023-BELRAY": 70,
+}
+
+
+def pbv_units(dev_id, li):
+    """CHA project-based voucher units, capped at the units we count."""
+    n = CHA_PBV.get(dev_id)
+    return {"pbv": min(n, li)} if n else {}
+
+
 def population(dev_id):
     return "senior" if dev_id in SENIOR else "supportive" if dev_id in SUPPORTIVE else "general"
 
@@ -2233,6 +2316,7 @@ def write_site(out, hud):
             "rs": bool(o.get("resyndication_of")),
             "pop": population(o["hud_id"]),
             **cha_split(o["hud_id"], new, pres),
+            **pbv_units(o["hud_id"], li),
         })
     projects.sort(key=lambda p: -p["li"])
     by = collections.Counter(p["s"] for p in projects)
@@ -2257,6 +2341,7 @@ def write_site(out, hud):
             "cha": bool(c.get("cha")), "tif": c["id"] in TIF, "aro": False, "mix": bool(c.get("mixed_income")),
             "sl": False, "fu": bool(c.get("follow_up")), "rs": False,
             "pop": population(c["id"]),
+            **pbv_units(c["id"], li),
         })
     city.sort(key=lambda p: -p["li"])
     payload = {

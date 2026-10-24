@@ -45,8 +45,9 @@ export function Glossary() {
             The City&rsquo;s public housing authority. Since the Plan for Transformation most new
             CHA homes are built inside mixed-income, tax-credit developments on former public
             housing sites, alongside affordable and market-rate units. The Affordable Units page
-            counts those CHA units and can show them on their own; CHA housing built or bought
-            without tax credits is not covered.
+            counts those units as &ldquo;CHA owned&rdquo; and can show them on their own; CHA housing
+            built or bought without tax credits is not covered. Buildings where CHA pays part of
+            the rent through project-based vouchers carry a separate &ldquo;CHA voucher&rdquo; label.
           </dd>
         </div>
         <div>
@@ -110,6 +111,17 @@ export function Glossary() {
             alongside tax credits, CHA and ARO; projects where public money only refinanced
             debt or paid for repairs are left out, since nothing was built, rehabbed or newly
             restricted.
+          </dd>
+        </div>
+        <div>
+          <dt>Project-based voucher</dt>
+          <dd>
+            A rent subsidy tied to a unit rather than to a tenant. CHA contracts with a
+            building&rsquo;s owner for a set number of units; the household living in one pays about
+            30% of its income and CHA pays the rest, and when that household moves out the subsidy
+            stays with the unit for the next one. Tenant-based (Housing Choice, or
+            &ldquo;Section 8&rdquo;) vouchers instead move with the household, so they cannot be tied
+            to a building and the Affordable Units page leaves them out.
           </dd>
         </div>
         <div>

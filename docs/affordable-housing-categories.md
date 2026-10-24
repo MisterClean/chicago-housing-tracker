@@ -30,6 +30,7 @@ LIHTC building.
 | City-financed deals | TIF, multifamily loans, land write-downs, donation tax credits | Chicago DOH | Usually layered onto LIHTC, rarely standalone |
 | Chicago Housing Trust | Permanent affordability covenants on for-sale homes, partly funded by ARO in-lieu fees | DOH / the Trust | Small; its own map on the city's ARO page |
 | Naturally occurring affordable housing | Nothing. It is simply cheap | Nobody | The largest category in the city, in no dataset |
+| CHA project-based vouchers | A CHA contract with an owner, tied to specific units: regular PBV, RAD and Mod Rehab | CHA | About 12,500 units under contract or agreement (FY2027 plan) |
 | Housing Choice Vouchers | Tenant-based subsidy | CHA | Tens of thousands of households, not mappable to buildings |
 
 That last pair matters for framing. If the question is "all affordable units in
@@ -61,7 +62,7 @@ income-restricted rental units**, against about 120,000 if you add the columns.
 
 **CHA is not a category. It is an owner and administrator that appears inside
 several of them.** This is the most common confusion in this space. CHA reaches
-households four ways:
+households five ways:
 
 1. **Traditional public housing** it owns and operates outright.
 2. **Mixed-income redevelopments** from the Plan for Transformation, where CHA
@@ -70,7 +71,11 @@ households four ways:
 3. **RAD conversions**, which moved a large share of public housing onto
    project-based Section 8 contracts. Same buildings, same tenants, different
    dataset.
-4. **Housing Choice Vouchers** it administers, which are not buildings at all.
+4. **Project-based vouchers** in privately owned buildings: a contract with the
+   owner for a set number of units, which stays with the unit when a tenant
+   moves out. Many sit in LIHTC buildings. The Affordable Units page labels
+   these "CHA voucher" without counting them again.
+5. **Housing Choice Vouchers** it administers, which are not buildings at all.
 
 So "CHA units" and "public housing units" are different numbers, and the 19,651
 figure understates CHA's footprint considerably.

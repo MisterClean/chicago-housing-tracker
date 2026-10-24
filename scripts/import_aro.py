@@ -97,6 +97,15 @@ TIF_ARO = {
     "811 W. Agatite Ave": "Eight Eleven Uptown: Montrose/Clarendon RDA 2016, 381 units incl. 20 affordable",
 }
 
+# ARO buildings where CHA holds project-based vouchers: a rent subsidy tied to
+# the unit, not the tenant. From CHA's FY2027 MTW Annual Plan draft (July
+# 2026), existing PBVs, matched by address 2026-10-23. In both, the voucher
+# count equals the ARO unit count. A label only, like TIF.
+PBV_ARO = {
+    "625 W. Division St.": 24,    # Xavier Apts
+    "1825 W Lawrence": 17,        # The Raven
+}
+
 # Last-resort match radius. 40 m dates only 74% of buildings; 150 m starts
 # picking up the building next door. 75 m is the usable middle.
 # House-number slack for an address match, in street-number units. Chicago
@@ -749,6 +758,7 @@ def main():
             "k": kind,
             "ll": [round(b["lat"], 5), round(b["lon"], 5)],
             **({"tif": True} if (b.get("Project_Ad") or "").strip() in TIF_ARO else {}),
+            **({"pbv": min(PBV_ARO[a], units)} if (a := (b.get("Project_Ad") or "").strip()) in PBV_ARO else {}),
         })
 
     print(f"  placed in a ward: {len(buildings) - unplaced}/{len(buildings)}")

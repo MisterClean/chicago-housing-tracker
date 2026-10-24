@@ -60,6 +60,11 @@ export interface LihtcProject {
   /** CHA units split new / preserved in the development's own proportion. */
   chn?: number;
   chp?: number;
+  /**
+   * Units with CHA project-based vouchers: rent subsidy tied to the unit, not
+   * the tenant. Already counted in li; a label, never a bucket of its own in "All".
+   */
+  pbv?: number;
 }
 
 export interface LihtcData {
@@ -81,15 +86,19 @@ export interface LihtcData {
   city: LihtcProject[];
 }
 
-export type Program = "all" | "lihtc" | "cha" | "tif" | "city" | "aro";
+export type Program = "all" | "lihtc" | "cha" | "pbv" | "tif" | "city" | "aro";
 export type LihtcKind = "new" | "both" | "preserved";
 export type YearBasis = "permit" | "opened";
 export type Population = "all" | "general" | "senior" | "supportive";
 
-/** Button order follows the waterfall; TIF, a label only, comes last. */
+/**
+ * Button order follows the waterfall, with CHA vouchers beside CHA-owned units;
+ * vouchers and TIF are labels only.
+ */
 export const PROGRAM_LABELS: Record<Program, string> = {
   all: "All",
-  cha: "CHA",
+  cha: "CHA owned",
+  pbv: "CHA voucher",
   lihtc: "Tax credit (LIHTC)",
   city: "Other City/State",
   aro: "ARO",
@@ -129,13 +138,15 @@ export interface Options {
  * units are attributed down a waterfall: CHA units first, then the rest of a
  * tax-credit development's units, then Other City/State, then ARO. TIF is a
  * label only: every TIF-funded unit already falls in one of those buckets.
+ * So are CHA project-based vouchers; the "pbv" bucket holds units only in the
+ * CHA voucher view, which counts each building's voucher units.
  */
-export type Bucket = "cha" | "lihtcNew" | "lihtcPres" | "city" | "aro";
+export type Bucket = "cha" | "lihtcNew" | "lihtcPres" | "city" | "aro" | "pbv";
 export type Parts = Record<Bucket, number>;
-export type Label = "LIHTC" | "CHA" | "TIF" | "City" | "ARO";
+export type Label = "LIHTC" | "CHA" | "PBV" | "TIF" | "City" | "ARO";
 
-const zero = (): Parts => ({ cha: 0, lihtcNew: 0, lihtcPres: 0, city: 0, aro: 0 });
-export const partsTotal = (x: Parts) => x.cha + x.lihtcNew + x.lihtcPres + x.city + x.aro;
+const zero = (): Parts => ({ cha: 0, lihtcNew: 0, lihtcPres: 0, city: 0, aro: 0, pbv: 0 });
+export const partsTotal = (x: Parts) => x.cha + x.lihtcNew + x.lihtcPres + x.city + x.aro + x.pbv;
 
 /** One development from any source, with its units split into buckets under the selection. */
 export interface Dev {
@@ -154,6 +165,8 @@ export interface Dev {
   primary: "CHA" | "LIHTC" | "City" | "ARO";
   kind: "new" | "preserved";
   tags: string[];
+  /** CHA project-based voucher units in the building, whatever the view. */
+  pbv: number;
   src: LihtcProject | null;
 }
 
@@ -170,6 +183,7 @@ const aroPopOk = (o: Options) => o.pop === "all" || o.pop === "general";
 function labelsOf(p: LihtcProject, src: "lihtc" | "city"): Label[] {
   const l: Label[] = [src === "lihtc" ? "LIHTC" : "City"];
   if ((p.chu ?? 0) > 0 || p.cha) l.push("CHA");
+  if (p.pbv) l.push("PBV");
   if (p.tif) l.push("TIF");
   return l;
 }
@@ -178,15 +192,28 @@ const inSelection = (labels: Label[], program: Program) =>
   program === "all" ||
   (program === "lihtc" && labels.includes("LIHTC")) ||
   (program === "cha" && labels.includes("CHA")) ||
+  (program === "pbv" && labels.includes("PBV")) ||
   (program === "tif" && labels.includes("TIF")) ||
   (program === "city" && labels.includes("City")) ||
   (program === "aro" && labels.includes("ARO"));
 
+/** Voucher units split new / preserved in the development's own proportion. */
+function pbvSplit(p: LihtcProject): [number, number] {
+  const n = p.pbv ?? 0;
+  const pbn = p.new + p.pres > 0 ? Math.round((n * p.new) / (p.new + p.pres)) : 0;
+  return [pbn, n - pbn];
+}
+
 /** A tax-credit or City/State-funded development's units in each bucket under the selection. */
 function lihtcParts(p: LihtcProject, src: "lihtc" | "city", o: Options): Parts {
   const x = zero();
-  const chn = p.chn ?? 0, chp = p.chp ?? 0;
   const keepNew = o.kind !== "preserved", keepPres = o.kind !== "new";
+  if (o.program === "pbv") {
+    const [pbn, pbp] = pbvSplit(p);
+    x.pbv = (keepNew ? pbn : 0) + (keepPres ? pbp : 0);
+    return x;
+  }
+  const chn = p.chn ?? 0, chp = p.chp ?? 0;
   x.cha = (keepNew ? chn : 0) + (keepPres ? chp : 0);
   if (o.program === "cha") return x;
   const restNew = Math.max(0, p.new - chn), restPres = Math.max(0, p.pres - chp);
@@ -202,7 +229,8 @@ function lihtcParts(p: LihtcProject, src: "lihtc" | "city", o: Options): Parts {
 function lihtcTags(p: LihtcProject): string[] {
   const tags: string[] = [];
   if (p.pres > 0 && p.new > 0) tags.push("part preserved");
-  if (p.chu != null && p.chu > 0) tags.push(`${p.chu} CHA`);
+  if (p.chu != null && p.chu > 0) tags.push(`${p.chu} CHA owned`);
+  if (p.pbv) tags.push(`${p.pbv} CHA voucher unit${p.pbv === 1 ? "" : "s"}`);
   if (p.mix) tags.push("mixed-income");
   if (p.sl) tags.push("supportive living");
   if (p.pop !== "general") tags.push(p.pop);
@@ -225,30 +253,43 @@ export function allDevelopments(aro: AroData, lihtc: LihtcData, o: Options): Dev
     const units = partsTotal(parts);
     if (units === 0) return;
     const year = src === "lihtc" ? lihtcYear(p, basis) : p.s === "awarded" ? null : p.y;
-    const pres = o.kind === "new" ? 0 : o.program === "cha" ? p.chp ?? 0 : p.pres;
+    const pres = o.kind === "new" ? 0
+      : o.program === "cha" ? p.chp ?? 0
+        : o.program === "pbv" ? pbvSplit(p)[1]
+          : p.pres;
+    // The voucher view holds no CHA bucket, so judge the building as a whole.
+    const chaLed = o.program === "pbv"
+      ? (p.chu ?? 0) * 2 >= p.li && (p.chu ?? 0) > 0
+      : parts.cha > 0 && parts.cha * 2 >= units;
     out.push({
       id: p.id, name: titleCase(p.n), address: p.a, ward: p.w, ll: p.ll, year, total: p.u || null,
       parts, units, labels,
-      primary: parts.cha > 0 && parts.cha * 2 >= units ? "CHA" : src === "lihtc" ? "LIHTC" : "City",
+      primary: chaLed ? "CHA" : src === "lihtc" ? "LIHTC" : "City",
       kind: pres * 2 > units ? "preserved" : "new",
-      tags: lihtcTags(p), src: p,
+      tags: lihtcTags(p), pbv: p.pbv ?? 0, src: p,
     });
   };
   for (const p of lihtc.projects) addLihtc(p, "lihtc");
   for (const p of lihtc.city) addLihtc(p, "city");
   // ARO units are new only, open to anyone, and never CHA.
-  const aroIn = o.kind !== "preserved" && aroPopOk(o) && (o.program === "all" || o.program === "aro" || o.program === "tif");
+  const aroIn = o.kind !== "preserved" && aroPopOk(o) &&
+    (o.program === "all" || o.program === "aro" || o.program === "tif" || o.program === "pbv");
   if (aroIn) {
     for (const [w, list] of Object.entries(aro.projects)) {
       for (const [i, b] of list.entries()) {
-        const labels: Label[] = b.tif ? ["ARO", "TIF"] : ["ARO"];
+        const labels: Label[] = ["ARO"];
+        if (b.pbv) labels.push("PBV");
+        if (b.tif) labels.push("TIF");
         if (!inSelection(labels, o.program)) continue;
         const parts = zero();
-        parts.aro = b.u;
+        if (o.program === "pbv") parts.pbv = b.pbv ?? 0;
+        else parts.aro = b.u;
+        const tags = b.k === "conversion" ? ["conversion"] : [];
+        if (b.pbv) tags.push(`${b.pbv} CHA voucher unit${b.pbv === 1 ? "" : "s"}`);
         out.push({
           id: `ARO-${w}-${i}`, name: b.n !== "—" ? b.n : b.a, address: b.a, ward: Number(w), ll: b.ll ?? null,
-          year: b.y && /^\d+$/.test(b.y) ? Number(b.y) : null, total: null, parts, units: b.u, labels,
-          primary: "ARO", kind: "new", tags: b.k === "conversion" ? ["conversion"] : [], src: null,
+          year: b.y && /^\d+$/.test(b.y) ? Number(b.y) : null, total: null, parts, units: partsTotal(parts), labels,
+          primary: "ARO", kind: "new", tags, pbv: b.pbv ?? 0, src: null,
         });
       }
     }
@@ -359,7 +400,8 @@ export function inYears(devs: Dev[], from: number, to: number): Dev[] {
 
 export const LABEL_SHORT: Record<Label, string> = {
   LIHTC: "Tax credit",
-  CHA: "CHA",
+  CHA: "CHA owned",
+  PBV: "CHA voucher",
   TIF: "TIF",
   City: "Other City/State",
   ARO: "ARO",
@@ -369,7 +411,8 @@ export const labelList = (labels: Label[]) => labels.map((l) => LABEL_SHORT[l]).
 export function devsToCsv(devs: Dev[], from: number, to: number, o: Options): string {
   const q = (v: string) => (/[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
   const head = [
-    "name", "address", "ward", "programs", "counted_as", "units_counted", "cha_units", "total_units", "year",
+    "name", "address", "ward", "programs", "counted_as", "units_counted", "cha_units", "cha_voucher_units",
+    "total_units", "year",
     "new_or_preserved", "notes", "latitude", "longitude", "years", "program_selected", "units_kind", "year_basis",
     "who_it_serves",
   ];
@@ -377,7 +420,7 @@ export function devsToCsv(devs: Dev[], from: number, to: number, o: Options): st
   for (const d of devs) {
     lines.push([
       q(d.name), q(d.address), d.ward ?? "", q(labelList(d.labels)), LABEL_SHORT[d.primary], d.units, d.parts.cha,
-      d.total ?? "", d.year ?? "", d.kind, q(d.tags.join("; ")), d.ll?.[0] ?? "", d.ll?.[1] ?? "",
+      d.pbv, d.total ?? "", d.year ?? "", d.kind, q(d.tags.join("; ")), d.ll?.[0] ?? "", d.ll?.[1] ?? "",
       `${from}-${to}`, o.program, o.kind, o.basis, o.pop,
     ].join(","));
   }
@@ -411,6 +454,7 @@ export const BREAKS: Record<Program, number[]> = {
   aro: [10, 25, 50, 100, 200, 500],
   lihtc: [50, 100, 250, 500, 1000, 2000],
   cha: [10, 25, 50, 100, 250, 500],
+  pbv: [10, 25, 50, 100, 250, 500],
   tif: [25, 50, 100, 250, 500, 1000],
   city: [10, 25, 50, 100, 150, 250],
   all: [50, 100, 250, 500, 1000, 2000],
@@ -440,13 +484,13 @@ export function colorFor(breaks: number[]) {
 export function toCsv(rows: WardRow[], from: number, to: number, o: Options): string {
   const head = [
     "ward", "units_selected", "cha_units", "lihtc_new_units", "lihtc_preserved_units", "other_city_state_units",
-    "aro_units", "developments", "all_new_units", "share_of_new_units", "years", "program", "units_kind",
+    "aro_units", "cha_voucher_units", "developments", "all_new_units", "share_of_new_units", "years", "program", "units_kind",
     "year_basis", "who_it_serves",
   ];
   const lines = [head.join(",")];
   for (const r of [...rows].sort((a, b) => a.ward - b.ward)) {
     lines.push([
-      r.ward, r.units, r.cha, r.lihtcNew, r.lihtcPres, r.city, r.aro, r.developments, r.allUnits,
+      r.ward, r.units, r.cha, r.lihtcNew, r.lihtcPres, r.city, r.aro, r.pbv, r.developments, r.allUnits,
       r.share == null ? "" : r.share.toFixed(5), `${from}-${to}`, o.program, o.kind, o.basis, o.pop,
     ].join(","));
   }

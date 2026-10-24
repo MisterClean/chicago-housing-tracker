@@ -55,11 +55,12 @@ type SortKey =
 
 /** Dot colours match the stacked chart's segments. */
 const DOT_COLOR = { cha: "#6b4c9a", new: "#00596f", pres: "#8fc9de", city: "#d9822b", aro: "#0d96c9" };
-const dotColor = (d: Dev) =>
-  d.primary === "CHA" ? DOT_COLOR.cha
-    : d.primary === "ARO" ? DOT_COLOR.aro
-      : d.primary === "City" ? DOT_COLOR.city
-        : d.kind === "preserved" ? DOT_COLOR.pres : DOT_COLOR.new;
+const dotKind = (d: Dev): keyof typeof DOT_COLOR =>
+  d.primary === "CHA" ? "cha"
+    : d.primary === "ARO" ? "aro"
+      : d.primary === "City" ? "city"
+        : d.kind === "preserved" ? "pres" : "new";
+const dotColor = (d: Dev) => DOT_COLOR[dotKind(d)];
 
 const download = (text: string, name: string) => {
   const blob = new Blob([text], { type: "text/csv;charset=utf-8" });
@@ -83,6 +84,14 @@ const CITY_SET_ASIDE_UNITS = lihtc.meta.citySetAside.reduce((s, c) => s + c.u, 0
 const TIF_DEVS =
   [...lihtc.projects, ...lihtc.city].filter((p) => p.tif && p.s !== "awarded" && p.s !== "preSeries").length +
   Object.values(aro.projects).flat().filter((b) => b.tif).length;
+
+/** Developments in the series with CHA project-based vouchers, and their voucher units. */
+const PBV_SERIES = [
+  ...[...lihtc.projects, ...lihtc.city].filter((p) => p.pbv && p.s !== "awarded" && p.s !== "preSeries"),
+  ...Object.values(aro.projects).flat().filter((b) => b.pbv),
+];
+const PBV_DEVS = PBV_SERIES.length;
+const PBV_UNITS = PBV_SERIES.reduce((n, p) => n + (p.pbv ?? 0), 0);
 
 /** A round top for a y-axis and its 2-4 ticks, chosen to waste the least headroom. */
 function niceScale(max: number): { top: number; ticks: number[] } {
@@ -208,7 +217,10 @@ export function AffordableUnits() {
     lihtcPres: totals.lihtcPres > 0,
     city: totals.city > 0,
     aro: totals.aro > 0,
+    pbv: totals.pbv > 0 || program === "pbv",
   };
+  // The map key follows the dots drawn, which in the voucher view keep their building's colour.
+  const dotKinds = useMemo(() => new Set(devs.map(dotKind)), [devs]);
   const showCity = program === "all" || program === "city";
   const points: MapPoint[] = useMemo(
     () =>
@@ -284,7 +296,8 @@ export function AffordableUnits() {
   const unitsLabel0 =
     program === "aro" ? "ARO units"
       : program === "lihtc" ? `${kindWord}tax-credit units`
-        : program === "cha" ? `${kindWord}CHA units`
+        : program === "cha" ? `${kindWord}CHA-owned units`
+          : program === "pbv" ? `${kindWord}units with CHA project-based vouchers`
           : program === "tif" ? `${kindWord}units in TIF-funded developments`
             : program === "city" ? `${kindWord}Other City/State units`
               : kind === "both" ? "affordable units, new + preserved" : kind === "preserved" ? "preserved units" : "new affordable units";
@@ -402,15 +415,25 @@ export function AffordableUnits() {
         {(program === "all" || program === "tif") && (
           <p className="af-caveat af-split">
             {[
-              has.cha && `${totals.cha.toLocaleString()} CHA`,
+              has.cha && `${totals.cha.toLocaleString()} CHA owned`,
               has.lihtcNew && `${totals.lihtcNew.toLocaleString()} ${kind === "both" ? "new " : ""}tax-credit`,
               has.lihtcPres && `${totals.lihtcPres.toLocaleString()} ${kind === "both" ? "preserved " : ""}tax-credit`,
               has.city && `${totals.city.toLocaleString()} Other City/State`,
               has.aro && `${totals.aro.toLocaleString()} ARO`,
             ].filter(Boolean).join(" · ")}.
             {program === "all"
-              ? " Each unit is counted once, in the first of these that applies: CHA units, then the rest of a tax-credit development, then Other City/State, then ARO. The program buttons above show every development a label applies to, so they overlap and do not add up to this total."
+              ? " Each unit is counted once, in the first of these that applies: CHA-owned units, then the rest of a tax-credit development, then Other City/State, then ARO. The program buttons above show every development a label applies to, so they overlap and do not add up to this total."
               : " TIF is money added to developments that are also tax-credit, Other City/State or ARO; their units are split the same way."}
+          </p>
+        )}
+        {program === "pbv" && (
+          <p className="af-caveat">
+            A CHA project-based voucher is a rent subsidy tied to the unit, not the tenant: CHA contracts
+            with the building&rsquo;s owner, and when a household moves out the subsidy stays for the next
+            eligible one. Only project-based vouchers are shown here; tenant-based (Housing Choice)
+            vouchers, which move with the household, are not. Every one of these units is already
+            counted under CHA owned, tax credit, Other City/State or ARO, so this view shows where
+            CHA&rsquo;s vouchers sit rather than adding units.
           </p>
         )}
         {(pipe.length > 0 || showCity) && (
@@ -441,13 +464,13 @@ export function AffordableUnits() {
           <figcaption>
             <h2>Units by year</h2>
             <p>
-              {program === "cha" || program === "city" || program === "aro"
+              {program === "cha" || program === "pbv" || program === "city" || program === "aro"
                 ? "Hover a bar for the count."
                 : "Stacked by where each unit is counted; no unit is in more than one segment."}
             </p>
-            {program !== "cha" && program !== "city" && program !== "aro" && (
+            {program !== "cha" && program !== "pbv" && program !== "city" && program !== "aro" && (
               <div className="af-key">
-                {has.cha && <span><i className="af-sw cha" /> CHA</span>}
+                {has.cha && <span><i className="af-sw cha" /> CHA owned</span>}
                 {has.lihtcNew && <span><i className="af-sw new" /> Tax credit{kind === "both" ? ", new" : ""}</span>}
                 {has.lihtcPres && <span><i className="af-sw pres" /> Tax credit{kind === "both" ? ", preserved" : ""}</span>}
                 {has.city && <span><i className="af-sw city" /> Other City/State</span>}
@@ -472,6 +495,7 @@ export function AffordableUnits() {
                   {seg(y.lihtcPres, "pres")}
                   {seg(y.lihtcNew, "new")}
                   {seg(y.cha, "cha")}
+                  {seg(y.pbv, "pbv")}
                 </div>
               );
             }}
@@ -479,7 +503,8 @@ export function AffordableUnits() {
               <>
                 <strong>{y.year}: {y.units.toLocaleString()} units</strong>
                 {[
-                  ["cha", "CHA", y.cha],
+                  ["cha", "CHA owned", y.cha],
+                  ["pbv", "CHA voucher", y.pbv],
                   ["new", kind === "both" ? "Tax credit, new" : "Tax credit", y.lihtcNew],
                   ["pres", kind === "both" ? "Tax credit, preserved" : "Tax credit", y.lihtcPres],
                   ["city", "Other City/State", y.city],
@@ -559,11 +584,11 @@ export function AffordableUnits() {
               </label>
               {showDots && (
                 <div className="af-dot-key">
-                  {has.cha && <span><i style={{ background: DOT_COLOR.cha }} /> CHA</span>}
-                  {has.lihtcNew && <span><i style={{ background: DOT_COLOR.new }} /> Tax credit</span>}
-                  {has.lihtcPres && <span><i style={{ background: DOT_COLOR.pres }} /> Tax credit, preserved</span>}
-                  {has.city && <span><i style={{ background: DOT_COLOR.city }} /> Other City/State</span>}
-                  {has.aro && <span><i style={{ background: DOT_COLOR.aro }} /> ARO</span>}
+                  {dotKinds.has("cha") && <span><i style={{ background: DOT_COLOR.cha }} /> CHA owned</span>}
+                  {dotKinds.has("new") && <span><i style={{ background: DOT_COLOR.new }} /> Tax credit</span>}
+                  {dotKinds.has("pres") && <span><i style={{ background: DOT_COLOR.pres }} /> Tax credit, preserved</span>}
+                  {dotKinds.has("city") && <span><i style={{ background: DOT_COLOR.city }} /> Other City/State</span>}
+                  {dotKinds.has("aro") && <span><i style={{ background: DOT_COLOR.aro }} /> ARO</span>}
                   <span className="af-dot-size">Size: units</span>
                 </div>
               )}
@@ -607,7 +632,7 @@ export function AffordableUnits() {
                                 {d.name}
                                 {d.labels.map((l) => <span key={l} className="af-tag">{LABEL_SHORT[l]}</span>)}
                                 {d.kind === "preserved" && d.primary !== "ARO" && <span className="af-tag soft">preserved</span>}
-                                {d.tags.filter((t) => !/CHA$/.test(t)).map((t) => <span key={t} className="af-tag soft">{t}</span>)}
+                                {d.tags.filter((t) => !/CHA (owned|voucher units?)$/.test(t)).map((t) => <span key={t} className="af-tag soft">{t}</span>)}
                               </span>
                               <span className="pm-proj-date">{d.year ?? "—"}</span>
                             </li>
@@ -629,8 +654,8 @@ export function AffordableUnits() {
                 <th className="num">{sortHead("rank", "#")}</th>
                 <th className="num">{sortHead("ward", "Ward")}</th>
                 <th className="num">{sortHead("units", "Units")}</th>
-                {program === "all" && <th className="num" title="CHA units">{sortHead("cha", "CHA")}</th>}
-                {program === "all" && <th className="num" title="Tax-credit units other than CHA units">{sortHead("lihtc", "LIHTC")}</th>}
+                {program === "all" && <th className="num" title="CHA-owned units">{sortHead("cha", "CHA")}</th>}
+                {program === "all" && <th className="num" title="Tax-credit units other than CHA-owned units">{sortHead("lihtc", "LIHTC")}</th>}
                 {program === "all" && <th className="num" title="Other City- and State-funded units, no tax credits">{sortHead("city", "Oth.")}</th>}
                 {program === "all" && <th className="num" title="ARO units">{sortHead("aro", "ARO")}</th>}
                 {/* The "All" view spends this column on the per-program split; the ward card lists the developments. */}
@@ -786,14 +811,15 @@ export function AffordableUnits() {
           every program that applies to it. The federal Low-Income Housing Tax Credit (LIHTC)
           finances most of the city&rsquo;s subsidized affordable housing, allocated by the City and
           by the Illinois Housing Development Authority; those developments land where public money
-          sends them. Chicago Housing Authority (CHA) units sit inside many of them. Tax-increment
+          sends them. Chicago Housing Authority (CHA) public housing units sit inside many of them,
+          and CHA project-based vouchers subsidize the rent on units in many more. Tax-increment
           financing (TIF) is City money added to developments of every kind. Other City- and
           State-funded developments used no tax credits. The Affordable Requirements Ordinance (ARO)
           requires developments of ten or more units that need a zoning change, city land or city
           money to set aside a share of their homes at restricted rents; those units are produced by
           the market and land where it builds. Because one development can carry several labels,
           the program buttons overlap. The &ldquo;All&rdquo; totals, the stacked chart and the map
-          count each unit once, in the first bucket that applies: CHA units, then the rest of a
+          count each unit once, in the first bucket that applies: CHA-owned units, then the rest of a
           tax-credit development, then Other City/State, then ARO. None of the City&rsquo;s ARO
           buildings is a tax-credit development. Not covered: public housing built or bought by CHA
           without tax credits, for-sale programs, and housing that is simply cheap without any
@@ -848,19 +874,33 @@ export function AffordableUnits() {
           with two more of the same kind found by checking every CHA development.
         </p>
         <p>
-          <strong>CHA units.</strong> Most Chicago Housing Authority housing added since {FIRST} sits
-          inside tax-credit developments, often mixed-income buildings on former CHA sites. The CHA
-          button shows just those units; in the &ldquo;All&rdquo; view they are counted as CHA rather
-          than as tax-credit units. Each development&rsquo;s CHA
+          <strong>CHA owned.</strong> Chicago Housing Authority public housing: units in CHA&rsquo;s own
+          buildings, and CHA units inside mixed-income developments, often on former CHA sites. Most
+          added since {FIRST} sits inside tax-credit developments. The CHA owned button shows just
+          those units; in the &ldquo;All&rdquo; view they are counted as CHA rather than as tax-credit
+          units. Each development&rsquo;s CHA
           count comes from the City&rsquo;s report of commitments under CHA&rsquo;s Plan for
           Transformation and Plan Forward, HUD&rsquo;s public-housing development file and CHA&rsquo;s
           annual Moving to Work reports; where HUD splits one phase into several records, CHA&rsquo;s
           total is divided among them in proportion to their low-income units. CHA housing added
           without tax credits is not counted: CHA&rsquo;s reports show 218 long-vacant Altgeld Gardens
           units rehabbed in 2016 and 98 units in existing buildings it bought in 2016&ndash;18, but its
-          reports for 2010&ndash;2015 are not published online and those for 2024 on are not yet out.
-          Project-based vouchers CHA places in privately owned buildings are rent subsidies, not
-          housing CHA adds, and are not counted separately.
+          reports for 2010&ndash;2015 are not published online.
+        </p>
+        <p>
+          <strong>CHA voucher.</strong> A CHA project-based voucher is a rent subsidy tied to a unit, not
+          to a tenant: CHA contracts with the building&rsquo;s owner, the household pays about 30% of
+          its income, and when it moves out the subsidy stays with the unit for the next eligible
+          household. Only project-based vouchers are included; tenant-based (Housing Choice) vouchers,
+          which move with the household, cannot be tied to a building. The label covers regular
+          project-based vouchers, RAD conversions (where CHA&rsquo;s own public housing subsidy moves to
+          a voucher contract, so these overlap CHA owned) and Mod Rehab contracts. It is a label, like
+          TIF: every voucher unit is already counted under CHA owned, tax credit, Other City/State or
+          ARO, and the CHA voucher button shows each building&rsquo;s voucher units. Source: CHA&rsquo;s
+          FY2027 Moving to Work plan (draft for public comment, July 2026), which lists every property
+          with vouchers under contract or agreement, matched to these developments by address and
+          name; {PBV_DEVS} developments in the series carry it, with {PBV_UNITS.toLocaleString()} voucher units. A
+          building&rsquo;s voucher count is capped at the units counted here.
         </p>
         <p>
           <strong>TIF.</strong> {TIF_DEVS} developments in the series received City tax-increment

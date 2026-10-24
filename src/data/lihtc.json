@@ -2,7 +2,7 @@
 "meta":{
 "source":"HUD LIHTC database (LIHTCPUB), City of Chicago and IHDA award, closing and progress reports; dates from City building permits",
 "hudUrl":"https://www.huduser.gov/lihtc/lihtcpub.zip",
-"built":"2026-10-21",
+"built":"2026-10-23",
 "projects":316,
 "byStatus":{
 "permit":260,
@@ -144,7 +144,8 @@
 "pop":"senior",
 "chu":449,
 "chn":0,
-"chp":449
+"chp":449,
+"pbv":449
 },
 {
 "id":"IHDA4-PARKWAYS",
@@ -219,7 +220,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":130
 },
 {
 "id":"IHDA4-SPURLOCK-SAMPSON",
@@ -247,7 +249,8 @@
 "pop":"senior",
 "chu":405,
 "chn":0,
-"chp":405
+"chp":405,
+"pbv":405
 },
 {
 "id":"CITY2021-ALBANY-TERRACE",
@@ -275,7 +278,8 @@
 "pop":"senior",
 "chu":350,
 "chn":0,
-"chp":350
+"chp":350,
+"pbv":350
 },
 {
 "id":"ILB0000X073",
@@ -300,7 +304,8 @@
 "sl":false,
 "fu":false,
 "rs":true,
-"pop":"senior"
+"pop":"senior",
+"pbv":114
 },
 {
 "id":"ILB0000X052",
@@ -353,7 +358,8 @@
 "pop":"general",
 "chu":153,
 "chn":0,
-"chp":153
+"chp":153,
+"pbv":315
 },
 {
 "id":"IHDA4-WEST-TOWN-PRESERVATION",
@@ -556,7 +562,8 @@
 "pop":"general",
 "chu":161,
 "chn":161,
-"chp":0
+"chp":0,
+"pbv":151
 },
 {
 "id":"DOH-BARBARA-JEAN-WRIGHT",
@@ -581,7 +588,8 @@
 "sl":false,
 "fu":false,
 "rs":true,
-"pop":"general"
+"pop":"general",
+"pbv":82
 },
 {
 "id":"IHDA4-CAMPBELL-TERRACE",
@@ -634,7 +642,8 @@
 "pop":"general",
 "chu":60,
 "chn":60,
-"chp":0
+"chp":0,
+"pbv":60
 },
 {
 "id":"ILB0000X070",
@@ -759,7 +768,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":65
 },
 {
 "id":"IHDA4-GREENWOOD-CITY-SENIOR",
@@ -987,7 +997,8 @@
 "sl":false,
 "fu":false,
 "rs":true,
-"pop":"senior"
+"pop":"senior",
+"pbv":51
 },
 {
 "id":"IHDA4-CONGRESSMAN-COLLINS",
@@ -1065,7 +1076,8 @@
 "pop":"general",
 "chu":132,
 "chn":0,
-"chp":132
+"chp":132,
+"pbv":125
 },
 {
 "id":"ILB0000X038",
@@ -1090,7 +1102,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"senior"
+"pop":"senior",
+"pbv":180
 },
 {
 "id":"DOH-STERLING-PARK",
@@ -1168,7 +1181,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"senior"
+"pop":"senior",
+"pbv":74
 },
 {
 "id":"CITYPL-INDIAN-TRAILS",
@@ -1318,7 +1332,8 @@
 "sl":false,
 "fu":false,
 "rs":true,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":76
 },
 {
 "id":"IHDA4-DREXEL-LAKE-PARK",
@@ -1368,7 +1383,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":60
 },
 {
 "id":"IHDA4-NEW-VISTAS-II",
@@ -1443,7 +1459,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":150
 },
 {
 "id":"ILB0000X029",
@@ -1521,7 +1538,8 @@
 "pop":"senior",
 "chu":150,
 "chn":0,
-"chp":150
+"chp":150,
+"pbv":150
 },
 {
 "id":"IHDA4-6900-CRANDON",
@@ -1571,7 +1589,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":148
 },
 {
 "id":"ILB0000X080",
@@ -1599,7 +1618,8 @@
 "pop":"general",
 "chu":95,
 "chn":0,
-"chp":95
+"chp":95,
+"pbv":95
 },
 {
 "id":"ILA20240004",
@@ -1749,7 +1769,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":34
 },
 {
 "id":"IHDA4-400-LAKE-SHORE",
@@ -1852,7 +1873,8 @@
 "pop":"general",
 "chu":68,
 "chn":68,
-"chp":0
+"chp":0,
+"pbv":68
 },
 {
 "id":"IHDA4-WILLA-RAWLS",
@@ -1980,7 +2002,8 @@
 "pop":"senior",
 "chu":74,
 "chn":74,
-"chp":0
+"chp":0,
+"pbv":74
 },
 {
 "id":"IHDA4-WHITECHAPEL",
@@ -2058,7 +2081,8 @@
 "pop":"general",
 "chu":75,
 "chn":75,
-"chp":0
+"chp":0,
+"pbv":75
 },
 {
 "id":"DOH-LAKE-PARK-CRESCENT",
@@ -2086,7 +2110,8 @@
 "pop":"general",
 "chu":60,
 "chn":0,
-"chp":60
+"chp":60,
+"pbv":60
 },
 {
 "id":"ILB20110808",
@@ -2192,7 +2217,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"senior"
+"pop":"senior",
+"pbv":38
 },
 {
 "id":"DOH-MONTCLARE-LAWNDALE",
@@ -2267,7 +2293,8 @@
 "sl":false,
 "fu":false,
 "rs":true,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":66
 },
 {
 "id":"IHDA2019-VICTORY",
@@ -2317,7 +2344,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":23
 },
 {
 "id":"IHDA4-ELLIS-LAKEVIEW",
@@ -2395,7 +2423,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"senior"
+"pop":"senior",
+"pbv":34
 },
 {
 "id":"CITYPL-111-W-MONROE",
@@ -2470,7 +2499,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":25
 },
 {
 "id":"IHDA4-SUNNYDALE-COMMONS",
@@ -2520,7 +2550,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":61
 },
 {
 "id":"ILA00000114",
@@ -2623,7 +2654,8 @@
 "pop":"general",
 "chu":65,
 "chn":65,
-"chp":0
+"chp":0,
+"pbv":65
 },
 {
 "id":"ILB20159004",
@@ -2748,7 +2780,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":12
 },
 {
 "id":"IHDA4-JARRELL",
@@ -2798,7 +2831,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":50
 },
 {
 "id":"ILB20120268",
@@ -2901,7 +2935,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":45
 },
 {
 "id":"CITY2025-ENCUENTRO-2",
@@ -2926,7 +2961,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":13
 },
 {
 "id":"IHDA2023-CASA-YUCATAN",
@@ -3026,7 +3062,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":24
 },
 {
 "id":"ILB0000X043",
@@ -3154,7 +3191,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":75
 },
 {
 "id":"ILB0000X076",
@@ -3179,7 +3217,8 @@
 "sl":false,
 "fu":false,
 "rs":true,
-"pop":"general"
+"pop":"general",
+"pbv":90
 },
 {
 "id":"CITY2023-5853-BROADWAY",
@@ -3204,7 +3243,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":23
 },
 {
 "id":"ILA20120001",
@@ -3229,7 +3269,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":89
 },
 {
 "id":"ILB20130100",
@@ -3279,7 +3320,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":42
 },
 {
 "id":"DOH-PENNYCUFF",
@@ -3304,7 +3346,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":47
 },
 {
 "id":"CITY2021-CHURCHVIEW",
@@ -3354,7 +3397,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":70
 },
 {
 "id":"ILB20171001",
@@ -3482,7 +3526,8 @@
 "pop":"general",
 "chu":37,
 "chn":37,
-"chp":0
+"chp":0,
+"pbv":37
 },
 {
 "id":"CITY2021-SACRED",
@@ -3532,7 +3577,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"senior"
+"pop":"senior",
+"pbv":18
 },
 {
 "id":"ILA20149843",
@@ -3582,7 +3628,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":39
 },
 {
 "id":"IHDA2025-WERNER",
@@ -3632,7 +3679,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"senior"
+"pop":"senior",
+"pbv":79
 },
 {
 "id":"IHDA4-LAS-MORADAS",
@@ -3710,7 +3758,8 @@
 "pop":"general",
 "chu":39,
 "chn":0,
-"chp":39
+"chp":39,
+"pbv":40
 },
 {
 "id":"CITY2023-PILSEN-COC",
@@ -3841,7 +3890,8 @@
 "pop":"general",
 "chu":46,
 "chn":46,
-"chp":0
+"chp":0,
+"pbv":46
 },
 {
 "id":"ILB20141001",
@@ -3866,7 +3916,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":72
 },
 {
 "id":"IHDA2022-SOUTHBRIDGE-1C",
@@ -3894,7 +3945,8 @@
 "pop":"general",
 "chu":29,
 "chn":29,
-"chp":0
+"chp":0,
+"pbv":29
 },
 {
 "id":"IHDA4-835-WILSON",
@@ -4200,7 +4252,8 @@
 "sl":false,
 "fu":false,
 "rs":true,
-"pop":"general"
+"pop":"general",
+"pbv":12
 },
 {
 "id":"CITY2021-MORGAN-PARK",
@@ -4303,7 +4356,8 @@
 "pop":"general",
 "chu":36,
 "chn":36,
-"chp":0
+"chp":0,
+"pbv":36
 },
 {
 "id":"IHDA2020-CARLTON",
@@ -4509,7 +4563,8 @@
 "sl":false,
 "fu":false,
 "rs":true,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":20
 },
 {
 "id":"DOH-GRACE-MANOR",
@@ -4534,7 +4589,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":19
 },
 {
 "id":"DOH-WOODLAWN-PARK-SENIOR",
@@ -4584,7 +4640,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":65
 },
 {
 "id":"ILB20212001",
@@ -4612,7 +4669,8 @@
 "pop":"general",
 "chu":35,
 "chn":35,
-"chp":0
+"chp":0,
+"pbv":54
 },
 {
 "id":"IHDA2021-ALBIZU-CAMPOS",
@@ -4637,7 +4695,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":31
 },
 {
 "id":"IHDA2024-3959-LINCOLN",
@@ -4662,7 +4721,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":64
 },
 {
 "id":"ILA20120007",
@@ -4768,7 +4828,8 @@
 "pop":"general",
 "chu":38,
 "chn":38,
-"chp":0
+"chp":0,
+"pbv":38
 },
 {
 "id":"CITY2021-4715-WESTERN",
@@ -4793,7 +4854,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":16
 },
 {
 "id":"ILB0000X049",
@@ -4843,7 +4905,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":18
 },
 {
 "id":"ILA20140017",
@@ -4868,7 +4931,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":61
 },
 {
 "id":"IHDA2024-PIONEER-ARCADE",
@@ -4971,7 +5035,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":30
 },
 {
 "id":"ILA20230002",
@@ -5199,7 +5264,8 @@
 "pop":"general",
 "chu":50,
 "chn":50,
-"chp":0
+"chp":0,
+"pbv":50
 },
 {
 "id":"DOH-WARREN-APARTMENTS",
@@ -5224,7 +5290,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":21
 },
 {
 "id":"DOH-CHURCHVIEW-MANOR",
@@ -5508,7 +5575,8 @@
 "pop":"general",
 "chu":30,
 "chn":30,
-"chp":0
+"chp":0,
+"pbv":30
 },
 {
 "id":"IHDA4-BERRY-MANOR",
@@ -5558,7 +5626,8 @@
 "sl":false,
 "fu":false,
 "rs":true,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":57
 },
 {
 "id":"CITYPL-LEVY-HOUSE",
@@ -5583,7 +5652,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"senior"
+"pop":"senior",
+"pbv":57
 },
 {
 "id":"ILB20140015",
@@ -5686,7 +5756,8 @@
 "sl":false,
 "fu":false,
 "rs":true,
-"pop":"senior"
+"pop":"senior",
+"pbv":12
 },
 {
 "id":"CITY2025-WESTGATE",
@@ -5786,7 +5857,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":48
 },
 {
 "id":"ILB0000X023",
@@ -5811,7 +5883,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":38
 },
 {
 "id":"ILB0000X030",
@@ -5836,7 +5909,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":15
 },
 {
 "id":"IHDA2021-OAK-LARRABEE",
@@ -5864,7 +5938,8 @@
 "pop":"general",
 "chu":17,
 "chn":17,
-"chp":0
+"chp":0,
+"pbv":37
 },
 {
 "id":"IHDA2026-SARAHS-SUNNYSIDE",
@@ -5889,7 +5964,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":54
 },
 {
 "id":"ILB0000X045",
@@ -5967,7 +6043,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":9
 },
 {
 "id":"ILB0000X082",
@@ -6173,7 +6250,8 @@
 "pop":"general",
 "chu":37,
 "chn":37,
-"chp":0
+"chp":0,
+"pbv":34
 },
 {
 "id":"ILB20136003",
@@ -6198,7 +6276,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":51
 },
 {
 "id":"CITY2023-HUB-32",
@@ -6273,7 +6352,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":38
 },
 {
 "id":"ILB0000X040",
@@ -6498,7 +6578,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":32
 },
 {
 "id":"ILA20230001",
@@ -6548,7 +6629,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":48
 },
 {
 "id":"CITY2025-SOUTHBRIDGE-3A",
@@ -6673,7 +6755,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":10
 },
 {
 "id":"ILB20162001",
@@ -6726,7 +6809,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":14
 },
 {
 "id":"CITY2021-JIGZIBIK",
@@ -6776,7 +6860,8 @@
 "sl":false,
 "fu":false,
 "rs":true,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":44
 },
 {
 "id":"ILA20130001",
@@ -6854,7 +6939,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":44
 },
 {
 "id":"ILB20195001",
@@ -6882,7 +6968,8 @@
 "pop":"senior",
 "chu":30,
 "chn":30,
-"chp":0
+"chp":0,
+"pbv":30
 },
 {
 "id":"ILB20195003",
@@ -6910,7 +6997,8 @@
 "pop":"senior",
 "chu":30,
 "chn":30,
-"chp":0
+"chp":0,
+"pbv":30
 },
 {
 "id":"CITY2025-HEART-SOUTH-SHORE",
@@ -7013,7 +7101,8 @@
 "pop":"general",
 "chu":31,
 "chn":31,
-"chp":0
+"chp":0,
+"pbv":34
 },
 {
 "id":"ILA20230011",
@@ -7041,7 +7130,8 @@
 "pop":"general",
 "chu":28,
 "chn":0,
-"chp":28
+"chp":28,
+"pbv":28
 },
 {
 "id":"CITY2019-GARFIELD-GREEN",
@@ -7169,7 +7259,8 @@
 "pop":"general",
 "chu":21,
 "chn":21,
-"chp":0
+"chp":0,
+"pbv":21
 },
 {
 "id":"CITY2021-REGENERATOR",
@@ -7272,7 +7363,8 @@
 "pop":"general",
 "chu":23,
 "chn":23,
-"chp":0
+"chp":0,
+"pbv":23
 },
 {
 "id":"ILA20180001",
@@ -7322,7 +7414,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":24
 },
 {
 "id":"CITY2021-1237-CALIFORNIA",
@@ -7347,7 +7440,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":18
 },
 {
 "id":"DOH-ENGLEWOOD-PHASE-I",
@@ -7425,7 +7519,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":6
 },
 {
 "id":"CITY2023-WBC-MANOR",
@@ -7500,7 +7595,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":37
 },
 {
 "id":"ILB20162002",
@@ -7550,7 +7646,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":9
 },
 {
 "id":"ILB0000X039",
@@ -7575,7 +7672,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":31
 },
 {
 "id":"CITY2023-JANET-SMITH",
@@ -7600,7 +7698,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":30
 },
 {
 "id":"DOH-HOPE-MANOR-VILLAGE",
@@ -7681,7 +7780,8 @@
 "pop":"general",
 "chu":19,
 "chn":19,
-"chp":0
+"chp":0,
+"pbv":19
 },
 {
 "id":"ILA20110916",
@@ -7706,7 +7806,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":9
 },
 {
 "id":"ILA20120006",
@@ -7731,7 +7832,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":8
 },
 {
 "id":"ILA20158126",
@@ -7756,7 +7858,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":11
 },
 {
 "id":"IHDA2026-BELDEN",
@@ -7806,7 +7909,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":30
 },
 {
 "id":"DOH-HAZEL-WINTHROP",
@@ -8248,7 +8352,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":100
 },
 {
 "id":"CITYF-PORTA-COELI",
@@ -8373,7 +8478,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":11
 },
 {
 "id":"CITYF-VILLA-GUADALUPE",
@@ -8523,7 +8629,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":40
 },
 {
 "id":"CITYF-SARAHS-SHERIDAN",
@@ -8548,7 +8655,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":38
 },
 {
 "id":"CITYF-ST-EDMUNDS-ANNEX",
@@ -8598,7 +8706,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":14
 },
 {
 "id":"CITYF-LAZARUS",
@@ -8673,7 +8782,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":24
 },
 {
 "id":"CITYF-CRESSEY-HOUSE",
@@ -8723,7 +8833,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":25
 },
 {
 "id":"CITYF-OGDEN-PARK",
@@ -8773,7 +8884,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":10
 },
 {
 "id":"CITYF-LA-HERENCIA",
@@ -8848,7 +8960,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":20
 },
 {
 "id":"NSP-1015-N-PULASKI-RD",
@@ -8998,7 +9111,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":7
 },
 {
 "id":"CITYF-WEST-HUMBOLDT-PLACE",
@@ -9023,7 +9137,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"supportive"
+"pop":"supportive",
+"pbv":4
 },
 {
 "id":"CITYF-TRIANON-LOFTS",
@@ -9123,7 +9238,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":6
 },
 {
 "id":"NSP-5520-S-PRAIRIE-AVE",
@@ -9273,7 +9389,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":6
 },
 {
 "id":"CITYF-BRONZEVILLE-ARTIST-LOFTS",
@@ -9398,7 +9515,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":5
 },
 {
 "id":"NSP-3351-W-OHIO-ST",
@@ -9498,7 +9616,8 @@
 "sl":false,
 "fu":false,
 "rs":false,
-"pop":"general"
+"pop":"general",
+"pbv":6
 },
 {
 "id":"NSP-3302-08-W-HURON-ST",

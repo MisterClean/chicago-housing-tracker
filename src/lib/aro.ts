@@ -41,6 +41,8 @@ export interface AroProject {
   ll?: [number, number];
   /** The building also received City tax-increment financing. */
   tif?: boolean;
+  /** Units with CHA project-based vouchers (rent subsidy tied to the unit). */
+  pbv?: number;
 }
 
 export interface AroData {

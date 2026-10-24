@@ -288,6 +288,20 @@
   margin-top: 0;
 }
 
+/* Seven programs don't fit one row beside the summary, so that row wraps by
+   whole buttons at every width, the way all option rows do on a phone. */
+.af-switches .pm-basis:first-child .pm-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  background: var(--rule);
+}
+.af-switches .pm-basis:first-child .pm-tog {
+  flex: 1 1 auto;
+  border-right: none;
+  white-space: nowrap;
+}
+
 .af-split {
   margin-top: 10px;
 }
@@ -318,6 +332,7 @@
 .af-seg.pres { background: #8fc9de; }
 .af-seg.city { background: #d9822b; }
 .af-seg.cha { background: #6b4c9a; }
+.af-seg.pbv { background: #9a7fc6; }
 
 .af-bar.stack:not(.in) .af-seg { opacity: 0.28; }
 .af-bar.stack:hover .af-seg { filter: brightness(1.15); }
@@ -349,6 +364,7 @@
 .af-sw.pres { background: #8fc9de; }
 .af-sw.city { background: #d9822b; }
 .af-sw.cha { background: #6b4c9a; }
+.af-sw.pbv { background: #9a7fc6; }
 
 .af-empty {
   height: 104px;
