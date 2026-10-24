@@ -187,9 +187,9 @@ SPA rewrite. The same titles set the browser tab as you move between pages.
 |---|---|
 | `src/data/permits.json` | **Automated.** `.github/workflows/refresh-permits.yml` re-runs the importer monthly and commits any change. Also runnable by hand from the Actions tab. |
 | `src/data/blogPosts.json` | Manual — `python3 scripts/import_posts.py`, then commit. Every public newsletter post tagged "Housing" on Substack, which is the source of truth. Can't be scheduled: Substack blocks requests from GitHub's servers. |
-| `src/data/aro.json` | Manual — `python3 scripts/import_aro.py`. Needs `.permits_cache.json` present, so run the permit importer first. |
+| `src/data/aro.json` | Manual, quarterly (see below) — `python3 scripts/import_aro.py`. Needs `.permits_cache.json` present, so run the permit importer first. |
 | `src/data/wards_data.json` | Manual — Zillow listing counts collected by hand, see the pipeline notes above. |
-| `src/data/lihtc.json` | Manual — `python3 scripts/import_lihtc.py`. Tax-credit and City/State-funded developments; hand-reviewed records live in the script, source documents in `sources/` (git-ignored). |
+| `src/data/lihtc.json` | Manual, quarterly (see below) — `python3 scripts/import_lihtc.py`. Tax-credit and City/State-funded developments; hand-reviewed records live in the script, source documents in `sources/` (git-ignored). |
 
 The permit importer is safe to run unattended because it fails loudly rather
 than committing bad data:
@@ -201,6 +201,32 @@ than committing bad data:
 - the workflow typechecks and builds the site before committing.
 
 Requires `shapely` and `certifi`, both build-time only.
+
+### Quarterly refresh of the Affordable Units data
+
+`aro.json` and `lihtc.json` are reconciled by hand, so each quarter:
+
+1. Run `python3 scripts/refresh_check.py`. It reports, since the last
+   completed refresh: permits pulled near any awarded-but-unpermitted
+   development; housing-finance ordinances introduced at City Council (from
+   the City Clerk's API, only those since the last refresh); whether HUD has
+   posted a new LIHTC file; new documents on the IHDA, City and CHA pages the
+   reconciliation draws on; whether the City's ARO map data has changed; and
+   newsletter posts not yet listed. It changes nothing.
+2. Work through the report and the open follow-ups. Update the hand-kept
+   records in `scripts/import_lihtc.py` (and `ARO_SERVICE` in
+   `scripts/import_aro.py` if the City has published a new ARO dataset).
+3. Rerun `import_aro.py`, `import_lihtc.py` and `import_posts.py`; build and
+   check the Affordable Units totals; commit and push.
+4. Run `python3 scripts/refresh_check.py --mark-done` and commit
+   `scripts/refresh_state.json`. Only this moves the baseline, so a report
+   nobody acted on never hides anything from the next one.
+
+A reminder comes by itself: `.github/workflows/quarterly-refresh-reminder.yml`
+runs the check on the first day of each quarter and opens a "Quarterly
+refresh due" issue assigned to the maintainer (GitHub emails the assignee),
+or adds the report to the open one. Checks a site refuses from GitHub's
+servers say so and need the local run in step 1.
 
 ## Reference
 

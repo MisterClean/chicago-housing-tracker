@@ -1,0 +1,67 @@
+name: Quarterly refresh reminder
+
+# The Affordable Units records are reconciled by hand, so nothing refreshes
+# them on its own. At 14:00 UTC (morning in Chicago) on the first day of each
+# quarter this runs scripts/refresh_check.py and opens an issue assigned to
+# the maintainer with a checklist and the report; GitHub emails the assignee.
+# If last quarter's issue is still open, the new report goes on it instead.
+# Checks a site refuses from GitHub's servers say so in the report and need a
+# local run (Substack does; see the README).
+on:
+  schedule:
+    - cron: "0 14 1 1,4,7,10 *"
+  workflow_dispatch: {} # lets you run it by hand from the Actions tab
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  ASSIGNEE: conordurkin
+  LABEL: refresh
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install certifi shapely
+
+      - name: Run the refresh check
+        # Never fails the job: a report with gaps is still a useful reminder.
+        run: python scripts/refresh_check.py --out report.md || echo "The check itself failed; see the job log." > report.md
+
+      - name: Open or update the refresh issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          quarter="Q$(( ($(date -u +%-m) - 1) / 3 + 1 )) $(date -u +%Y)"
+          {
+            echo "Time for the quarterly refresh of the Affordable Units data ($quarter)."
+            echo
+            echo "- [ ] Run \`python3 scripts/refresh_check.py\` locally: the report below ran on GitHub's servers, and any check marked \"Couldn't run from here\" needs a local run"
+            echo "- [ ] Work through the report and the open follow-ups in the backlog"
+            echo "- [ ] Update the hand-kept records in \`scripts/import_lihtc.py\` and \`scripts/import_aro.py\`, then rerun both importers"
+            echo "- [ ] Run \`python3 scripts/import_posts.py\` for the newsletter list"
+            echo "- [ ] Build, check the Affordable Units totals, commit and push"
+            echo "- [ ] Run \`python3 scripts/refresh_check.py --mark-done\`, commit \`scripts/refresh_state.json\`, and close this issue"
+            echo
+            echo "---"
+            echo
+            cat report.md
+          } > body.md
+          gh label create "$LABEL" --description "Quarterly data refresh" --color 00abe5 --force
+          open=$(gh issue list --label "$LABEL" --state open --json number --jq '.[0].number')
+          if [ -n "$open" ]; then
+            gh issue comment "$open" --body-file body.md
+            echo "Added this quarter's report to open issue #$open."
+          else
+            gh issue create --title "Quarterly refresh due: $quarter" --label "$LABEL" \
+              --assignee "$ASSIGNEE" --body-file body.md
+          fi
