@@ -10,7 +10,9 @@ through:
 
   1. Awarded developments that may have pulled a building permit, from the
      City's permit data near each one (a permit moves its units into the
-     counts).
+     counts). 1b. The same for developments on file as stalled or proposed,
+     plus any City Council ordinance naming them: the check-in that decides
+     whether one goes back to awarded.
   2. City Council housing-finance ordinances introduced since the last
      refresh, from the City Clerk's API; ones already cited in the importer
      are marked.
@@ -112,10 +114,10 @@ def metres(lat1, lon1, lat2, lon2):
     dx = (lon2 - lon1) * 111_320 * math.cos(math.radians(lat1))
     return math.hypot(dx, dy)
 
-def check_permits(since):
-    """Permits near each awarded development, issued on or after `since`."""
+def check_permits(since, statuses=("awarded",)):
+    """Permits near each development with one of `statuses`, issued on or after `since`."""
     data = json.load(open(LIHTC))
-    awarded = [p for p in data["projects"] + data["city"] if p["s"] == "awarded" and p.get("ll")]
+    awarded = [p for p in data["projects"] + data["city"] if p["s"] in statuses and p.get("ll")]
     lines = []
     for p in sorted(awarded, key=lambda p: p["n"]):
         lat, lon = p["ll"]
@@ -145,14 +147,40 @@ def check_permits(since):
             hits.append(f"  - permit {r['permit_']}, {r['issue_date'][:10]}, {r['permit_type'].replace('PERMIT - ', '').lower()}, "
                         f"${cost:,.0f}, {addr.title()}: {desc[:140]}")
         if hits:
-            lines.append(f"- **{p['n']}** ({p['a']}, ward {p['w']}, `{p['id']}`)")
+            tag = "" if p["s"] == "awarded" else f", {p['s']}"
+            lines.append(f"- **{p['n']}** ({p['a']}, ward {p['w']}, `{p['id']}`{tag})")
             lines += hits
-    head = (f"{len(awarded)} awarded developments searched for permits issued since {since} on their own "
-            f"street or within {NEAR_M} m (new construction, or renovation of ${MIN_RENOVATION_COST:,}+).")
+    head = (f"{len(awarded)} {' or '.join(statuses)} developments searched for permits issued since {since} on "
+            f"their own street or within {NEAR_M} m (new construction, or renovation of ${MIN_RENOVATION_COST:,}+).")
     if not lines:
         return head + " None found.", 0
     return head + " Check each against the development; a match moves it into the counts:\n\n" + "\n".join(lines), \
         sum(1 for l in lines if l.startswith("- "))
+
+
+def check_dormant(since):
+    """Stalled and proposed developments: new permits, and ordinances naming them."""
+    data = json.load(open(LIHTC))
+    dormant = sorted((p for p in data["projects"] + data["city"] if p["s"] in ("stalled", "proposed")),
+                     key=lambda p: (p["s"], p["n"]))
+    if not dormant:
+        return "No developments on file as stalled or proposed.", 0
+    listing = "\n".join(f"- {p['n']} ({p['s']}, {p['li']} units, ward {p['w']})" for p in dormant)
+    permits, n_permits = check_permits(since, ("stalled", "proposed"))
+    found = []
+    for p in dormant:
+        name = re.sub(r"\s*\(.*?\)", "", p["n"]).strip()
+        d = get(CLERK_API, {"search": f'"{name}"', "filter": f"introductionDate ge {since}T00:00:00Z",
+                            "top": "50", "sort": "introductionDate desc"})
+        for m in d.get("data", []):
+            if m.get("type") == "Ordinance":
+                found.append(f"- {p['n']}: {(m.get('introductionDate') or '')[:10]} {m['recordNumber']}: "
+                             f"{(m.get('title') or '').strip()}")
+    text = (f"{len(dormant)} developments on file but not counted as coming. Check in on each; if one has "
+            "moved (award, permit, Council action), change its status in `scripts/import_lihtc.py`:\n\n"
+            + listing + "\n\n" + permits + "\n\nCity Council ordinances naming them since "
+            + since + (":\n\n" + "\n".join(found) if found else ": none."))
+    return text, n_permits + len(found)
 
 
 # ---- 2. City Council ordinances ---------------------------------------------
@@ -286,6 +314,7 @@ def main():
         return res
 
     run("1. Awarded developments: new permits?", lambda: check_permits(permits_since))
+    run("1b. Stalled and proposed developments: check in", lambda: check_dormant(permits_since))
     run("2. City Council housing-finance ordinances", lambda: check_ordinances(last))
     r = run("3. HUD's annual LIHTC file", lambda: check_hud(state))
     if r:

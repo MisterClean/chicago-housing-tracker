@@ -208,7 +208,10 @@ Requires `shapely` and `certifi`, both build-time only.
 
 1. Run `python3 scripts/refresh_check.py`. It reports, since the last
    completed refresh: permits pulled near any awarded-but-unpermitted
-   development; housing-finance ordinances introduced at City Council (from
+   development; a check-in on developments kept on file as "stalled" or
+   "proposed" (not shown on the site; the rules are in
+   `scripts/import_lihtc.py` above `PIPELINE`), with any permits or Council
+   ordinances naming them; housing-finance ordinances introduced at City Council (from
    the City Clerk's API, only those since the last refresh); whether HUD has
    posted a new LIHTC file; new documents on the IHDA, City and CHA pages the
    reconciliation draws on; whether the City's ARO map data has changed; and

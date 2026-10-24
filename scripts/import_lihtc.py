@@ -708,8 +708,16 @@ def hud_address(text):
 # its building permit like everything else; an award with no permit yet is
 # "awarded" and stays out of the yearly series.
 #
+# Two more statuses keep a development on file without counting it as coming
+# (neither shows on the site; refresh_check.py lists both each quarter):
+#   "stalled"  awarded three or more years ago, with no permit, City Council
+#              action or news in the last two years;
+#   "proposed" never awarded financing (approved, rezoned or applied only).
+# Either goes back to "awarded", or straight to a permit, when the record
+# changes. Decided 2026-10-24.
+#
 # Fields: units / li_units (low-income), permit (date, id), category,
-# opened (year, where known), cha / mixed_income, sources, note.
+# opened (year, where known), cha / mixed_income, status, sources, note.
 PIPELINE = [
     # ---- City of Chicago 2019 round (announced March 2020). Checked 2026-10.
     {"id": "CITY2019-ROOSEVELT-3B", "project": "Roosevelt Square 3B",
@@ -957,10 +965,10 @@ PIPELINE = [
      "address": "1711 W 61st St", "units": 50, "li_units": 50,
      "permit": ("2024-06-12", "101034568"), "category": "new", "opened": 2026, "sources": ["IHDA 9% 2022"],
      "note": "Gorman & Company with the Phoenix Foundation; supportive. Conversion of the vacant Earle school. IHDA listed 63 units; the permit is for 50."},
-    {"id": "IHDA2022-CALHOUN", "project": "Calhoun School Redevelopment",
+    {"id": "IHDA2022-CALHOUN", "status": "stalled", "project": "Calhoun School Redevelopment",
      "address": "2833 W Adams St", "units": 60, "li_units": 60, "permit": None, "category": "new",
      "follow_up": True, "sources": ["IHDA 9% 2022"],
-     "note": "Heartland Housing, on the former Calhoun North school (bought from CPS in 2017, with the gym and auditorium to be kept for community use). Plans went from a 64-unit school rehab (2019 application) and 51 units (LISC, 2021) to a 60-unit new building at the site (2022 award). No permit, demolition permit or news since. FOLLOW UP: possibly stalled; check whether the school building stays."},
+     "note": "Heartland Housing, on the former Calhoun North school (bought from CPS in 2017, with the gym and auditorium to be kept for community use). Plans went from a 64-unit school rehab (2019 application) and 51 units (LISC, 2021) to a 60-unit new building at the site (2022 award). No permit, demolition permit or news since. FOLLOW UP: possibly stalled; check whether the school building stays. Stalled 2026-10-24: no permit, City Council action or news since the 2022 award."},
     {"id": "IHDA2022-LECLAIRE-SOUTH", "project": "LeClaire Courts A-South",
      "address": "4442 S Cicero Ave", "units": 45, "li_units": 41,
      "permit": ("2025-10-22", "101061910"), "category": "new", "cha": True, "mixed_income": True, "sources": ["IHDA 9% 2022"],
@@ -1182,10 +1190,10 @@ PIPELINE = [
      "address": "1061 E 41st Pl", "units": 148, "li_units": 112, "mixed_income": True,
      "permit": ("2021-09-23", "100916107"), "category": "preserved", "resyndication_of": "ILA20040065", "sources": ["City DOH 2021"],
      "note": "Habitat and P3 Markets; City 4% and bonds."},
-    {"id": "DOH-ENGLEWOOD-PHASE-I", "project": "Englewood Phase I",
+    {"id": "DOH-ENGLEWOOD-PHASE-I", "status": "stalled", "project": "Englewood Phase I",
      "address": "6100 S Halsted St", "units": 56, "li_units": 40, "permit": None, "category": "new", "mixed_income": True,
      "follow_up": True, "sources": ["City DOH 2021"],
-     "note": "Keith B. Key Enterprises; 40 affordable, 16 market. City 9% committed 2021 and Council approval in 2021, but no permit or construction news since. FOLLOW UP: possibly stalled."},
+     "note": "Keith B. Key Enterprises; 40 affordable, 16 market. City 9% committed 2021 and Council approval in 2021, but no permit or construction news since. FOLLOW UP: possibly stalled. Stalled 2026-10-24: no permit or news since the 2021 Council approval."},
     {"id": "DOH-BARBARA-JEAN-WRIGHT", "project": "Barbara Jean Wright Court Apartments",
      "address": "1350 S Morgan St", "units": 272, "li_units": 251,
      "permit": ("2022-03-21", "100936560"), "category": "preserved", "mixed_income": True, "resyndication_of": "ILB20000001", "sources": ["City DOH 2022"],
@@ -1356,11 +1364,11 @@ PIPELINE = [
      "units": 57, "li_units": 57, "permit": None, "category": "preserved", "resyndication_of": None,
      "sources": ["City ordinance O2026-0026255 (in committee)"],
      "note": "POAH: 8-story building of 57 apartments for low- and very-low-income seniors, bought in 2020 with a City HOME loan (purchase only, not counted). A 2023 bond inducement and a June 2026 ordinance (still in committee) for up to $15M in bonds, 4% LIHTC and City funds for a roughly $22M renovation. No permit yet."},
-    {"id": "CITYPL-LAWNDALE-REDEFINED", "project": "Lawndale ReDefined",
+    {"id": "CITYPL-LAWNDALE-REDEFINED", "status": "proposed", "project": "Lawndale ReDefined",
      "address": "3400-3436 W Ogden Ave", "units": 59, "li_units": 48, "mixed_income": True, "permit": None,
      "category": "new", "follow_up": True,
      "sources": ["INVEST South/West"],
-     "note": "Griggs Real Estate Ventures, 548 Development and Imagine Group: new 6-story building on vacant land, 48 affordable of 59, with a requested 9% LIHTC allocation and $1.8M TIF. Rezoning approved July 2026; no tax-credit award found yet. FOLLOW UP."},
+     "note": "Griggs Real Estate Ventures, 548 Development and Imagine Group: new 6-story building on vacant land, 48 affordable of 59, with a requested 9% LIHTC allocation and $1.8M TIF. Rezoning approved July 2026; no tax-credit award found yet. FOLLOW UP. Proposed 2026-10-24: at the zoning stage (July 2026); tax credits requested, not awarded."},
 ]
 
 # Projects found during research that are probably LIHTC but can't be placed
@@ -1547,14 +1555,14 @@ CITY_FUNDED = [
      "category": "new", "basis": "conversion of an office building",
      "sources": ["City ordinance SO2025-0018754 (TIF)"],
      "note": "105 Adams Development: about 400 apartments, 121 affordable (30%); TIF forgivable loan up to $67.5M and federal historic credits (no LIHTC). Approved July 2025. The ordinance's figures are used. No permit yet."},
-    {"id": "CITYF-GALLERIA-89", "project": "Galleria 89", "address": "8840-8854 S Commercial Ave",
+    {"id": "CITYF-GALLERIA-89", "status": "proposed", "project": "Galleria 89", "address": "8840-8854 S Commercial Ave",
      "units": 58, "li_units": 58, "permit": None, "category": "split", "split": {"new": 46, "preserved": 12},
      "follow_up": True, "sources": ["INVEST South/West"],
-     "note": "548 Enterprise and partners, South Chicago: a new 5-story building of 46 apartments on City-owned land and 12 apartments in a rehabbed 3-story building at 8840, all at or under 60% AMI. Rezoned May 2023; financing award not confirmed; no permit. FOLLOW UP."},
-    {"id": "CITYF-PIONEROS", "project": "Pioneros (Pioneer Bank site)", "address": "1616-38 N Pulaski Rd",
+     "note": "548 Enterprise and partners, South Chicago: a new 5-story building of 46 apartments on City-owned land and 12 apartments in a rehabbed 3-story building at 8840, all at or under 60% AMI. Rezoned May 2023; financing award not confirmed; no permit. FOLLOW UP. Proposed 2026-10-24: rezoned 2023, but no financing award or Council action found."},
+    {"id": "CITYF-PIONEROS", "status": "proposed", "project": "Pioneros (Pioneer Bank site)", "address": "1616-38 N Pulaski Rd",
      "units": 75, "li_units": 75, "permit": None, "category": "new", "follow_up": True,
      "sources": ["INVEST South/West"],
-     "note": "Team Pioneros: a new 9-story building on the parking lot north of the landmark Pioneer Bank, 75 apartments all affordable (43 at 60% AMI, 32 at 30%); the bank itself becomes a cultural and office center (City TIF, 2023-24). Applied for 9% LIHTC in 2023 (31 units); no award found. FOLLOW UP."},
+     "note": "Team Pioneros: a new 9-story building on the parking lot north of the landmark Pioneer Bank, 75 apartments all affordable (43 at 60% AMI, 32 at 30%); the bank itself becomes a cultural and office center (City TIF, 2023-24). Applied for 9% LIHTC in 2023 (31 units); no award found. FOLLOW UP. Proposed 2026-10-24: Council actions (2021 land, 2023-24 TIF) cover the bank building only; the housing has no award."},
     # Found 2026-10-20 checking the City's TIF-funded RDA list (mex4-ppfc):
     # TIF approved, affordable units required, no construction permit yet.
     {"id": "CITYF-ARMOUR-BUILDING", "project": "Armour Building", "address": "3300 S Federal St",
@@ -2129,7 +2137,7 @@ def main():
 
     for p in PIPELINE:
         date, pid = p["permit"] if p.get("permit") else (None, None)
-        tier = "award" if date else "awarded"
+        tier = "award" if date else p.get("status", "awarded")
         if not date and p.get("estimated"):
             # Done but no permit found: dated to a stated year, like HUD estimates.
             date, pid, tier = f"{p['estimated']}-01-01", "", "estimate"
@@ -2286,7 +2294,8 @@ def write_site(out, hud):
         return pc.get(p) if p and pc.get(p) else hud_ll.get(o["hud_id"]) or address_coords(o["address"])
 
     STATUS = {"award": "permit", "hand": "permit", "estimate": "estimate",
-              "pre2010": "preSeries", "awarded": "awarded"}
+              "pre2010": "preSeries", "awarded": "awarded",
+              "stalled": "stalled", "proposed": "proposed"}
     projects, unplaced = [], []
     for o in out:
         tier = o["tier"]
@@ -2343,7 +2352,7 @@ def write_site(out, hud):
             "new": split.get("new", li if c["category"] == "new" else 0),
             "pres": split.get("preserved", li if c["category"] == "preserved" else 0),
             "y": int(date[:4]) if date else None, "yo": None,
-            "s": "permit" if c.get("permit") else "estimate" if date else "awarded",
+            "s": "permit" if c.get("permit") else "estimate" if date else c.get("status", "awarded"),
             "cha": bool(c.get("cha")), "tif": c["id"] in TIF, "aro": False, "mix": bool(c.get("mixed_income")),
             "sl": False, "fu": bool(c.get("follow_up")), "rs": False,
             "pop": population(c["id"]),
@@ -2360,8 +2369,9 @@ def write_site(out, hud):
             "byStatus": dict(by),
             "liUnits": sum(p["li"] for p in projects),
             "unplaced": unplaced,
-            "cityProjects": sum(1 for p in city if p["s"] != "awarded"),
-            "cityUnits": sum(p["li"] for p in city if p["s"] != "awarded"),
+            # counted ones only: not awarded, stalled or proposed
+            "cityProjects": sum(1 for p in city if p["s"] in ("permit", "estimate")),
+            "cityUnits": sum(p["li"] for p in city if p["s"] in ("permit", "estimate")),
             "citySetAside": [{"n": c["project"], "u": c["units"], "note": c["note"]} for c in CITY_SET_ASIDE],
         },
         "projects": projects,

@@ -11,7 +11,7 @@
 import { PERMIT_RAMP, PERMIT_NO_DATA, type PermitsData } from "./permits";
 import type { AroData } from "./aro";
 
-export type LihtcStatus = "permit" | "estimate" | "preSeries" | "awarded";
+export type LihtcStatus = "permit" | "estimate" | "preSeries" | "awarded" | "stalled" | "proposed";
 
 export interface LihtcProject {
   id: string;
@@ -37,7 +37,8 @@ export interface LihtcProject {
   /**
    * permit: dated by a building permit. estimate: done, but no permit found,
    * so dated from other records. preSeries: permitted before the series
-   * starts. awarded: tax credits awarded, no permit yet.
+   * starts. awarded: tax credits awarded, no permit yet. stalled and proposed:
+   * kept on file for the quarterly check, never shown or counted.
    */
   s: LihtcStatus;
   /** CHA housing: a CHA building, or CHA replacement units on a redevelopment site. */
@@ -252,7 +253,7 @@ export function allDevelopments(aro: AroData, lihtc: LihtcData, o: Options): Dev
     const parts = lihtcParts(p, src, o);
     const units = partsTotal(parts);
     if (units === 0) return;
-    const year = src === "lihtc" ? lihtcYear(p, basis) : p.s === "awarded" ? null : p.y;
+    const year = src === "lihtc" ? lihtcYear(p, basis) : p.s === "permit" || p.s === "estimate" ? p.y : null;
     const pres = o.kind === "new" ? 0
       : o.program === "cha" ? p.chp ?? 0
         : o.program === "pbv" ? pbvSplit(p)[1]

@@ -82,12 +82,12 @@ const NSP_UNITS = NSP.reduce((t, p) => t + p.li, 0);
 const NSP_ALL_UNITS = NSP.reduce((t, p) => t + p.u, 0);
 const CITY_SET_ASIDE_UNITS = lihtc.meta.citySetAside.reduce((s, c) => s + c.u, 0);
 const TIF_DEVS =
-  [...lihtc.projects, ...lihtc.city].filter((p) => p.tif && p.s !== "awarded" && p.s !== "preSeries").length +
+  [...lihtc.projects, ...lihtc.city].filter((p) => p.tif && (p.s === "permit" || p.s === "estimate")).length +
   Object.values(aro.projects).flat().filter((b) => b.tif).length;
 
 /** Developments in the series with CHA project-based vouchers, and their voucher units. */
 const PBV_SERIES = [
-  ...[...lihtc.projects, ...lihtc.city].filter((p) => p.pbv && p.s !== "awarded" && p.s !== "preSeries"),
+  ...[...lihtc.projects, ...lihtc.city].filter((p) => p.pbv && (p.s === "permit" || p.s === "estimate")),
   ...Object.values(aro.projects).flat().filter((b) => b.pbv),
 ];
 const PBV_DEVS = PBV_SERIES.length;
