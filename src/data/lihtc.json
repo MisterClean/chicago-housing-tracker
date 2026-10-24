@@ -2,7 +2,7 @@
 "meta":{
 "source":"HUD LIHTC database (LIHTCPUB), City of Chicago and IHDA award, closing and progress reports; dates from City building permits",
 "hudUrl":"https://www.huduser.gov/lihtc/lihtcpub.zip",
-"built":"2026-10-23",
+"built":"2026-10-24",
 "projects":316,
 "byStatus":{
 "permit":260,
@@ -1095,7 +1095,7 @@
 "y":2015,
 "yo":null,
 "s":"permit",
-"cha":false,
+"cha":true,
 "tif":false,
 "aro":false,
 "mix":false,
@@ -1103,6 +1103,9 @@
 "fu":false,
 "rs":false,
 "pop":"senior",
+"chu":180,
+"chn":0,
+"chp":180,
 "pbv":180
 },
 {
@@ -2551,6 +2554,9 @@
 "fu":false,
 "rs":false,
 "pop":"general",
+"chu":61,
+"chn":61,
+"chp":0,
 "pbv":61
 },
 {

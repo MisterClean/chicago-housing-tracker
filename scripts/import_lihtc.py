@@ -1351,7 +1351,7 @@ PIPELINE = [
      "address": "2620 W Hirsch St", "units": 103, "li_units": 103, "cha": True, "permit": None,
      "category": "new", "basis": "conversion of a vacant school",
      "sources": ["City ordinances July 2026 (TCB Humboldt 4 and 9)"],
-     "note": "The Community Builders: the vacant Von Humboldt school (1417 N Talman / 2620 W Hirsch) converted to rental units, all at or under 80% AMI, including CHA RAD project-based replacement units (number not stated); a 9% deal of about 28 units and a 4% bond deal for the rest. City loans approved July 2026; about 103 units. No permit yet."},
+     "note": "The Community Builders: the vacant Von Humboldt school (1417 N Talman / 2620 W Hirsch) converted to rental units, all at or under 80% AMI, including 61 CHA public-housing units converting to RAD project-based vouchers (CHA FY2027 plan); a 9% deal of about 28 units and a 4% bond deal for the rest. City loans approved July 2026; about 103 units. No permit yet."},
     {"id": "CITYPL-LEVY-HOUSE", "project": "Levy House", "address": "1221 W Sherwin Ave",
      "units": 57, "li_units": 57, "permit": None, "category": "preserved", "resyndication_of": None,
      "sources": ["City ordinance O2026-0026255 (in committee)"],
@@ -1750,6 +1750,12 @@ SUPPORTIVE = set("""
 CHA_UNITS = {
     "ILB0000X026": 449, "IHDA4-SPURLOCK-SAMPSON": 405, "CITY2021-ALBANY-TERRACE": 350,
     "CITY2021-GAINES": 150,                       # all-CHA senior buildings
+    # CHA senior building whose units CHA's FY2027 MTW plan (draft, July 2026)
+    # calls "former public housing units", like Caroline Hedger and Albany Terrace.
+    "ILB0000X038": 180,                           # Fannie Emanuel Apartments
+    # CHA's FY2027 plan: 61 public-housing units converting to RAD project-based
+    # vouchers at Humboldt Village (Teachers Village).
+    "CITYPL-TEACHERS-VILLAGE": 61,
     "DOH-LATHROP-1A": 161, "ILA20230011": 28, "CITY2021-LATHROP-1D": 121,
     "DOH-ROSENWALD-COURTS": 60, "DOH-STERLING-PARK": 66,
     "CITY2019-ROOSEVELT-3B": 75, "DOH-ROOSEVELT-SQUARE-1-REHAB": 132,  # City: 207 in the 3B deal
