@@ -62,11 +62,12 @@ export interface PermitsData extends PermitTables {
   projectMinUnits: number;
   conversions: Conversions;
   /**
-   * The same tables keyed on the ward as stated on each permit — the map in
-   * force when it was issued — rather than on today's boundaries.
+   * The same tables keyed on the ward each permit fell in on the map in
+   * force when it was issued (placed by its coordinates; the ward recorded on
+   * the permit only where they can't place it), rather than on today's map.
    */
   atIssue: PermitTables;
-  /** Stated-ward tables split at the exact redistricting dates, after deduplication. */
+  /** At-issue tables split at the exact redistricting dates, after deduplication. */
   byBoundaryPeriod: Record<string, PermitTables & { conversions: ConversionTables }>;
 }
 

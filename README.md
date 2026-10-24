@@ -153,9 +153,12 @@ periods live in `src/data/wardBoundaryPeriods.json`, shared by the site and
 the permit importer; they switch on 2015-05-18 and 2023-05-15, the days each
 new Council was sworn in. The importer writes a `byBoundaryPeriod` table per
 period into `permits.json`, splitting after staged permits are deduplicated
-so a project straddling a cutoff counts once. Wards there are as recorded on
-each permit, which agrees with the outlines for over 99.7% of permits. Per-year
-rates divide by the days each period actually covers.
+so a project straddling a cutoff counts once. Each permit is placed by its
+coordinates on the full-resolution map in force on its issue date (the ward
+recorded on the permit is used only where coordinates can't place it); the
+recorded ward lags for days after a redistricting, which is why it isn't used
+directly (GitHub issue #3). Per-year rates divide by the days each period
+actually covers.
 
 Regenerate the files with the mapshaper command above, adding
 `-each 'ward=Number(ward)'`; for 2003 also add

@@ -52,11 +52,16 @@ Three corrections do most of the work:
    Validated at 99.87% against 2024+ permits, whose stated ward is already
    current.
 
-   The stated ward is kept too, as a second set of tables ("atIssue"). It is
-   the ward as drawn when the permit was issued — agreement with today's map
-   is ~70% for 2010-14 and ~80% for 2015-22, stepping up at each redistricting
-   — so it answers "whose ward was this at the time" rather than "where is
-   this now". The site offers both.
+   A second set of tables ("atIssue", and "byBoundaryPeriod" split at each
+   redistricting) places every permit on the ward map in force on its issue
+   date, again by point-in-polygon on its coordinates, using the City's
+   full-resolution 2003, 2015 and 2023 boundary files. It answers "whose ward
+   was this at the time" rather than "where is this now"; agreement with
+   today's map is ~70% for 2010-14 and ~80% for 2015-22. The ward recorded on
+   the permit is used only where the coordinates can't place it (missing, or
+   on a boundary line): it usually matches, but for days after a
+   redistricting it can still carry the old map's number (five housing
+   permits, 18 units, in the week after 2023-05-15; GitHub issue #3).
 
 Requires: shapely (build-time only, not a site dependency).
 """
@@ -417,6 +422,43 @@ def main():
     rows = fetch_permits()
     print(f"  {len(rows):,} permits fetched since {START_YEAR}")
 
+    boundary_periods = json.loads(
+        (Path(__file__).resolve().parents[1] / "src/data/wardBoundaryPeriods.json")
+        .read_text(encoding="utf-8")
+    )
+    # Full-resolution geometry for each map, from the dataset each period cites.
+    era_maps = {}
+    for period in boundary_periods:
+        resource = period["source"].rstrip("/").rsplit("/", 1)[-1]
+        g = get(f"https://data.cityofchicago.org/resource/{resource}.geojson", {"$limit": 60})
+        feats = [f for f in g["features"]
+                 if str(f["properties"].get("ward", "")).strip().isdigit()
+                 and 1 <= int(f["properties"]["ward"]) <= 50]
+        if len({int(f["properties"]["ward"]) for f in feats}) != 50:
+            sys.exit(f"  {period['label']}: expected 50 wards in {resource}")
+        ps = [shape(f["geometry"]) for f in feats]
+        era_maps[period["id"]] = (ps, [int(f["properties"]["ward"]) for f in feats], STRtree(ps))
+    era_stats = collections.Counter()
+
+    def era_ward(r):
+        """Ward on the map in force on the issue date, by coordinates; else as recorded."""
+        date = (r.get("issue_date") or "")[:10]
+        period = next((p for p in boundary_periods if in_period(date, p["start"], p["end"])),
+                      boundary_periods[0])
+        stated = stated_ward(r)
+        lat, lon = r.get("latitude"), r.get("longitude")
+        if lat and lon:
+            ps, ws, tr = era_maps[period["id"]]
+            pt = Point(float(lon), float(lat))
+            hits = [ws[i] for i in tr.query(pt) if ps[i].contains(pt)]
+            if len(hits) == 1:
+                era_stats["placed"] += 1
+                if stated is not None and stated != hits[0]:
+                    era_stats["stated differs"] += 1
+                return hits[0]
+        era_stats["fell back to stated ward"] += 1
+        return stated
+
     geo = get(WARDS, {"$limit": 60})
     polys = [shape(f["geometry"]) for f in geo["features"]]
     wnum = [int(f["properties"]["ward"]) for f in geo["features"]]
@@ -468,15 +510,15 @@ def main():
         w = current_ward(r)
         if w is None:
             unmapped += 1
-        sw = stated_ward(r)
+        aw = era_ward(r)
         addr = " ".join(str(r.get(f) or "").strip().upper()
                         for f in ("street_number", "street_direction", "street_name"))
-        recs.append((r.get("issue_date", "")[:10], w, sw, n, addr, r.get("permit_")))
+        recs.append((r.get("issue_date", "")[:10], w, aw, n, addr, r.get("permit_")))
 
     # collapse staged permits for one project
     recs.sort(key=lambda x: x[0])
     seen, kept, dropped = {}, [], 0
-    for date, w, sw, n, addr, permit in recs:
+    for date, w, aw, n, addr, permit in recs:
         if n:
             k = (addr, n)
             prev = seen.get(k)
@@ -485,7 +527,7 @@ def main():
                 dropped += 1
                 continue
             seen[k] = date
-        kept.append((date, w, sw, n, addr, permit))
+        kept.append((date, w, aw, n, addr, permit))
 
     print(f"  unmapped to a ward: {unmapped} ({unmapped/len(rows)*100:.2f}%)")
     print(f"  collapsed {dropped} staged duplicates")
@@ -495,7 +537,7 @@ def main():
     at_issue = aggregate(kept, ward_index=2)
     by_ward_year = current["units"]
     moved = sum(1 for rec in kept if rec[1] and rec[2] and rec[1] != rec[2])
-    print(f"  stated ward differs from current ward on {moved:,} of {len(kept):,} "
+    print(f"  ward at issue differs from current ward on {moved:,} of {len(kept):,} "
           f"permits ({moved / len(kept) * 100:.1f}%)")
 
     # ---- conversions -----------------------------------------------------
@@ -510,7 +552,7 @@ def main():
         before, after = ba
         a = " ".join(str(r.get(f) or "").strip().upper()
                      for f in ("street_number", "street_direction", "street_name"))
-        crecs.append((r.get("issue_date", "")[:10], current_ward(r), stated_ward(r),
+        crecs.append((r.get("issue_date", "")[:10], current_ward(r), era_ward(r),
                       before, after, a))
     crecs.sort(key=lambda x: x[0])
 
@@ -521,12 +563,9 @@ def main():
     print(f"  conversions: {ckept:,} permits, single-family {ts:+,}, "
           f"multi-family {tm:+,}, net {ts + tm:+,}")
 
+    print("  ward at issue: " + ", ".join(f"{k} {v:,}" for k, v in era_stats.items()))
     last_date = max(rec[0] for rec in kept)
     years = sorted({rec[0][:4] for rec in kept})
-    boundary_periods = json.loads(
-        (Path(__file__).resolve().parents[1] / "src/data/wardBoundaryPeriods.json")
-        .read_text(encoding="utf-8")
-    )
     by_period = {}
     for period in boundary_periods:
         period_records = [rec for rec in kept
@@ -553,7 +592,11 @@ def main():
             "note": ("Gross new construction only — excludes conversions, "
                      "deconversions and demolitions. Top-level tables key on "
                      "current (2023) ward boundaries for every year; atIssue "
-                     "keys on the ward as stated on the permit."),
+                     "and byBoundaryPeriod key on the ward map in force on each "
+                     "permit's issue date, placed by coordinates."),
+            # How the at-issue wards were placed, so disagreement with the
+            # ward recorded on the permit stays inspectable.
+            "atIssueWards": dict(era_stats),
         },
         "projectMinUnits": PROJECT_MIN_UNITS,
         "conversions": {
