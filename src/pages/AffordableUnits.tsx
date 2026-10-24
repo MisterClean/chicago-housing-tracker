@@ -428,12 +428,10 @@ export function AffordableUnits() {
         )}
         {program === "pbv" && (
           <p className="af-caveat">
-            A CHA project-based voucher is a rent subsidy tied to the unit, not the tenant: CHA contracts
-            with the building&rsquo;s owner, and when a household moves out the subsidy stays for the next
-            eligible one. Only project-based vouchers are shown here; tenant-based (Housing Choice)
-            vouchers, which move with the household, are not. Every one of these units is already
-            counted under CHA owned, tax credit, Other City/State or ARO, so this view shows where
-            CHA&rsquo;s vouchers sit rather than adding units.
+            A CHA project-based voucher is a rent subsidy tied to a particular unit, not a tenant. CHA
+            contracts with the building&rsquo;s owner, and when a household moves out the subsidy stays
+            for the next eligible one. This tab only includes project-based vouchers; tenant-based
+            (Housing Choice) vouchers, which move with the household, are not.
           </p>
         )}
         {(pipe.length > 0 || showCity) && (
