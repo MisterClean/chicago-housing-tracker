@@ -167,6 +167,16 @@ Tests for the period split: `npm test` and
 `python3 -m unittest discover -s tests -p 'test_permit_periods.py'`. Both run
 in CI on every pull request and push to `main`.
 
+### Link previews
+
+Shared links preview with a title, description and `public/og-image.png`
+(1200×630: the Permitted Units ward map beside the site name). Titles and
+descriptions come from `src/pageMeta.ts`, which reads `src/sections.ts`; the
+build writes a copy of `index.html` per page (`permitting.html`, ...) with
+its own `<head>`, because previews are read from the raw HTML before any
+script runs. Netlify serves `/permitting` from `permitting.html` ahead of the
+SPA rewrite. The same titles set the browser tab as you move between pages.
+
 ## Refreshing the data
 
 | Dataset | How it refreshes |

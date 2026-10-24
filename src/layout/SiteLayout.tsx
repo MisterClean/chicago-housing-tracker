@@ -1,10 +1,18 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { SECTIONS } from "../sections";
 import { BLOG_URL } from "../data/blogPosts";
+import { pageMeta } from "../pageMeta";
 
 const PARENT_URL = "https://acitythatworks.org";
 
 export function SiteLayout() {
+  const { pathname } = useLocation();
+  // The tab title follows the page; the per-page HTML only sets it on first load.
+  useEffect(() => {
+    document.title = pageMeta(pathname).title;
+  }, [pathname]);
+
   return (
     <div className="site">
       <header className="site-header">
