@@ -173,8 +173,8 @@ export function AffordableVsMarket() {
           </div>
         )}
         <p className="mix-scale-note">
-          Market-rate units here are all units permitted less the affordable ones; preserved
-          affordable units are not counted.
+          Note that market-rate units here are all <em>market-rate</em> units permitted (total
+          permitted units minus affordable units permitted).
         </p>
       </section>
 
