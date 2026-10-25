@@ -1670,8 +1670,6 @@ for _a, _u, _dev, _permit in NSP_RENTALS:
 CITY_SET_ASIDE = [
     {"project": "Palmer Place Apartments", "address": "3301 W Palmer St", "units": 36,
      "note": "Sale of an existing 1993 HOME-funded affordable building to a new owner with a City acquisition loan (ordinance in committee, October 2026); no renovation and no new restrictions."},
-    {"project": "ABLA Brooks Homes", "address": "1300-1400 W 13th St", "units": 330,
-     "note": "Chicago Housing Authority renovation of its 330-unit public housing complex (2025-27), with City TIF for site infrastructure under a July 2026 agreement. CHA public housing without tax credits is outside the page's scope."},
     {"project": "Midwest Apartments", "address": "6 N Hamlin Blvd", "units": 276,
      "note": "Refinancing only: 2016 City preservation loan on HUD's 1996 Midwest Athletic Club LIHTC deal."},
     {"project": "Heartland Phoenix House", "address": "1251 S Sawyer Ave", "units": 32,
@@ -1692,6 +1690,82 @@ CITY_SET_ASIDE = [
 # The City's TIF Purchase+Rehab multifamily program also reports unit totals
 # with no project list: 64 units in 2022, 28 in 2023, none in 2019-2021.
 
+# CHA public housing added or rehabbed with no tax credits and no City or State
+# housing loans (Brooks Homes has City TIF for site work, so carries the TIF
+# label): shown as CHA owned only, every unit in the CHA bucket.
+# Sources: CHA's Moving to Work annual reports (FY2010-2015 from HUD's site
+# via the Wayback Machine, FY2016-2024 from CHA's) and plans (FY2025-2027),
+# dated by building permit. Added 2026-10-24. The same new/preserved rule as
+# everywhere else: units CHA had held offline and vacant for years, or new
+# buildings it bought on completion, are new; a gut rehab of occupied
+# buildings, or buying existing homes that had no legal restriction, is
+# preserved.
+# Repairs and modernization (boilers, elevators, roofs, masonry, accessibility)
+# are not counted.
+# Not counted, in the method text instead:
+#   - Property Investment Initiative, 2010-14: 37 single-family homes and
+#     condos bought on the open market (6, 8, 9, 7, 7 a year), no addresses.
+#   - Dearborn Homes buildings permitted in 2009 (2701 and 2731 S Dearborn,
+#     2730 S State; 128 units), before the series.
+CHA_ONLY = [
+    {"id": "CHA-DEARBORN-HOMES", "project": "Dearborn Homes (2010 rehab permits)",
+     "address": "2840-2971 S State, Dearborn and Federal Sts", "units": 338, "li_units": 338,
+     "permit": ("2010-01-26", "100328028"), "category": "preserved",
+     "sources": ["CHA MTW reports FY2010-2012", "City building permits"],
+     "note": "Gut rehab of the eight Dearborn Homes buildings permitted in 2010: 2964 and 2840 and 2900 S State (42, 36, 36), 2951, 2971 and 2901 S Federal (42 each), 2961 and 2910 S Dearborn (46, 52). The three buildings permitted in 2009 (128 units) fall before the series."},
+    {"id": "CHA-ALTGELD-BLOCKS-7-8", "project": "Altgeld Gardens, Blocks 7 and 8",
+     "address": "800-972 E 131st-133rd Sts", "units": 218, "li_units": 218,
+     "permit": ("2015-05-26", "100584844"), "category": "new",
+     "basis": "long-vacant public housing brought back",
+     "sources": ["CHA FY2016 MTW plan amendment and report", "City building permits"],
+     "note": "Complete gut rehab of 218 units in 25 buildings on Blocks 7 and 8, permitted May-June 2015 and delivered 2016. Counted as new: CHA's reports call them \"remaining offline units\"; CHA had called 648 Altgeld units vacant and uninhabitable in 2012 (CBS), and only about 1,200 of some 2,000 were occupied in 2014 (WBEZ)."},
+    {"id": "CHA-ABLA-BROOKS-HOMES", "project": "ABLA Brooks Homes", "address": "1244-60 W 14th St",
+     "units": 330, "li_units": 330, "permit": ("2026-03-26", "101079775"), "category": "preserved",
+     "sources": ["CHA MTW plans FY2025-2027", "City building permits"],
+     "note": "Full interior and exterior renovation of CHA's 330-unit Brooks Homes rowhouses and walk-ups, interior renovation permits March-April 2026 (1345 S Throop, 1337 W 13th, 1303-23 W Washburne, 1249 W Hastings); residents relocated during the work. City TIF for site infrastructure under a July 2026 agreement."},
+    {"id": "CHA-REAP-MONTCLARE", "project": "CHA Montclare apartments", "address": "7163-69 W Grand Ave",
+     "units": 18, "li_units": 18, "permit": ("2016-03-31", "100632799"), "category": "new",
+     "basis": "new buildings bought on completion",
+     "sources": ["CHA MTW report FY2017", "City building permits"],
+     "note": "Two new 9-unit buildings on a cleared commercial lot (permits March-April 2016), bought by CHA through its Real Estate Acquisition Program: \"18 new public housing units in the Montclare community\" (FY2017)."},
+    {"id": "CHA-REAP-HARLEM", "project": "Harlem Apartments", "address": "2603-17 N Harlem Ave",
+     "units": 24, "li_units": 24, "permit": ("2017-08-04", "100693759"), "category": "new",
+     "basis": "new buildings bought on completion",
+     "sources": ["CHA MTW report FY2018", "City building permits"],
+     "note": "Four new 6-unit buildings on a cleared commercial lot (permits August 2017), bought by CHA through its Real Estate Acquisition Program and opened as 24 public housing units in 2018."},
+    # Presbyterian Homes' three Chicago buildings, bought March 2016 (111 units,
+    # $19M): charity-run low-income senior housing with no recorded restriction
+    # or HUD contract, which the charity planned to sell to market-rate buyers
+    # in 2015 (DNAinfo, 2015-09-12: the alderman said "by law, we cannot force
+    # them" to keep it affordable). Newly restricted, so preserved, dated by the
+    # purchase. Units per building from CHA's FY2016 MTW report; 65 went to
+    # project-based vouchers in 2016 and 46 to public housing in 2017.
+    {"id": "CHA-PRESBYTERIAN-CROWDER", "project": "Crowder Place (Presbyterian Homes)",
+     "address": "3801 N Pine Grove Ave", "units": 41, "li_units": 41, "permit": None, "estimated": 2016,
+     "category": "preserved", "sources": ["CHA MTW report FY2016", "CHA press release 2016-03"],
+     "note": "Senior building CHA bought from Presbyterian Homes in March 2016 to keep it affordable; dated by the purchase."},
+    {"id": "CHA-PRESBYTERIAN-MULVEY", "project": "Mulvey Place (Presbyterian Homes)",
+     "address": "416 W Barry Ave", "units": 37, "li_units": 37, "permit": None, "estimated": 2016,
+     "category": "preserved", "sources": ["CHA MTW report FY2016", "CHA press release 2016-03"],
+     "note": "Senior building CHA bought from Presbyterian Homes in March 2016 to keep it affordable; dated by the purchase."},
+    {"id": "CHA-PRESBYTERIAN-DEVON", "project": "Devon Place (Presbyterian Homes)",
+     "address": "1950 W Devon Ave", "units": 33, "li_units": 33, "permit": None, "estimated": 2016,
+     "category": "preserved", "sources": ["CHA MTW report FY2016", "CHA press release 2016-03"],
+     "note": "Building CHA bought from Presbyterian Homes in March 2016 to keep it affordable, now family and individual housing; dated by the purchase."},
+    {"id": "CHA-REAP-3723-ELSTON", "project": "CHA acquisition: 3723 N Elston Ave", "address": "3723 N Elston Ave",
+     "units": 1, "li_units": 1, "permit": None, "estimated": 2015, "category": "preserved",
+     "sources": ["CHA MTW report FY2015"],
+     "note": "A condominium bought through CHA's Real Estate Acquisition Program and let as public housing; dated by the year bought."},
+    {"id": "CHA-REAP-2138-TOUHY", "project": "CHA acquisition: 2138 W Touhy Ave", "address": "2138 W Touhy Ave",
+     "units": 6, "li_units": 6, "permit": None, "estimated": 2016, "category": "preserved",
+     "sources": ["CHA MTW report FY2016"],
+     "note": "Six units bought through CHA's Real Estate Acquisition Program and let as public housing; dated by the year delivered."},
+    {"id": "CHA-REAP-W-OAK", "project": "CHA acquisition: 438 and 454 W Oak St", "address": "438 W Oak St",
+     "units": 4, "li_units": 4, "permit": None, "estimated": 2016, "category": "preserved",
+     "sources": ["CHA MTW report FY2016"],
+     "note": "Four units at 438 and 454 W Oak bought through CHA's Real Estate Acquisition Program and let as public housing; dated by the year delivered."},
+]
+
 
 # Who a development serves, for the page's "Who it serves" filter. Classed by
 # building, decided 2026-10 from IHDA's elderly/non-elderly column, the City's
@@ -1705,6 +1779,7 @@ CITY_SET_ASIDE = [
 # tower with family townhomes, or a family building with some supportive
 # units). ARO units are general.
 SENIOR = set("""
+    CHA-PRESBYTERIAN-CROWDER CHA-PRESBYTERIAN-MULVEY
     CITY2021-ALBANY-TERRACE CITY2021-ARCHER-SENIOR CITY2021-CHURCHVIEW
     CITY2021-GAINES CITY2021-IMANI CITY2023-ABRAMS
     CITY2023-MARTHA-WASHINGTON CITY2023-PARK-MANOR CITY2023-WBC-MANOR
@@ -1787,8 +1862,9 @@ CHA_UNITS = {
 
 # Developments that received City tax-increment financing (TIF), for the
 # page's TIF label. TIF is never a development's primary program: every TIF
-# deal with income-restricted units is also tax-credit, Other City/State or
-# ARO (checked 2026-10-20). Sources: the TIF multifamily commitment tables
+# deal with income-restricted units is also tax-credit, Other City/State,
+# CHA owned or ARO (checked 2026-10-20; Brooks Homes added 2026-10-24).
+# Sources: the TIF multifamily commitment tables
 # in the City's year-end housing reports (2010-2023; none in 2019), the
 # City's list of TIF-funded RDAs and IGAs (mex4-ppfc) matched by location,
 # 2023-26 City Council ordinances, and records' own notes. A TIF deal for an
@@ -1827,6 +1903,7 @@ TIF = set("""
     CITYF-105-W-ADAMS CITYF-30-N-LASALLE IHDA2022-SOUTHBRIDGE-1C
     CITY2023-5853-BROADWAY IHDA2024-PIONEER-ARCADE CITY2023-HOMAN-SQUARE-IV
     CITY2025-LELAND CITYF-VILLA-GUADALUPE CITYF-ARMOUR-BUILDING CITYF-CONGRESS-THEATER
+    CHA-ABLA-BROOKS-HOMES
 """.split())
 
 
@@ -2193,6 +2270,8 @@ def main():
           f"{sum(c['li_units'] for c in CITY_FUNDED if not (c.get('permit') or c.get('estimated')))} in the pipeline")
     for c in CITY_SET_ASIDE:
         print(f"  City/State-funded, not counted: {c['project']} ({c['units']} units): {c['note'][:70]}")
+    print(f"  CHA owned only, no tax credits: {len(CHA_ONLY)} developments, "
+          f"{sum(c['li_units'] for c in CHA_ONLY)} units")
     if review_path:
         json.dump(out, open(review_path, "w"), indent=1)
         print(f"  wrote review file {review_path}")
@@ -2233,7 +2312,8 @@ def address_coords(address):
     toks = a[2].split()
     dirn = toks[0] if toks and toks[0] in ("N", "S", "E", "W") else None
     core = aro.street_core(" ".join(toks[1:]) if dirn else a[2])
-    where = (f"street_number='{a[0]}' AND starts_with(street_name,'{core}') "
+    # The whole street name, so OAK does not match OAKDALE.
+    where = (f"street_number='{a[0]}' AND (street_name='{core}' OR starts_with(street_name,'{core} ')) "
              "AND latitude IS NOT NULL")
     if dirn:
         where += f" AND street_direction='{dirn}'"
@@ -2287,7 +2367,7 @@ def write_site(out, hud):
         except (KeyError, TypeError, ValueError):
             pass
     pc = permit_coords([(o.get("permit") or {}).get("id") for o in out]
-                       + [c["permit"][1] for c in CITY_FUNDED if c.get("permit")])
+                       + [c["permit"][1] for c in CITY_FUNDED + CHA_ONLY if c.get("permit")])
 
     def coords(o):
         p = (o.get("permit") or {}).get("id")
@@ -2336,29 +2416,37 @@ def write_site(out, hud):
     projects.sort(key=lambda p: -p["li"])
     by = collections.Counter(p["s"] for p in projects)
 
-    city = []
-    for c in CITY_FUNDED:
-        date = (c["permit"][0] if c.get("permit")
-                else f"{c['estimated']}-01-01" if c.get("estimated") else None)
-        ll = (pc.get(c["permit"][1]) if c.get("permit") else None) or address_coords(c["address"])
-        w = ward_of(ll)
-        if w is None:
-            unplaced.append(c["project"])
-        li, split = c["li_units"], c.get("split") or {}
-        city.append({
-            "id": c["id"], "n": c["project"], "a": c["address"], "w": w,
-            "ll": [round(ll[0], 5), round(ll[1], 5)] if ll else None,
-            "u": c["units"], "li": li,
-            "new": split.get("new", li if c["category"] == "new" else 0),
-            "pres": split.get("preserved", li if c["category"] == "preserved" else 0),
-            "y": int(date[:4]) if date else None, "yo": None,
-            "s": "permit" if c.get("permit") else "estimate" if date else c.get("status", "awarded"),
-            "cha": bool(c.get("cha")), "tif": c["id"] in TIF, "aro": False, "mix": bool(c.get("mixed_income")),
-            "sl": False, "fu": bool(c.get("follow_up")), "rs": False,
-            "pop": population(c["id"]),
-            **pbv_units(c["id"], li),
-        })
-    city.sort(key=lambda p: -p["li"])
+    def hand_kept(items, cha_only=False):
+        """Records kept by hand (City/State-funded, CHA owned only), in the page's shape."""
+        rows = []
+        for c in items:
+            date = (c["permit"][0] if c.get("permit")
+                    else f"{c['estimated']}-01-01" if c.get("estimated") else None)
+            ll = (pc.get(c["permit"][1]) if c.get("permit") else None) or address_coords(c["address"])
+            w = ward_of(ll)
+            if w is None:
+                unplaced.append(c["project"])
+            li, split = c["li_units"], c.get("split") or {}
+            new = split.get("new", li if c["category"] == "new" else 0)
+            pres = split.get("preserved", li if c["category"] == "preserved" else 0)
+            rows.append({
+                "id": c["id"], "n": c["project"], "a": c["address"], "w": w,
+                "ll": [round(ll[0], 5), round(ll[1], 5)] if ll else None,
+                "u": c["units"], "li": li, "new": new, "pres": pres,
+                "y": int(date[:4]) if date else None, "yo": None,
+                "s": "permit" if c.get("permit") else "estimate" if date else c.get("status", "awarded"),
+                "cha": cha_only or bool(c.get("cha")), "tif": c["id"] in TIF, "aro": False,
+                "mix": bool(c.get("mixed_income")),
+                "sl": False, "fu": bool(c.get("follow_up")), "rs": False,
+                "pop": population(c["id"]),
+                **({"chu": li, "chn": new, "chp": pres} if cha_only else {}),
+                **pbv_units(c["id"], li),
+            })
+        rows.sort(key=lambda p: -p["li"])
+        return rows
+
+    city = hand_kept(CITY_FUNDED)
+    cha_only = hand_kept(CHA_ONLY, cha_only=True)
     payload = {
         "meta": {
             "source": "HUD LIHTC database (LIHTCPUB), City of Chicago and IHDA award, "
@@ -2373,13 +2461,16 @@ def write_site(out, hud):
             "cityProjects": sum(1 for p in city if p["s"] in ("permit", "estimate")),
             "cityUnits": sum(p["li"] for p in city if p["s"] in ("permit", "estimate")),
             "citySetAside": [{"n": c["project"], "u": c["units"], "note": c["note"]} for c in CITY_SET_ASIDE],
+            "chaOnlyUnits": sum(p["li"] for p in cha_only if p["s"] in ("permit", "estimate")),
         },
         "projects": projects,
         "city": city,
+        "chaOnly": cha_only,
     }
     os.makedirs(os.path.dirname(SITE_OUT), exist_ok=True)
     json.dump(payload, open(SITE_OUT, "w"), indent=0, separators=(",", ":"))
-    print(f"  wrote {SITE_OUT}: {len(projects)} developments, {dict(by)}, {len(city)} City-funded; "
+    print(f"  wrote {SITE_OUT}: {len(projects)} developments, {dict(by)}, {len(city)} City-funded, "
+          f"{len(cha_only)} CHA owned only; "
           f"{len(unplaced)} without a ward: {unplaced[:8]}")
 
 

@@ -82,12 +82,12 @@ const NSP_UNITS = NSP.reduce((t, p) => t + p.li, 0);
 const NSP_ALL_UNITS = NSP.reduce((t, p) => t + p.u, 0);
 const CITY_SET_ASIDE_UNITS = lihtc.meta.citySetAside.reduce((s, c) => s + c.u, 0);
 const TIF_DEVS =
-  [...lihtc.projects, ...lihtc.city].filter((p) => p.tif && (p.s === "permit" || p.s === "estimate")).length +
+  [...lihtc.projects, ...lihtc.city, ...lihtc.chaOnly].filter((p) => p.tif && (p.s === "permit" || p.s === "estimate")).length +
   Object.values(aro.projects).flat().filter((b) => b.tif).length;
 
 /** Developments in the series with CHA project-based vouchers, and their voucher units. */
 const PBV_SERIES = [
-  ...[...lihtc.projects, ...lihtc.city].filter((p) => p.pbv && (p.s === "permit" || p.s === "estimate")),
+  ...[...lihtc.projects, ...lihtc.city, ...lihtc.chaOnly].filter((p) => p.pbv && (p.s === "permit" || p.s === "estimate")),
   ...Object.values(aro.projects).flat().filter((b) => b.pbv),
 ];
 const PBV_DEVS = PBV_SERIES.length;
@@ -819,9 +819,8 @@ export function AffordableUnits() {
           the program buttons overlap. The &ldquo;All&rdquo; totals, the stacked chart and the map
           count each unit once, in the first bucket that applies: CHA-owned units, then the rest of a
           tax-credit development, then Other City/State, then ARO. None of the City&rsquo;s ARO
-          buildings is a tax-credit development. Not covered: public housing built or bought by CHA
-          without tax credits, for-sale programs, and housing that is simply cheap without any
-          restriction.
+          buildings is a tax-credit development. Not covered: for-sale programs, and housing that is
+          simply cheap without any restriction.
         </p>
         <p>
           <strong>Other City/State developments.</strong> {lihtc.meta.cityProjects} developments
@@ -880,10 +879,19 @@ export function AffordableUnits() {
           count comes from the City&rsquo;s report of commitments under CHA&rsquo;s Plan for
           Transformation and Plan Forward, HUD&rsquo;s public-housing development file and CHA&rsquo;s
           annual Moving to Work reports; where HUD splits one phase into several records, CHA&rsquo;s
-          total is divided among them in proportion to their low-income units. CHA housing added
-          without tax credits is not counted: CHA&rsquo;s reports show 218 long-vacant Altgeld Gardens
-          units rehabbed in 2016 and 98 units in existing buildings it bought in 2016&ndash;18, but its
-          reports for 2010&ndash;2015 are not published online.
+          total is divided among them in proportion to their low-income units. CHA housing added or
+          rehabbed without tax credits counts as CHA owned only: {lihtc.chaOnly.length} developments
+          with {lihtc.meta.chaOnlyUnits.toLocaleString()} units, from CHA&rsquo;s Moving to Work annual
+          reports (2010&ndash;2024) and plans (2025&ndash;2027), each dated by its building permit, or,
+          for homes CHA bought, the year it bought them. The gut rehabs of occupied Dearborn Homes
+          (2010) and Brooks Homes (2026) are preserved, as are the three Presbyterian Homes buildings
+          (111 units) CHA bought in 2016, low-income senior housing with no legal restriction that
+          its charity owner was selling to market-rate buyers; 218 long-vacant units at Altgeld
+          Gardens (2015) and two new buildings CHA bought on completion (2016&ndash;17) are new.
+          Repairs and modernization of occupied buildings (boilers, elevators, roofs, accessibility)
+          are not counted, and neither are 37 single-family homes and condos CHA bought in
+          2010&ndash;2014, which its reports give only as yearly totals with no addresses.
+          CHA&rsquo;s report for 2025 is not yet out, so later work comes from its plans and permits.
         </p>
         <p>
           <strong>CHA voucher.</strong> A CHA project-based voucher is a rent subsidy tied to a unit, not
@@ -902,7 +910,7 @@ export function AffordableUnits() {
         </p>
         <p>
           <strong>TIF.</strong> {TIF_DEVS} developments in the series received City tax-increment
-          financing: tax-credit, Other City/State and ARO alike. TIF is never a development&rsquo;s
+          financing: tax-credit, CHA owned, Other City/State and ARO alike. TIF is never a development&rsquo;s
           only source, so it is a label, not a bucket of its own; every TIF-funded unit is counted
           under one of the other programs. Tagged from the TIF commitment tables in the City&rsquo;s
           year-end housing reports (2010&ndash;2023), the City&rsquo;s list of TIF-funded

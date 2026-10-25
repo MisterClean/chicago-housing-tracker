@@ -81,10 +81,14 @@ export interface LihtcData {
     cityUnits: number;
     /** City-funded projects looked at and left out, with the reason. */
     citySetAside: { n: string; u: number; note: string }[];
+    /** Units in chaOnly that are counted (dated by permit or estimate). */
+    chaOnlyUnits: number;
   };
   projects: LihtcProject[];
   /** City-funded income-restricted projects with no federal tax credits; same shape. */
   city: LihtcProject[];
+  /** CHA public housing with no tax credits or City/State money; every unit is CHA owned. */
+  chaOnly: LihtcProject[];
 }
 
 export type Program = "all" | "lihtc" | "cha" | "pbv" | "tif" | "city" | "aro";
@@ -181,8 +185,11 @@ export function lihtcYear(p: LihtcProject, basis: YearBasis): number | null {
 const popOk = (p: LihtcProject, o: Options) => o.pop === "all" || p.pop === o.pop;
 const aroPopOk = (o: Options) => o.pop === "all" || o.pop === "general";
 
-function labelsOf(p: LihtcProject, src: "lihtc" | "city"): Label[] {
-  const l: Label[] = [src === "lihtc" ? "LIHTC" : "City"];
+/** Where a record comes from: tax-credit, Other City/State, or CHA owned only. */
+type Source = "lihtc" | "city" | "cha";
+
+function labelsOf(p: LihtcProject, src: Source): Label[] {
+  const l: Label[] = src === "lihtc" ? ["LIHTC"] : src === "city" ? ["City"] : [];
   if ((p.chu ?? 0) > 0 || p.cha) l.push("CHA");
   if (p.pbv) l.push("PBV");
   if (p.tif) l.push("TIF");
@@ -206,7 +213,7 @@ function pbvSplit(p: LihtcProject): [number, number] {
 }
 
 /** A tax-credit or City/State-funded development's units in each bucket under the selection. */
-function lihtcParts(p: LihtcProject, src: "lihtc" | "city", o: Options): Parts {
+function lihtcParts(p: LihtcProject, src: Source, o: Options): Parts {
   const x = zero();
   const keepNew = o.kind !== "preserved", keepPres = o.kind !== "new";
   if (o.program === "pbv") {
@@ -221,7 +228,7 @@ function lihtcParts(p: LihtcProject, src: "lihtc" | "city", o: Options): Parts {
   if (src === "lihtc") {
     x.lihtcNew = keepNew ? restNew : 0;
     x.lihtcPres = keepPres ? restPres : 0;
-  } else {
+  } else if (src === "city") {
     x.city = (keepNew ? restNew : 0) + (keepPres ? restPres : 0);
   }
   return x;
@@ -247,7 +254,7 @@ function lihtcTags(p: LihtcProject): string[] {
 export function allDevelopments(aro: AroData, lihtc: LihtcData, o: Options): Dev[] {
   const out: Dev[] = [];
   const basis = o.program === "lihtc" ? o.basis : "permit";
-  const addLihtc = (p: LihtcProject, src: "lihtc" | "city") => {
+  const addLihtc = (p: LihtcProject, src: Source) => {
     const labels = labelsOf(p, src);
     if (!inSelection(labels, o.program) || !popOk(p, o)) return;
     const parts = lihtcParts(p, src, o);
@@ -265,13 +272,14 @@ export function allDevelopments(aro: AroData, lihtc: LihtcData, o: Options): Dev
     out.push({
       id: p.id, name: titleCase(p.n), address: p.a, ward: p.w, ll: p.ll, year, total: p.u || null,
       parts, units, labels,
-      primary: chaLed ? "CHA" : src === "lihtc" ? "LIHTC" : "City",
+      primary: chaLed || src === "cha" ? "CHA" : src === "lihtc" ? "LIHTC" : "City",
       kind: pres * 2 > units ? "preserved" : "new",
       tags: lihtcTags(p), pbv: p.pbv ?? 0, src: p,
     });
   };
   for (const p of lihtc.projects) addLihtc(p, "lihtc");
   for (const p of lihtc.city) addLihtc(p, "city");
+  for (const p of lihtc.chaOnly) addLihtc(p, "cha");
   // ARO units are new only, open to anyone, and never CHA.
   const aroIn = o.kind !== "preserved" && aroPopOk(o) &&
     (o.program === "all" || o.program === "aro" || o.program === "tif" || o.program === "pbv");
@@ -431,7 +439,7 @@ export function devsToCsv(devs: Dev[], from: number, to: number, o: Options): st
 /** Developments with financing awarded but no building permit yet, largest first. */
 export function pipeline(lihtc: LihtcData, program: Program): { p: LihtcProject; labels: Label[] }[] {
   const rows: { p: LihtcProject; labels: Label[] }[] = [];
-  for (const [list, src] of [[lihtc.projects, "lihtc"], [lihtc.city, "city"]] as const) {
+  for (const [list, src] of [[lihtc.projects, "lihtc"], [lihtc.city, "city"], [lihtc.chaOnly, "cha"]] as const) {
     for (const p of list) {
       if (p.s !== "awarded") continue;
       const labels = labelsOf(p, src);

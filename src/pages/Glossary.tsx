@@ -45,8 +45,8 @@ export function Glossary() {
             The City&rsquo;s public housing authority. Since the Plan for Transformation most new
             CHA homes are built inside mixed-income, tax-credit developments on former public
             housing sites, alongside affordable and market-rate units. The Affordable Units page
-            counts those units as &ldquo;CHA owned&rdquo; and can show them on their own; CHA housing
-            built or bought without tax credits is not covered. Buildings where CHA pays part of
+            counts those units as &ldquo;CHA owned&rdquo; and can show them on their own, along with
+            the CHA housing built, bought or rehabbed without tax credits. Buildings where CHA pays part of
             the rent through project-based vouchers carry a separate &ldquo;CHA voucher&rdquo; label.
           </dd>
         </div>

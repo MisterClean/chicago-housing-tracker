@@ -189,7 +189,7 @@ SPA rewrite. The same titles set the browser tab as you move between pages.
 | `src/data/blogPosts.json` | Manual — `python3 scripts/import_posts.py`, then commit. Every public newsletter post tagged "Housing" on Substack, which is the source of truth. Can't be scheduled: Substack blocks requests from GitHub's servers. |
 | `src/data/aro.json` | Manual, quarterly (see below) — `python3 scripts/import_aro.py`. Needs `.permits_cache.json` present, so run the permit importer first. |
 | `src/data/wards_data.json` | Manual — Zillow listing counts collected by hand, see the pipeline notes above. |
-| `src/data/lihtc.json` | Manual, quarterly (see below) — `python3 scripts/import_lihtc.py`. Tax-credit and City/State-funded developments; hand-reviewed records live in the script, source documents in `sources/` (git-ignored). |
+| `src/data/lihtc.json` | Manual, quarterly (see below) — `python3 scripts/import_lihtc.py`. Tax-credit and City/State-funded developments, and CHA public housing added or rehabbed without tax credits; hand-reviewed records live in the script, source documents in `sources/` (git-ignored). |
 
 The permit importer is safe to run unattended because it fails loudly rather
 than committing bad data:
@@ -219,6 +219,9 @@ Requires `shapely` and `certifi`, both build-time only.
 2. Work through the report and the open follow-ups. Update the hand-kept
    records in `scripts/import_lihtc.py` (and `ARO_SERVICE` in
    `scripts/import_aro.py` if the City has published a new ARO dataset).
+   When CHA posts a new Moving to Work report or plan, check it for public
+   housing added, bought or gut-rehabbed without tax credits (`CHA_ONLY`) and
+   for changes to the CHA and voucher counts (`CHA_UNITS`, `CHA_PBV`).
 3. Rerun `import_aro.py`, `import_lihtc.py` and `import_posts.py`; build and
    check the Affordable Units totals; commit and push.
 4. Run `python3 scripts/refresh_check.py --mark-done` and commit
