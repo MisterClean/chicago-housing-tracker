@@ -39,6 +39,13 @@ Three corrections do most of the work:
    if its text names a whole new building with no building part in between
    (see renovation_is_new_building); one for a single house must also not
    describe work on an existing building unless it says the old one came down.
+   The same holds the other way: a permit typed as new construction for "2
+   CAR GARAGE SERVING AN EXISTING 2 STORY SFR" or "ADDITION TO AN EXISTING
+   SINGLE FAMILY RESIDENCE" named a house and counted as one (about 340 since
+   2010). One-unit permits like that are now left out (see
+   accessory_to_existing); coach houses and ADUs still count. A deconversion
+   typed as new construction ("DE-CONVERT 2DU TO SINGLE FAMILY") goes to the
+   conversions series instead (UNIT_CHANGE).
 
 4. CONVERSIONS ARE A SEPARATE SERIES. An existing building becoming housing
    adds real supply but is not new construction, so it is counted apart rather
@@ -167,7 +174,7 @@ ADDS_UNITS = re.compile(r"NEW CONSTRUCTION|RESIDENTIAL ADDITION|ADDITION OF \(?\
 EXISTING_WORK = re.compile(r"\b(?:ADDITION|DORMER|INTERIOR|REMODEL|REHAB|RENOVAT|ALTERATION|"
                            r"EXISTING|EXISTNG|EXSTG|EXIST\.|EXITING)")
 #: the old building came down, so "existing" refers to its foundation or site
-REBUILT = re.compile(r"(?:DEMOLI\w*|REMOVE (?:AN |THE )?EXISTING)[^.]{0,50}?\b(?:RESIDENCE|SFR|STRUCTURE|BUILDING|HOUSE)|"
+REBUILT = re.compile(r"(?:DEMOLI\w*|REMOVE (?:AN |THE )?EXISTING)[^.]{0,50}?\b(?:RESIDENCE|SFR|(?<!ROOF )STRUCTURE|BUILDING|HOUSE)|"
                      r"WRECKING PERMIT|(?:ABOVE|ON TOP OF) (?:THE )?EXISTING|"
                      r"(?:DOWN TO|UP TO) (?:THE )?(?:EXISTING )?FOUNDATION|FIRE DAMAGE|"
                      r"(?:SINGLE[- ]FAMILY|RESIDENCE|SFR)[^.]{0,40}?(?:ON|OVER) (?:THE )?EXISTING (?:PARTIAL )?FOUNDATION")
@@ -188,6 +195,60 @@ def renovation_is_new_building(t, units):
     if CONVERSION_WORDS.search(t) or not whole(NEW_SINGLE):
         return False
     return not EXISTING_WORK.search(t) or bool(REBUILT.search(t))
+
+
+# ---- new-construction permits that are really for an existing house -----
+
+_VERB_HOUSE = (r"(?:ERECT\w*|EREC|CONSTRUCT\w*|BUILD\w*|NEW CONSTRUCTION|NEW|PROPOSED|REPLACED WITH|"
+               r"FULL (?:BUILDING )?PERMIT FOR)\b")
+NEW_HOUSE = re.compile(_VERB_HOUSE + r"[^.]{0,80}?\b(?:SINGLE[- ]FAMILY|RESIDEN\w*|SFR|HOUSE|DWELLING|HOME)\b")
+#: a coach house or ADU over a garage is a new home
+ADU = re.compile(r"COACH\s*HOUSE|\bADU\b|ACCESSORY DWELLING|DWELLING UNIT ABOVE|LIVING (?:SPACE|UNIT) ABOVE")
+#: the City's standard designs for new homes: "ISSUED AS A PROTOTYPE BUILDING"
+PROTOTYPE = re.compile(r"\bPROTOTYP")
+#: parts that come between the verb and the house only when the house isn't new
+#: ("ROOF DECK, SINGLE FAMILY RESIDENCE" is fine)
+SPAN_PART = re.compile(r"\b(?:ADDITION|DORMER|GARAGE|PORCH|PERGOLA|FENCE|SHED|CARPORT|BREEZEWAY|STAIR\w*|"
+                       r"FLOOR|BEDROOM|BATH\w*|KITCHEN|FAMILY ROOM|PATIO|CANOPY)\b")
+PART_WORDS = re.compile(r"\b(?:ADDITION|DORMER|GARAGE|PORCH|DECK|PERGOLA|FENCE|SHED|CARPORT|BREEZEWAY|PATIO|SPA|"
+                        r"FIREPLACE|STAIRS?|CANOPY|TRELLIS|PARKING PAD|SLAB|ACCESSORY|ALTERATIONS?|INTERIOR|"
+                        r"REMODEL\w*|RENOVAT\w*|BATH\w*|BEDROOM)\b")
+#: the house is already there: "SERVING AN EXISTING 2 STORY SFR" (and its misspellings),
+#: "GARAGE FOR A SINGLE FAMILY RESIDENCE"
+HOUSE_THERE = re.compile(r"\bEX[IS]{1,2}T?\w*|\bEXITING\b|\bSERV\w*|\b(?:FOR|TO|AT|ON|OF) (?:(?:A|AN|THE|THIS)\s+)?"
+                         r"(?:[^.\s]+\s+){0,8}?(?:SINGLE[- ]FAMILY|SFR|RESIDEN\w*|HOUSE|HOME)\b")
+#: "DE-CONVERT 2DU TO SINGLE FAMILY", "CONVERT 3 UNITS TO 4 UNITS": an existing building's unit count changing
+UNIT_CHANGE = re.compile(r"DE-?\s?CONVER|CONVERT\w*\s+(?:FROM\s+)?(?:(?:A|AN|THE)\s+)?(?:[\w-]+\s+){0,4}?\(?\d+\)?\s*"
+                         r"(?:DU|D\.U|DWELLING|UNITS?|APARTMENTS?)\b[^.]{0,40}?\b(?:TO|INTO)\b")
+REPLACES_BUILDING = re.compile(r"TO REPLACE (?:AN |THE )?EXISTING (?!GARAGE|PORCH|DECK)|REPLACED WITH NEW|VACANT LOT")
+
+
+def new_house_phrase(t):
+    """'ERECT 2 STORY FRAME SINGLE FAMILY RESIDENCE': a whole new house, not a
+    part of one ('2 STORY ADDITION') or zoning boilerplate ('NO CHANGE,
+    PROPOSED SINGLE FAMILY')."""
+    for m in NEW_HOUSE.finditer(t):
+        span = m.group(0)
+        if SPAN_PART.search(span) or re.search(r"\bEX[IS]|NO CHANGE|\bUSE\b", span):
+            continue
+        if "NO CHANGE" in t[max(0, m.start() - 30):m.start()]:
+            continue
+        if re.match(r"[^.]{0,30}?\bADDITION\b", t[m.end():]):
+            continue
+        return True
+    return False
+
+
+def accessory_to_existing(t):
+    """A one-unit new-construction permit for a garage, deck, porch, addition
+    or renovation at a house already there ('PROPOSED 2 CAR GARAGE SERVING AN
+    EXISTING 2 STORY SFR'): not a new house. Checked by hand against samples
+    of both outcomes from all 7,227 such permits, 2010-2026."""
+    if ADU.search(t) or PROTOTYPE.search(t) or new_house_phrase(t):
+        return False
+    if REBUILT.search(t) or REPLACES_BUILDING.search(t):
+        return False
+    return bool(PART_WORDS.search(t) and HOUSE_THERE.search(t))
 
 
 # ---- conversions -------------------------------------------------------
@@ -543,10 +604,16 @@ def main():
     # describes a whole new building despite a renovation type. Everything
     # else that reached the fetch is a conversion candidate.
     def is_new_build(r):
-        if (r.get("permit_type") or "") == "PERMIT - NEW CONSTRUCTION":
-            return True
         t = CROSS_REF.sub(" ", (r.get("work_description") or "").upper())
-        return renovation_is_new_building(t, classify(t)[1])
+        units = classify(t)[1]
+        if (r.get("permit_type") or "") == "PERMIT - NEW CONSTRUCTION":
+            # a garage or addition for an existing house is typed as new construction too,
+            # and so is the odd conversion, which belongs in the conversions series
+            if (UNIT_CHANGE.search(t) and not ADU.search(t) and not new_house_phrase(t)
+                    and not re.search(r"\bNEW\b[^.]{0,20}?\bCONSTRUCTION\b", t)):
+                return False
+            return not (units == 1 and accessory_to_existing(t))
+        return renovation_is_new_building(t, units)
 
     newbuild = [r for r in rows if is_new_build(r)]
     convrows = [r for r in rows if not is_new_build(r)]
