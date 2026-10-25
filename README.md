@@ -189,7 +189,7 @@ SPA rewrite. The same titles set the browser tab as you move between pages.
 | `src/data/blogPosts.json` | Manual — `python3 scripts/import_posts.py`, then commit. Every public newsletter post tagged "Housing" on Substack, which is the source of truth. Can't be scheduled: Substack blocks requests from GitHub's servers. |
 | `src/data/aro.json` | Manual, quarterly (see below) — `python3 scripts/import_aro.py`. Needs `.permits_cache.json` present, so run the permit importer first. |
 | `src/data/wards_data.json` | Manual — Zillow listing counts collected by hand, see the pipeline notes above. |
-| `src/data/lihtc.json` | Manual, quarterly (see below) — `python3 scripts/import_lihtc.py`. Tax-credit and City/State-funded developments, and CHA public housing added or rehabbed without tax credits; hand-reviewed records live in the script, source documents in `sources/` (git-ignored). |
+| `src/data/lihtc.json` | Manual, quarterly (see below) — `python3 scripts/import_lihtc.py`. Tax-credit and City/State-funded developments, and CHA public housing added or rehabbed without tax credits, with TIF, City funds and HOME labels; hand-reviewed records live in the script, source documents in `sources/` (git-ignored). |
 
 The permit importer is safe to run unattended because it fails loudly rather
 than committing bad data:
@@ -213,7 +213,9 @@ Requires `shapely` and `certifi`, both build-time only.
    `scripts/import_lihtc.py` above `PIPELINE`), with any permits or Council
    ordinances naming them; housing-finance ordinances introduced at City Council (from
    the City Clerk's API, only those since the last refresh); whether HUD has
-   posted a new LIHTC file; new documents on the IHDA, City and CHA pages the
+   posted a new LIHTC file; HUD environmental reviews posted for Chicago
+   projects, with the HUD programs each names (the timely source for HOME,
+   for `HOME_FUNDS` and `CITY_FUNDS`); new documents on the IHDA, City and CHA pages the
    reconciliation draws on; whether the City's ARO map data has changed; and
    newsletter posts not yet listed. It changes nothing.
 2. Work through the report and the open follow-ups. Update the hand-kept

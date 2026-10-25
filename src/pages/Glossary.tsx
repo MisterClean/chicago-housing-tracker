@@ -59,6 +59,16 @@ export function Glossary() {
           </dd>
         </div>
         <div>
+          <dt>HOME — HOME Investment Partnerships Program</dt>
+          <dd>
+            A federal grant HUD gives cities and states each year to build, buy or fix up affordable
+            housing; Chicago receives about $40 million. The City mostly lends it to developers along
+            with its other housing money, and the homes must stay income-restricted for 5 to 20 years.
+            On the Affordable Units page, developments with any City housing loan, grant or land carry
+            the &ldquo;City funds&rdquo; label, and those where a source names HOME are tagged HOME.
+          </dd>
+        </div>
+        <div>
           <dt>Income-restricted</dt>
           <dd>
             A home whose rent is capped and whose tenants must earn below a set share of AMI,
@@ -131,7 +141,8 @@ export function Glossary() {
             spent on projects there, including affordable housing. TIF is usually one source among
             several, so on the Affordable Units page it is a label: the TIF button shows every
             development that received it, whether it is also a tax-credit, Other City/State or ARO
-            development.
+            development. The City&rsquo;s housing loans, grants and land have a label of their own,
+            &ldquo;City funds.&rdquo;
           </dd>
         </div>
       </dl>

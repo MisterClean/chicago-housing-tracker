@@ -85,6 +85,11 @@ const TIF_DEVS =
   [...lihtc.projects, ...lihtc.city, ...lihtc.chaOnly].filter((p) => p.tif && (p.s === "permit" || p.s === "estimate")).length +
   Object.values(aro.projects).flat().filter((b) => b.tif).length;
 
+/** Developments in the series with a City loan, grant or land, and those with HOME money named. */
+const SERIES = [...lihtc.projects, ...lihtc.city, ...lihtc.chaOnly].filter((p) => p.s === "permit" || p.s === "estimate");
+const CF_DEVS = SERIES.filter((p) => p.cf).length;
+const HOME_DEVS = SERIES.filter((p) => p.home).length;
+
 /** Developments in the series with CHA project-based vouchers, and their voucher units. */
 const PBV_SERIES = [
   ...[...lihtc.projects, ...lihtc.city, ...lihtc.chaOnly].filter((p) => p.pbv && (p.s === "permit" || p.s === "estimate")),
@@ -299,6 +304,7 @@ export function AffordableUnits() {
         : program === "cha" ? `${kindWord}CHA-owned units`
           : program === "pbv" ? `${kindWord}units with CHA project-based vouchers`
           : program === "tif" ? `${kindWord}units in TIF-funded developments`
+          : program === "cf" ? `${kindWord}units in developments with City funds`
             : program === "city" ? `${kindWord}Other City/State units`
               : kind === "both" ? "affordable units, new + preserved" : kind === "preserved" ? "preserved units" : "new affordable units";
   const unitsLabel = popEff === "all" ? unitsLabel0 : `${unitsLabel0} (${POP_LABELS[popEff].toLowerCase()})`;
@@ -412,7 +418,7 @@ export function AffordableUnits() {
           </div>
           <button className="pm-export" onClick={downloadCsv}>Download CSV</button>
         </div>
-        {(program === "all" || program === "tif") && (
+        {(program === "all" || program === "tif" || program === "cf") && (
           <p className="af-caveat af-split">
             {[
               has.cha && `${totals.cha.toLocaleString()} CHA owned`,
@@ -423,7 +429,9 @@ export function AffordableUnits() {
             ].filter(Boolean).join(" · ")}.
             {program === "all"
               ? " Each unit is counted once, in the first of these that applies: CHA-owned units, then the rest of a tax-credit development, then Other City/State, then ARO. The program buttons above show every development a label applies to, so they overlap and do not add up to this total."
-              : " TIF is money added to developments that are also tax-credit, Other City/State or ARO; their units are split the same way."}
+              : program === "tif"
+                ? " TIF is money added to developments that are also tax-credit, Other City/State or ARO; their units are split the same way."
+                : " City funds are loans, grants or land added to developments that are also tax-credit or Other City/State; their units are split the same way."}
           </p>
         )}
         {program === "pbv" && (
@@ -811,7 +819,8 @@ export function AffordableUnits() {
           by the Illinois Housing Development Authority; those developments land where public money
           sends them. Chicago Housing Authority (CHA) public housing units sit inside many of them,
           and CHA project-based vouchers subsidize the rent on units in many more. Tax-increment
-          financing (TIF) is City money added to developments of every kind. Other City- and
+          financing (TIF) is City money added to developments of every kind, and so are the
+          City&rsquo;s housing loans, grants and land (the &ldquo;City funds&rdquo; label). Other City- and
           State-funded developments used no tax credits. The Affordable Requirements Ordinance (ARO)
           requires developments of ten or more units that need a zoning change, city land or city
           money to set aside a share of their homes at restricted rents; those units are produced by
@@ -917,6 +926,23 @@ export function AffordableUnits() {
           redevelopment agreements, City Council ordinances (2023&ndash;2026) and the developments&rsquo;
           own records. For ARO buildings, only those matched to a TIF agreement by location are
           tagged, so the TIF count for ARO is a floor.
+        </p>
+        <p>
+          <strong>City funds.</strong> {CF_DEVS} developments in the series received a City housing
+          loan or grant, or City land, a label like TIF. The loans are the Department of
+          Housing&rsquo;s multifamily loans, which pool federal HOME, CDBG and Neighborhood
+          Stabilization money with the City&rsquo;s own Affordable Housing Opportunity Fund and other
+          City funds. City-issued bonds (private debt the City only issues), tax credits the City
+          allocates (federal) and Illinois donation credits (State) are not counted, and TIF has its own
+          label. Tagged from the multifamily loan and City land tables in the City&rsquo;s year-end
+          housing reports (2010&ndash;2023) and City Council ordinances since late 2023.{" "}
+          <strong>HOME</strong> money is shown as a tag in the list and the download, on{" "}
+          {HOME_DEVS} developments: because the City pools it with its other loan money, it is named
+          by project only in HUD&rsquo;s HOME activity records (completed projects through 2025), the
+          City&rsquo;s 2020&ndash;2022 Master File spreadsheets, HUD&rsquo;s environmental reviews
+          (about the past year) and HUD&rsquo;s tax-credit file. It includes HOME the State
+          lends through IHDA. Count it as a floor: a development still being built shows HOME only if
+          its environmental review was posted in the past year.
         </p>
         <p>
           <strong>Who it serves.</strong> Each tax-credit and Other City/State development is classed by

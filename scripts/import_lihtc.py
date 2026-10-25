@@ -1563,6 +1563,10 @@ CITY_FUNDED = [
      "units": 75, "li_units": 75, "permit": None, "category": "new", "follow_up": True,
      "sources": ["INVEST South/West"],
      "note": "Team Pioneros: a new 9-story building on the parking lot north of the landmark Pioneer Bank, 75 apartments all affordable (43 at 60% AMI, 32 at 30%); the bank itself becomes a cultural and office center (City TIF, 2023-24). Applied for 9% LIHTC in 2023 (31 units); no award found. FOLLOW UP. Proposed 2026-10-24: Council actions (2021 land, 2023-24 TIF) cover the bank building only; the housing has no award."},
+    {"id": "CITYF-ENOLA-DEW", "project": "Enola A. Dew Village Apartments", "address": "4623 W Gladys Ave",
+     "units": 60, "li_units": 59, "permit": ("2010-05-14", "100323907"), "category": "new",
+     "sources": ["HUD HOME activity data (IDIS 9452)", "HUD assisted housing file", "City CAPER 2024 (loan, HOME)"],
+     "note": "New 5-story senior building of 60 apartments, 59 HUD-assisted for seniors 62 and over, with .42M of City HOME funds (59 HOME units); no tax credits. Found 2026-10-25 through HUD's HOME activity data."},
     # Found 2026-10-20 checking the City's TIF-funded RDA list (mex4-ppfc):
     # TIF approved, affordable units required, no construction permit yet.
     {"id": "CITYF-ARMOUR-BUILDING", "project": "Armour Building", "address": "3300 S Federal St",
@@ -1779,7 +1783,7 @@ CHA_ONLY = [
 # tower with family townhomes, or a family building with some supportive
 # units). ARO units are general.
 SENIOR = set("""
-    CHA-PRESBYTERIAN-CROWDER CHA-PRESBYTERIAN-MULVEY
+    CHA-PRESBYTERIAN-CROWDER CHA-PRESBYTERIAN-MULVEY CITYF-ENOLA-DEW
     CITY2021-ALBANY-TERRACE CITY2021-ARCHER-SENIOR CITY2021-CHURCHVIEW
     CITY2021-GAINES CITY2021-IMANI CITY2023-ABRAMS
     CITY2023-MARTHA-WASHINGTON CITY2023-PARK-MANOR CITY2023-WBC-MANOR
@@ -1907,6 +1911,287 @@ TIF = set("""
 """.split())
 
 
+# City funds label: developments with a City housing loan or grant (HOME,
+# CDBG, NSP, the Affordable Housing Opportunity Fund, the trust fund and other
+# City money the Department of Housing lends) or City land, for the page's
+# "City funds" label. Like TIF, a label only. Decided 2026-10-25: City-issued
+# bonds (private debt), City-allocated tax credits (federal) and Illinois
+# donation credits (State) do not count, and TIF has its own label. Sources:
+# the Multi-family Loan Commitments and City Land Commitments tables in the
+# City's year-end housing reports, 2010-2023 (2010 and 2019 read from the
+# scanned pages), and City Council ordinances introduced since October 2023
+# that name a City loan, Multi-Family Program Funds or City land (Clerk's
+# API). Other City/State records whose own sources name a City loan, City land,
+# HOME, NSP or a Section 108 loan get the label without being listed here.
+# Matched by hand. Left unmatched: Roseland Village, Midwest Apartments,
+# Albany Park Initiative and Heartland Phoenix House (in CITY_SET_ASIDE),
+# Boulevard Courts (HUD placed in service 2010, before FIRST_PIS), and
+# Bronzeville Family Apartments (2010 loan, 424-516 E 41st, 66 units: no
+# construction or rehab permit found at those addresses, so not in the data;
+# FOLLOW UP).
+CITY_FUNDS = {
+    # City HOME found only on the HUD side
+    "CITY2019-FOGLIA": "City HOME (HUD HOME activity data, 2025)",
+    "CITY2021-PRAIRIE-DISTRICT-4": "City HOME (HUD environmental review, 2026)",
+    "CITYF-ENOLA-DEW": "City HOME (HUD HOME activity data)",
+    "CITY2019-CASA-DURANGO": "City loan 2021",
+    "CITY2019-ENCUENTRO-1": "City loan 2023",
+    "CITY2019-GARFIELD-GREEN": "City loan 2023",
+    "CITY2019-PARK-STATION": "City loan 2022",
+    "CITY2019-WESTHAVEN-IID": "City loan 2022",
+    "CITY2021-1237-CALIFORNIA": "City ordinance O2024-0009595",
+    "CITY2021-4715-WESTERN": "City loan 2023",
+    "CITY2021-AUSTIN-UNITED": "City loan 2022",
+    "CITY2021-BOULEVARD": "City loan 2023",
+    "CITY2021-CHURCHVIEW": "City loan 2022",
+    "CITY2021-IMANI": "City loan 2022",
+    "CITY2021-ISLAND-TERRACE": "City loan 2023",
+    "CITY2021-LEGENDS-A3": "City ordinance O2024-0010980",
+    "CITY2021-MORGAN-PARK": "City ordinance O2026-0029413, land O2026-0029008",
+    "CITY2021-PARKSIDE-3": "City ordinance SO2024-0007326",
+    "CITY2021-PRAIRIE-DISTRICT-9": "City ordinance O2024-0010987",
+    "CITY2021-REGENERATOR": "City ordinance SO2026-0027320",
+    "CITY2021-THRIVE": "City loan 2022",
+    "CITY2023-5853-BROADWAY": "City ordinance SO2026-0027224",
+    "CITY2023-HARVEST-HOMES-II": "City ordinance O2026-0028750",
+    "CITY2023-HILLIARD": "City loan 2015",
+    "CITY2023-HUB-32": "City ordinance SO2026-0024073",
+    "CITY2023-PARK-MANOR": "City ordinance O2026-0023337",
+    "CITYF-ALL-SAINTS": "City loan 2011",
+    "CITYF-ENGLEWOOD-FAMILY": "City loan 2021",
+    "CITYF-LA-HERENCIA": "City ordinance SO2024-0014175",
+    "CITYF-LAZARUS": "City loan 2021",
+    "CITYF-LINCOLN-PARK-SHELTER": "City loan 2017",
+    "CITYF-MAGNOLIA-PARK": "City loan 2016",
+    "CITYF-MARX": "City loan 2010",
+    "CITYF-NAOMI-SMITH": "City loan 2010",
+    "CITYF-NEW-MOMS": "City loan 2011",
+    "CITYF-NEW-WEST-ENGLEWOOD": "City loan 2017",
+    "CITYF-PIERCE-HOUSE": "City loan 2017",
+    "CITYF-PORTA-COELI": "City loan 2013",
+    "CITYF-RESURRECTION-HOMES": "City loan 2011",
+    "CITYF-SARAHS-HOUSE": "City loan 2012",
+    "CITYF-SARAHS-LAKESIDE": "City loan 2022",
+    "CITYF-ST-EDMUNDS-ANNEX": "City land 2014",
+    "CITYF-TRIANON-LOFTS": "City loan 2016",
+    "CITYPL-CARE-MANOR": "City ordinance O2024-0010978",
+    "CITYPL-LEVY-HOUSE": "City loan 2020; City ordinance O2026-0026796",
+    "CITYPL-TEACHERS-VILLAGE": "City ordinance O2026-0027221",
+    "CITYPL-THRIVE-EXCHANGE": "City ordinance SO2024-0013072",
+    "DOH-AUBURN-GRESHAM": "City loan 2022",
+    "DOH-BARBARA-JEAN-WRIGHT": "City loan 2022",
+    "DOH-CASA-VERACRUZ": "City loan 2020",
+    "DOH-CHURCHVIEW-MANOR": "City loan 2012",
+    "DOH-CICERO-SENIOR-LOFTS": "City loan 2019",
+    "DOH-COVENT": "City loan 2022",
+    "DOH-EL-ZOCALO": "City loan 2016",
+    "DOH-EMMETT-STREET": "City loan 2020",
+    "DOH-ENGLEWOOD-PHASE-I": "City loan 2021",
+    "DOH-GRACE-MANOR": "City loan 2022",
+    "DOH-HAZEL-WINTHROP": "City loan 2011",
+    "DOH-HOPE-MANOR-VILLAGE": "City loan 2019",
+    "DOH-HUMBOLDT-PARK-RESIDENCE": "City loan 2020",
+    "DOH-MARK-TWAIN": "City loan 2018",
+    "DOH-MONTCLARE-AVALON-PARK": "City loan 2013",
+    "DOH-MONTCLARE-CALUMET": "City loan 2018",
+    "DOH-MONTCLARE-ENGLEWOOD": "City loan 2017",
+    "DOH-MONTCLARE-LAWNDALE": "City loan 2015",
+    "DOH-OAKWOOD-SHORES-SENIOR": "City loan 2010",
+    "DOH-OAKWOOD-TERRACE": "City loan 2010",
+    "DOH-ROSENWALD-COURTS": "City land 2013",
+    "DOH-ST-EDMUNDS-OASIS": "City loan 2015",
+    "DOH-UNITED-YARDS-1A": "City loan 2023",
+    "DOH-WARREN-APARTMENTS": "City loan 2018",
+    "DOH-WOODLAWN-PARK-SENIOR": "City loan 2014",
+    "DOH-WOODLAWN-STATION": "City loan 2016",
+    "IHDA2020-OAKWOOD-3-1": "City loan 2021",
+    "IHDA2021-ALBIZU-CAMPOS": "City loan 2022",
+    "IHDA2022-HUMBOLDT-PASSIVE": "City loan 2023",
+    "IHDA2022-SOUTHBRIDGE-1C": "City ordinance SO2025-0018188",
+    "IHDA2023-CASA-YUCATAN": "City ordinance SO2024-0013661",
+    "IHDA2024-3959-LINCOLN": "City ordinance O2026-0024885",
+    "IHDA4-CONCORD-SHERIDAN": "City loan 2017",
+    "IHDA4-LAKEVIEW-LANDING": "City loan 2023; City ordinance O2023-0005797",
+    "IHDA4-SOUTH-CHICAGO-SALUD": "City loan 2020",
+    "ILA00000113": "City loan 2010",
+    "ILA20110905": "City loan 2013",
+    "ILA20110916": "City loan 2010",
+    "ILA20110917": "City loan 2010",
+    "ILA20110920": "City loan 2010",
+    "ILA20110931": "City loan 2010",
+    "ILA20120001": "City land 2011",
+    "ILA20120006": "City land 2011",
+    "ILA20120901": "City loan 2011",
+    "ILA20130825": "City loan 2012",
+    "ILA20140017": "City loan 2013",
+    "ILA20149843": "City loan 2013",
+    "ILA20158127": "City loan 2013",
+    "ILA20190008": "City loan 2018",
+    "ILA20200005": "City loan 2018",
+    "ILA20210007": "City loan 2019",
+    "ILA20220048": "City loan 2019",
+    "ILA20230015": "City loan 2020",
+    "ILA20230021": "City loan 2019",
+    "ILA20240009": "City loan 2021",
+    "ILB0000X021": "City loan 2015",
+    "ILB0000X027": "City loan 2016",
+    "ILB0000X031": "City land 2015",
+    "ILB0000X041": "City land 2015",
+    "ILB0000X045": "City land 2013",
+    "ILB0000X049": "City land 2016",
+    "ILB0000X056": "City loan 2015",
+    "ILB0000X069": "City loan 2012",
+    "ILB0000X076": "City loan 2017",
+    "ILB0000X082": "City loan 2014",
+    "ILB20110807": "City loan 2010",
+    "ILB20110811": "City land 2010",
+    "ILB20119812": "City loan 2010",
+    "ILB20119813": "City loan 2010",
+    "ILB20120268": "City loan 2011",
+    "ILB20120801": "City loan 2010",
+    "ILB20130005": "City loan 2011",
+    "ILB20130100": "City loan 2012",
+    "ILB20132002": "City loan 2012",
+    "ILB20132003": "City loan 2012",
+    "ILB20132004": "City loan 2012",
+    "ILB20132005": "City loan 2012",
+    "ILB20132006": "City loan 2012",
+    "ILB20136003": "City land 2012",
+    "ILB20138101": "City loan 2011",
+    "ILB20140015": "City loan 2013",
+    "ILB20141001": "City land 2013",
+    "ILB20147016": "City loan 2013",
+    "ILB20149058": "City loan 2013",
+    "ILB20153001": "City loan 2014",
+    "ILB20153002": "City loan 2013",
+    "ILB20153003": "City loan 2014",
+    "ILB20154003": "City loan 2014",
+    "ILB20159003": "City loan 2014",
+    "ILB20159004": "City loan 2011",
+    "ILB20159005": "City loan 2014",
+    "ILB20162001": "City loan 2014",
+    "ILB20162003": "City loan 2014",
+    "ILB20163001": "City loan 2014",
+    "ILB20171001": "City loan 2015",
+    "ILB20177003": "City loan 2017",
+    "ILB20177090": "City loan 2015",
+    "ILB20180009": "City loan 2017",
+    "ILB20181001": "City loan 2017",
+    "ILB20195052": "City land 2017 (as Life Center Artist Residences)",
+    "ILB20195053": "City loan 2016",
+    "ILB20212001": "City loan 2019",
+    "ILB20231001": "City loan 2021",
+    "ILB20231002": "City loan 2019",
+    "ILB20240001": "City ordinance O2023-0006388",
+    "ILB20250001": "City loan 2023",
+}
+
+
+# HOME: federal HOME Investment Partnerships money in the development, City
+# or State, a tag in the list and CSV. The City pools HOME with its other loan
+# money, so only these name it by project: HUD's HOME Program Activity layer
+# (IDIS completed activities, 1994-2025; City and IHDA HOME), the City's
+# Master File spreadsheets (2020-2022 commitments), HUD's environmental
+# review records (HEROS, about the past year), the City's 2024 CAPER
+# inspection list, and HUD's LIHTC file HOME flag. Matched by hand
+# 2026-10-25. A floor: deals still under construction appear only if their
+# HUD environmental review was posted in the past year.
+HOME_FUNDS = {
+    "CITY2019-CASA-DURANGO": "HUD HOME activity data; City DOH Master File 2020-22",
+    "CITY2019-ENCUENTRO-1": "HUD HOME activity data",
+    "CITY2019-FOGLIA": "HUD HOME activity data",
+    "CITY2019-GARFIELD-GREEN": "HUD HOME activity data",
+    "CITY2019-PARK-STATION": "HUD HOME activity data; City DOH Master File 2020-22",
+    "CITY2019-WESTHAVEN-IID": "City DOH Master File 2020-22",
+    "CITY2021-1237-CALIFORNIA": "HUD HOME activity data",
+    "CITY2021-4715-WESTERN": "HUD HOME activity data",
+    "CITY2021-AUSTIN-UNITED": "City DOH Master File 2020-22",
+    "CITY2021-IMANI": "HUD HOME activity data; City DOH Master File 2020-22",
+    "CITY2021-MORGAN-PARK": "HUD environmental review 2026",
+    "CITY2021-PRAIRIE-DISTRICT-4": "HUD environmental review 2026",
+    "CITY2021-THRIVE": "City DOH Master File 2020-22",
+    "CITY2023-PARK-MANOR": "HUD environmental review 2026",
+    "CITYF-ALL-SAINTS": "HUD HOME activity data",
+    "CITYF-ENGLEWOOD-FAMILY": "City DOH Master File 2020-22",
+    "CITYF-ENOLA-DEW": "HUD HOME activity data; City CAPER 2024 inspections",
+    "CITYF-LAZARUS": "City DOH Master File 2020-22",
+    "CITYF-MARX": "HUD HOME activity data",
+    "CITYF-NAOMI-SMITH": "HUD HOME activity data",
+    "CITYF-NEW-MOMS": "HUD HOME activity data",
+    "CITYF-NEW-WEST-ENGLEWOOD": "HUD HOME activity data",
+    "CITYF-PORTA-COELI": "HUD HOME activity data",
+    "CITYF-SARAHS-LAKESIDE": "HUD HOME activity data; City DOH Master File 2020-22",
+    "CITYPL-LEVY-HOUSE": "HUD HOME activity data; City DOH Master File 2020-22",
+    "DOH-CICERO-SENIOR-LOFTS": "HUD HOME activity data",
+    "DOH-COVENT": "HUD HOME activity data; City DOH Master File 2020-22",
+    "DOH-EMMETT-STREET": "HUD HOME activity data; City DOH Master File 2020-22",
+    "DOH-ENGLEWOOD-PHASE-I": "City DOH Master File 2020-22",
+    "DOH-GRACE-MANOR": "HUD HOME activity data",
+    "DOH-HAZEL-WINTHROP": "HUD HOME activity data",
+    "DOH-HOPE-MANOR-VILLAGE": "HUD HOME activity data",
+    "DOH-HUMBOLDT-PARK-RESIDENCE": "HUD HOME activity data; City DOH Master File 2020-22",
+    "DOH-MARK-TWAIN": "HUD HOME activity data",
+    "DOH-MONTCLARE-AVALON-PARK": "HUD HOME activity data",
+    "DOH-MONTCLARE-CALUMET": "HUD HOME activity data",
+    "DOH-MONTCLARE-ENGLEWOOD": "HUD HOME activity data",
+    "DOH-MONTCLARE-LAWNDALE": "HUD HOME activity data",
+    "DOH-OAKWOOD-SHORES-SENIOR": "HUD HOME activity data",
+    "DOH-ST-EDMUNDS-OASIS": "HUD HOME activity data",
+    "DOH-WARREN-APARTMENTS": "HUD HOME activity data",
+    "DOH-WOODLAWN-PARK-SENIOR": "HUD HOME activity data",
+    "DOH-WOODLAWN-STATION": "HUD HOME activity data",
+    "IHDA2021-ALBIZU-CAMPOS": "HUD HOME activity data; City DOH Master File 2020-22",
+    "IHDA2024-3959-LINCOLN": "HUD environmental review 2026",
+    "IHDA4-CONCORD-SHERIDAN": "HUD HOME activity data",
+    "ILA20110916": "HUD HOME activity data",
+    "ILA20110917": "HUD HOME activity data",
+    "ILA20110920": "HUD HOME activity data",
+    "ILA20110931": "HUD HOME activity data",
+    "ILA20140012": "HUD HOME activity data",
+    "ILA20140017": "HUD HOME activity data",
+    "ILA20149843": "HUD HOME activity data",
+    "ILA20190008": "HUD HOME activity data",
+    "ILA20220048": "HUD HOME activity data",
+    "ILA20230011": "HUD HOME activity data",
+    "ILA20230015": "HUD HOME activity data; City DOH Master File 2020-22",
+    "ILA20230021": "HUD HOME activity data",
+    "ILA20240009": "HUD HOME activity data; City DOH Master File 2020-22",
+    "ILB0000X076": "HUD HOME activity data",
+    "ILB0000X082": "HUD HOME activity data",
+    "ILB20110807": "City CAPER 2024 inspections",
+    "ILB20119813": "HUD HOME activity data",
+    "ILB20120268": "HUD HOME activity data",
+    "ILB20120801": "HUD HOME activity data",
+    "ILB20130005": "HUD HOME activity data; HUD LIHTC file",
+    "ILB20130100": "HUD HOME activity data; HUD LIHTC file",
+    "ILB20132002": "HUD HOME activity data; HUD LIHTC file",
+    "ILB20132003": "HUD HOME activity data; HUD LIHTC file",
+    "ILB20132004": "HUD HOME activity data; HUD LIHTC file",
+    "ILB20132005": "HUD HOME activity data; HUD LIHTC file",
+    "ILB20132006": "HUD HOME activity data; HUD LIHTC file",
+    "ILB20138101": "HUD HOME activity data",
+    "ILB20140015": "HUD HOME activity data",
+    "ILB20141001": "HUD HOME activity data",
+    "ILB20147016": "HUD HOME activity data",
+    "ILB20149058": "HUD HOME activity data",
+    "ILB20153001": "HUD HOME activity data",
+    "ILB20153002": "HUD HOME activity data",
+    "ILB20153003": "HUD HOME activity data",
+    "ILB20154003": "HUD HOME activity data",
+    "ILB20159004": "HUD HOME activity data; HUD LIHTC file",
+    "ILB20162001": "HUD LIHTC file",
+    "ILB20163001": "HUD HOME activity data; HUD LIHTC file",
+    "ILB20177090": "HUD HOME activity data",
+    "ILB20180004": "HUD LIHTC file",
+    "ILB20180009": "HUD HOME activity data; HUD LIHTC file",
+    "ILB20181001": "HUD HOME activity data",
+    "ILB20195003": "HUD HOME activity data",
+    "ILB20212001": "HUD HOME activity data",
+    "ILB20231001": "HUD HOME activity data; City DOH Master File 2020-22",
+    "ILB20250001": "HUD HOME activity data",
+}
+
+
 def cha_split(dev_id, new, pres):
     """CHA units split between new and preserved in the development's own proportion."""
     n = CHA_UNITS.get(dev_id)
@@ -1997,6 +2282,14 @@ def pbv_units(dev_id, li):
     """CHA project-based voucher units, capped at the units we count."""
     n = CHA_PBV.get(dev_id)
     return {"pbv": min(n, li)} if n else {}
+
+
+CITY_FUNDS_SOURCE = re.compile(r"\((?:[^)]*\b(?:loan|land|HOME|NSP2?)\b)|NSP status|Section 108|PEAR")
+
+
+def city_funds(dev_id, sources=()):
+    """City loan, grant or land: listed in CITY_FUNDS, or named in the record's own sources."""
+    return dev_id in CITY_FUNDS or any(CITY_FUNDS_SOURCE.search(x) for x in sources)
 
 
 def population(dev_id):
@@ -2404,6 +2697,8 @@ def write_site(out, hud):
             "s": status,
             "cha": "CHA" in o["programs"] or o["hud_id"] in CHA_UNITS,
             "tif": o["hud_id"] in TIF,
+            "cf": city_funds(o["hud_id"]),
+            "home": o["hud_id"] in HOME_FUNDS,
             "aro": "ARO" in o["programs"],
             "mix": bool(o.get("mixed_income")),
             "sl": bool(o.get("assisted_living")),
@@ -2436,6 +2731,7 @@ def write_site(out, hud):
                 "y": int(date[:4]) if date else None, "yo": None,
                 "s": "permit" if c.get("permit") else "estimate" if date else c.get("status", "awarded"),
                 "cha": cha_only or bool(c.get("cha")), "tif": c["id"] in TIF, "aro": False,
+                "cf": city_funds(c["id"], c.get("sources", [])), "home": c["id"] in HOME_FUNDS,
                 "mix": bool(c.get("mixed_income")),
                 "sl": False, "fu": bool(c.get("follow_up")), "rs": False,
                 "pop": population(c["id"]),

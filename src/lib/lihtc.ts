@@ -45,6 +45,10 @@ export interface LihtcProject {
   cha: boolean;
   /** Received City tax-increment financing. */
   tif?: boolean;
+  /** Received a City housing loan or grant (HOME, CDBG, NSP and other City money) or City land. */
+  cf?: boolean;
+  /** HOME Investment Partnerships money, City or State, where a source names it. */
+  home?: boolean;
   /** Also on the City's ARO list. */
   aro: boolean;
   /** Includes market-rate units. */
@@ -91,14 +95,14 @@ export interface LihtcData {
   chaOnly: LihtcProject[];
 }
 
-export type Program = "all" | "lihtc" | "cha" | "pbv" | "tif" | "city" | "aro";
+export type Program = "all" | "lihtc" | "cha" | "pbv" | "tif" | "cf" | "city" | "aro";
 export type LihtcKind = "new" | "both" | "preserved";
 export type YearBasis = "permit" | "opened";
 export type Population = "all" | "general" | "senior" | "supportive";
 
 /**
  * Button order follows the waterfall, with CHA vouchers beside CHA-owned units;
- * vouchers and TIF are labels only.
+ * vouchers, TIF and City funds are labels only.
  */
 export const PROGRAM_LABELS: Record<Program, string> = {
   all: "All",
@@ -108,6 +112,7 @@ export const PROGRAM_LABELS: Record<Program, string> = {
   city: "Other City/State",
   aro: "ARO",
   tif: "TIF",
+  cf: "City funds",
 };
 
 export const KIND_LABELS: Record<LihtcKind, string> = {
@@ -141,14 +146,14 @@ export interface Options {
  * that label, so the programs overlap and do not sum to "All". To count each
  * unit once — in the "All" totals, the stacked chart and the map's colours —
  * units are attributed down a waterfall: CHA units first, then the rest of a
- * tax-credit development's units, then Other City/State, then ARO. TIF is a
- * label only: every TIF-funded unit already falls in one of those buckets.
+ * tax-credit development's units, then Other City/State, then ARO. TIF and
+ * City funds are labels only: every such unit already falls in one of those buckets.
  * So are CHA project-based vouchers; the "pbv" bucket holds units only in the
  * CHA voucher view, which counts each building's voucher units.
  */
 export type Bucket = "cha" | "lihtcNew" | "lihtcPres" | "city" | "aro" | "pbv";
 export type Parts = Record<Bucket, number>;
-export type Label = "LIHTC" | "CHA" | "PBV" | "TIF" | "City" | "ARO";
+export type Label = "LIHTC" | "CHA" | "PBV" | "TIF" | "CF" | "City" | "ARO";
 
 const zero = (): Parts => ({ cha: 0, lihtcNew: 0, lihtcPres: 0, city: 0, aro: 0, pbv: 0 });
 export const partsTotal = (x: Parts) => x.cha + x.lihtcNew + x.lihtcPres + x.city + x.aro + x.pbv;
@@ -193,6 +198,7 @@ function labelsOf(p: LihtcProject, src: Source): Label[] {
   if ((p.chu ?? 0) > 0 || p.cha) l.push("CHA");
   if (p.pbv) l.push("PBV");
   if (p.tif) l.push("TIF");
+  if (p.cf) l.push("CF");
   return l;
 }
 
@@ -202,6 +208,7 @@ const inSelection = (labels: Label[], program: Program) =>
   (program === "cha" && labels.includes("CHA")) ||
   (program === "pbv" && labels.includes("PBV")) ||
   (program === "tif" && labels.includes("TIF")) ||
+  (program === "cf" && labels.includes("CF")) ||
   (program === "city" && labels.includes("City")) ||
   (program === "aro" && labels.includes("ARO"));
 
@@ -239,6 +246,7 @@ function lihtcTags(p: LihtcProject): string[] {
   if (p.pres > 0 && p.new > 0) tags.push("part preserved");
   if (p.chu != null && p.chu > 0) tags.push(`${p.chu} CHA owned`);
   if (p.pbv) tags.push(`${p.pbv} CHA voucher unit${p.pbv === 1 ? "" : "s"}`);
+  if (p.home) tags.push("HOME funds");
   if (p.mix) tags.push("mixed-income");
   if (p.sl) tags.push("supportive living");
   if (p.pop !== "general") tags.push(p.pop);
@@ -412,6 +420,7 @@ export const LABEL_SHORT: Record<Label, string> = {
   CHA: "CHA owned",
   PBV: "CHA voucher",
   TIF: "TIF",
+  CF: "City funds",
   City: "Other City/State",
   ARO: "ARO",
 };
@@ -421,7 +430,7 @@ export function devsToCsv(devs: Dev[], from: number, to: number, o: Options): st
   const q = (v: string) => (/[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
   const head = [
     "name", "address", "ward", "programs", "counted_as", "units_counted", "cha_units", "cha_voucher_units",
-    "total_units", "year",
+    "total_units", "year", "city_funds", "home_funds",
     "new_or_preserved", "notes", "latitude", "longitude", "years", "program_selected", "units_kind", "year_basis",
     "who_it_serves",
   ];
@@ -429,7 +438,7 @@ export function devsToCsv(devs: Dev[], from: number, to: number, o: Options): st
   for (const d of devs) {
     lines.push([
       q(d.name), q(d.address), d.ward ?? "", q(labelList(d.labels)), LABEL_SHORT[d.primary], d.units, d.parts.cha,
-      d.pbv, d.total ?? "", d.year ?? "", d.kind, q(d.tags.join("; ")), d.ll?.[0] ?? "", d.ll?.[1] ?? "",
+      d.pbv, d.total ?? "", d.year ?? "", d.src?.cf ? "yes" : "", d.src?.home ? "yes" : "", d.kind, q(d.tags.join("; ")), d.ll?.[0] ?? "", d.ll?.[1] ?? "",
       `${from}-${to}`, o.program, o.kind, o.basis, o.pop,
     ].join(","));
   }
@@ -465,6 +474,7 @@ export const BREAKS: Record<Program, number[]> = {
   cha: [10, 25, 50, 100, 250, 500],
   pbv: [10, 25, 50, 100, 250, 500],
   tif: [25, 50, 100, 250, 500, 1000],
+  cf: [25, 50, 100, 250, 500, 1000],
   city: [10, 25, 50, 100, 150, 250],
   all: [50, 100, 250, 500, 1000, 2000],
 };

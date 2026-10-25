@@ -16,7 +16,10 @@ through:
   2. City Council housing-finance ordinances introduced since the last
      refresh, from the City Clerk's API; ones already cited in the importer
      are marked.
-  3. Whether HUD has posted a new annual LIHTC file.
+  3. Whether HUD has posted a new annual LIHTC file. 3b. HUD environmental
+     reviews posted for Chicago projects since the last refresh, with the
+     HUD programs each names: the only timely source that names HOME by
+     project (HUD keeps a review public for about a year).
   4. New documents on the IHDA, City and CHA pages the reconciliation draws
      on, and whether the City's ARO map data has been updated.
   5. Newsletter posts tagged Housing that the site doesn't list yet.
@@ -222,6 +225,63 @@ def check_hud(state):
     return f"HUD's file is unchanged ({now['lastModified']}).", 0, now
 
 
+# ---- 3b. HUD environmental reviews ------------------------------------------
+
+HEROS_API = "https://cpd.hud.gov/cpd-public/api/env-reviews/"
+# HUD programs worth noticing in a review's funding table.
+HEROS_PROGRAMS = re.compile(r"HOME American Rescue Plan|HOME Program|Community Development Block Grant|"
+                            r"Project-Based Voucher|Section 8|Section 202|Section 811|Public Housing|"
+                            r"Mortgage Insurance|Community Project Funding|Green and Resilient Retrofit")
+
+
+def review_programs(rid, file_name):
+    """The HUD programs named in a posted review's funding table (the review is a .docx)."""
+    import io
+    url = f"{HEROS_API}downloads/{rid}?" + urllib.parse.urlencode({"fileName": file_name})
+    return docx_programs(io.BytesIO(get(url, raw=True)))
+
+
+def docx_programs(f):
+    import zipfile
+    doc = zipfile.ZipFile(f).read("word/document.xml").decode("utf-8", "ignore")
+    text = re.sub(r"<[^>]+>", " ", re.sub(r"</w:p>", "\n", doc))
+    funding = text.split("Funding Information", 1)[-1][:3000]
+    return sorted({m.group(0) for m in HEROS_PROGRAMS.finditer(funding)})
+
+
+def check_reviews(since):
+    rows, page = [], 0
+    while True:
+        d = get(HEROS_API, {"stateCd": "IL", "city": "Chicago", **({"pageNumber": page} if page else {})})
+        rows += d.get("content") or []
+        page += 1
+        if d.get("last", True) or page >= (d.get("totalPages") or 0):
+            break
+    if not rows:  # HUD's site has dozens of Chicago reviews on file; none at all means it is down
+        return ("HUD's review site returned no reviews at all, which means it is down; search by hand: "
+                "https://cpd.hud.gov/cpd-public/environmental-reviews (state IL, city Chicago)."), 1
+    cutoff = datetime.datetime.fromisoformat(since).timestamp() * 1000
+    new = sorted((r for r in rows if (r.get("uploadTimestamp") or 0) >= cutoff),
+                 key=lambda r: r["uploadTimestamp"], reverse=True)
+    if not new:
+        return f"No HUD environmental reviews posted for Chicago since {since} ({len(rows)} on HUD's site).", 0
+    lines, home = [], 0
+    for r in new:
+        try:
+            progs = review_programs(r["id"], r["fileName"])
+        except Exception as e:  # noqa: BLE001 - one bad file shouldn't stop the rest
+            progs = [f"couldn't read the file ({e.__class__.__name__})"]
+        is_home = any(p.startswith("HOME") for p in progs)
+        home += is_home
+        when = datetime.date.fromtimestamp(r["uploadTimestamp"] / 1000).isoformat()
+        lines.append(f"- {when} {'**HOME** ' if is_home else ''}{r['projectName'].strip()}: "
+                     f"{', '.join(progs) or 'no HUD program named'}")
+    return (f"{len(new)} reviews posted since {since}; {home} name HOME. Add HOME projects to `HOME_FUNDS` "
+            "(and `CITY_FUNDS` when the City is the responsible entity) in `scripts/import_lihtc.py`, and any "
+            f"affordable housing not yet on file. Search: https://cpd.hud.gov/cpd-public/environmental-reviews\n\n"
+            + "\n".join(lines)), home
+
+
 # ---- 4. watched pages and the ARO data --------------------------------------
 
 def page_docs(url):
@@ -319,6 +379,7 @@ def main():
     r = run("3. HUD's annual LIHTC file", lambda: check_hud(state))
     if r:
         snapshots["hud"] = r[2]
+    run("3b. HUD environmental reviews (HOME and other HUD money)", lambda: check_reviews(last))
     r = run("4. Source documents", lambda: check_pages(state))
     if r:
         snapshots["pages"] = r[2]
