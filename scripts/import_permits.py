@@ -30,6 +30,16 @@ Three corrections do most of the work:
    new construction are fetched too. Genuine conversions are NOT included —
    this remains a gross new-construction count — and are a separate question.
 
+   But "erect new" and "proposed new" also describe parts of buildings: "ERECT
+   NEW DORMER ADDITION", "ERECT NEW 2-CAR GARAGE TO AN EXISTING SINGLE FAMILY
+   RESIDENCE", "PROPOSED NEW USE SINGLE FAMILY" on a deconversion. Until
+   2026-10-25 every such permit naming a house counted as a new one (about 400
+   permits since 2010), and deconversions counted +1 here instead of reaching
+   the conversions series as a loss. A renovation-typed permit now counts only
+   if its text names a whole new building with no building part in between
+   (see renovation_is_new_building); one for a single house must also not
+   describe work on an existing building unless it says the old one came down.
+
 4. CONVERSIONS ARE A SEPARATE SERIES. An existing building becoming housing
    adds real supply but is not new construction, so it is counted apart rather
    than folded in. Only permits whose text states the change explicitly are
@@ -138,6 +148,47 @@ NOT_A_NEW_FLAT = re.compile(
 # word because "APARTMENT BUILDING" alone is not a count, so it gets its own
 # pattern requiring a preceding number.
 APARTMENTS = re.compile(r"\b(\d{1,4})\s+(?:NEW\s+)?(?:RESIDENTIAL\s+)?APARTMENTS?\b")
+
+# ---- renovation permits that are really new buildings --------------------
+
+NEWISH = re.compile(r"NEW CONSTRUCTION|PROPOSED NEW|ERECT NEW|CONSTRUCTION OF A NEW")
+_VERB = r"(?:NEW CONSTRUCTION(?: OF)?|CONSTRUCTION OF A NEW|ERECT(?:ION OF)?(?: A)? NEW|PROPOSED NEW)\b"
+#: a part of a building, not a building: "ERECT NEW METAL BALCONIES ON 4-STORY BUILDING"
+PART = re.compile(r"\b(?:ADDITION|DORMER|GARAGE|PORCH|DECK|BALCON\w*|STAIR\w*|ROOF\w*|PENTHOUSE|"
+                  r"PERGOLA|PARTITION\w*|CANOPY|CARPORT|BREEZEWAY|WALLS?|ENTRY|WINDOWS?|FENCE|"
+                  r"SECTION|FLOOR|FAMILY ROOM|BEDROOM|KITCHEN)\b")
+NEW_MULTI = re.compile(_VERB + r"[^.]{0,80}?\b(?:RESIDENTIAL|BUILDING|BUILIDNG|APARTMENT|TOWN\s?HO(?:ME|USE)S?|"
+                       r"\d+[- ]?STORY|[A-Z]+[- ]STORY|\d+[- ]FLAT|UNITS?\b)")
+NEW_SINGLE = re.compile(_VERB + r"[^.]{0,80}?\b(?:SINGLE[- ]FAMILY|RESIDENCE|SFR|HOUSE|DWELLING)\b")
+#: an addition counts only if it plainly adds units
+ADDS_UNITS = re.compile(r"NEW CONSTRUCTION|RESIDENTIAL ADDITION|ADDITION OF \(?\d+\)?\s*D|"
+                        r"\d+\)?\s+NEW\s+(?:DWELLING\s+|RESIDENTIAL\s+)?UNITS")
+#: work on a building already there (a new building has new porches and garages too)
+EXISTING_WORK = re.compile(r"\b(?:ADDITION|DORMER|INTERIOR|REMODEL|REHAB|RENOVAT|ALTERATION|"
+                           r"EXISTING|EXISTNG|EXSTG|EXIST\.|EXITING)")
+#: the old building came down, so "existing" refers to its foundation or site
+REBUILT = re.compile(r"(?:DEMOLI\w*|REMOVE (?:AN |THE )?EXISTING)[^.]{0,50}?\b(?:RESIDENCE|SFR|STRUCTURE|BUILDING|HOUSE)|"
+                     r"WRECKING PERMIT|(?:ABOVE|ON TOP OF) (?:THE )?EXISTING|"
+                     r"(?:DOWN TO|UP TO) (?:THE )?(?:EXISTING )?FOUNDATION|FIRE DAMAGE|"
+                     r"(?:SINGLE[- ]FAMILY|RESIDENCE|SFR)[^.]{0,40}?(?:ON|OVER) (?:THE )?EXISTING (?:PARTIAL )?FOUNDATION")
+CONVERSION_WORDS = re.compile(r"DE-?\s?CONVER|\bCONVER|NEW USE")
+
+
+def renovation_is_new_building(t, units):
+    """A renovation-typed permit is new construction only if it builds a whole
+    new building. Checked by hand against all 531 such permits, 2010-2026."""
+    def whole(pattern):
+        return any(not PART.search(m.group(0)) for m in pattern.finditer(t))
+    if units and units >= 2:
+        if CONVERSION_WORDS.search(t) and "NEW CONSTRUCTION" not in t:
+            return False
+        if not whole(NEW_MULTI):
+            return False
+        return not EXISTING_WORK.search(t) or bool(ADDS_UNITS.search(t))
+    if CONVERSION_WORDS.search(t) or not whole(NEW_SINGLE):
+        return False
+    return not EXISTING_WORK.search(t) or bool(REBUILT.search(t))
+
 
 # ---- conversions -------------------------------------------------------
 
@@ -489,14 +540,13 @@ def main():
         print("  WARNING: agreement below 99% — check the boundary file", file=sys.stderr)
 
     # A permit is new construction if it is typed that way, or if its text
-    # describes a new building despite a renovation type. Everything else that
-    # reached the fetch is a conversion candidate.
-    NEWISH = re.compile(r"NEW CONSTRUCTION|PROPOSED NEW|ERECT NEW|CONSTRUCTION OF A NEW")
-
+    # describes a whole new building despite a renovation type. Everything
+    # else that reached the fetch is a conversion candidate.
     def is_new_build(r):
         if (r.get("permit_type") or "") == "PERMIT - NEW CONSTRUCTION":
             return True
-        return bool(NEWISH.search((r.get("work_description") or "").upper()))
+        t = CROSS_REF.sub(" ", (r.get("work_description") or "").upper())
+        return renovation_is_new_building(t, classify(t)[1])
 
     newbuild = [r for r in rows if is_new_build(r)]
     convrows = [r for r in rows if not is_new_build(r)]

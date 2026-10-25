@@ -343,7 +343,8 @@ export function Permitting() {
           Gross new construction units per ward. This map extracts unit counts
           from the city&rsquo;s dataset on building permits. It covers permits
           typed as new construction, plus permits typed as renovations whose own
-          description is of a new building. Conversions of existing buildings
+          description is of a whole new building (not an addition, dormer or
+          garage on an existing one). Conversions of existing buildings
           are excluded unless toggled on. Unit counts are extracted from each
           permit&rsquo;s work description, since the source dataset has no
           unit-count field; note that these figures are not exact, as about{" "}
