@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import "../styles/permitting.css";
 import { PermitView } from "../components/PermitView";
+import { PermitTrends } from "../components/PermitTrends";
 import type { PermitViewport } from "../components/PermitMap";
 import boundaryPeriods from "../data/wardBoundaryPeriods.json";
 import chicagoAttribution from "../data/chicagoDataAttribution.json";
@@ -105,7 +106,10 @@ export function Permitting() {
         <p className="page-lede">New housing units approved by ward.</p>
       </header>
 
-      <section className="pm-controls">
+      <PermitTrends data={data} />
+
+      <h2 className="pm-map-heading" id="permit-map">Explore the ward map</h2>
+      <section className="pm-controls" aria-label="Ward map controls">
         <div className="pm-range">
           <div className="pm-range-head">
             <span className="eyebrow">Years</span>
