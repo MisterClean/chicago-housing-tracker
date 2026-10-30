@@ -5,7 +5,7 @@ export const TREND_METRICS = {
   permits: { label: "Permits", unit: "permits", description: "New-construction permit records after staged filings are deduplicated. Includes records with no classified housing units; not all building permits." },
   sfh: { label: "Single-family", unit: "units", description: "New units in single-family (1-unit) buildings. Excludes conversions." },
   mfh: { label: "Multifamily", unit: "units", description: "New units in multifamily (2+ unit) buildings. Counts homes, not buildings; excludes conversions." },
-  conversions: { label: "Conversions", unit: "unit change", description: "Units gained minus units lost through documented conversions of existing buildings. Can be negative. Excludes demolitions; not total net housing growth." },
+  conversions: { label: "Conversions", unit: "units", description: "Units gained minus units lost through documented conversions of existing buildings. Can be negative. Excludes demolitions; not total net housing growth." },
   combined: { label: "Including conversions", unit: "units", description: "Gross new housing units plus conversion gains and losses. Excludes demolitions; not total net housing growth." },
 } as const;
 

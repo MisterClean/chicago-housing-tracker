@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState, type PointerEvent } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type MouseEvent, type PointerEvent } from "react";
 import boundaryPeriods from "../data/wardBoundaryPeriods.json";
 import type { PermitsData, WardBasis } from "../lib/permits";
 import { annualWardSeries, fractionalYear, segmentDistance, trendTicks, TREND_METRICS, type TrendMetric, type WardSeries } from "../lib/permitTrends";
@@ -35,6 +35,7 @@ export function PermitTrends({ data }: { data: PermitsData }) {
   const active = series.find((s) => s.ward === activeWard);
   const point = active?.points.find((p) => p.year === activeYear);
   const info = TREND_METRICS[metric];
+  const formatValue = (value: number) => `${metric === "conversions" && value > 0 ? "+" : ""}${number.format(value)}`;
   const hasPartial = allSeries[0].points.some((p) => p.partial);
   const ticks = useMemo(() => trendTicks(series.flatMap((s) => s.points.map((p) => p.value))), [series]);
   const height = width < 600 ? 340 : 380;
@@ -51,8 +52,10 @@ export function PermitTrends({ data }: { data: PermitsData }) {
   };
   const remaps = boundaryPeriods.slice(1).filter((p) => fractionalYear(p.start) >= first && fractionalYear(p.start) <= last);
   const tickEvery = width < 480 ? 4 : width < 760 ? 2 : 1;
+  const tooltipX = Math.max(left, Math.min(width - right - 150, x(activeYear) + 12));
+  const tooltipY = point ? Math.max(top + 8, Math.min(bottom - 60, y(point.value) - 68)) : top;
 
-  function pointerTarget(event: PointerEvent<SVGSVGElement>) {
+  function pointerTarget(event: PointerEvent<SVGSVGElement> | MouseEvent<SVGSVGElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
     const px = (event.clientX - rect.left) * width / rect.width;
     const py = (event.clientY - rect.top) * height / rect.height;
@@ -81,7 +84,7 @@ export function PermitTrends({ data }: { data: PermitsData }) {
           <h2 id={`${id}-heading`}>How wards change over time</h2>
           <p>One line per ward. Follow housing activity from {data.meta.firstYear} to {data.meta.lastYear}.</p>
         </div>
-        <a href="#permit-map">Explore the ward map ↓</a>
+        <a href="#permit-map">Explore the ward map</a>
       </div>
 
       <div className="pt-metrics" role="group" aria-label="Trend metric">
@@ -114,7 +117,7 @@ export function PermitTrends({ data }: { data: PermitsData }) {
       </div>
 
       <div className="pt-chart-meta">
-        <span>{info.unit === "permits" ? "Permits per year" : info.unit === "unit change" ? "Change in units per year" : "Units per year"}</span>
+        <span>{info.unit === "permits" ? "Permits per year" : metric === "conversions" ? "Change in units per year" : "Units per year"}</span>
         <span className="pt-legend"><i /> All wards <i className="pt-selected-key" /> Highlighted ward</span>
       </div>
       <div ref={container} className="pt-chart">
@@ -128,7 +131,7 @@ export function PermitTrends({ data }: { data: PermitsData }) {
             setHovered(target.ward);
           }}
           onPointerLeave={() => setHovered(null)}
-          onPointerDown={(event) => {
+          onClick={(event) => {
             const target = pointerTarget(event);
             if (target.ward !== null) { setPinned(pinned === target.ward ? null : target.ward); setYear(target.year); setHovered(null); }
           }}
@@ -172,18 +175,23 @@ export function PermitTrends({ data }: { data: PermitsData }) {
               {active.points.map((p) => <circle key={p.year} cx={x(p.year)} cy={y(p.value)} r={p.year === activeYear ? 5 : 2.5} />)}
               {point && <line className="pt-cursor" x1={x(activeYear)} x2={x(activeYear)} y1={top} y2={bottom} />}
             </g>}
+            {active && point && <g className="pt-tooltip" transform={`translate(${tooltipX},${tooltipY})`}>
+              <rect width={150} height={56} />
+              <text x={10} y={20}>Ward {active.ward} · {activeYear}{point.partial ? "*" : ""}</text>
+              <text x={10} y={42}>{formatValue(point.value)} {info.unit}</text>
+            </g>}
           </g>
         </svg>
       </div>
 
       <div className={`pt-readout${active ? " is-active" : ""}`} id={`${id}-readout`}>
         <div className="pt-readout-value" aria-live="polite" aria-atomic="true">
-          {active && point ? <><strong>Ward {active.ward}</strong><span>{activeYear}{point.partial ? "*" : ""}</span><strong>{number.format(point.value)} <small>{info.unit}</small></strong></>
+          {active && point ? <><strong>Ward {active.ward}</strong><span>{activeYear}{point.partial ? "*" : ""}</span><strong>{formatValue(point.value)} <small>{info.unit}</small></strong></>
             : <><strong>All 50 wards</strong><span>Hover a line to explore. Click or tap to pin a ward.</span></>}
         </div>
         <label className="pt-year">Year
           <select value={activeYear} onChange={(e) => setYear(Number(e.target.value))}>
-            {years.map((value) => <option key={value} value={value}>{value}{value === data.meta.lastYear && hasPartial ? " (partial)" : ""}</option>)}
+            {years.map((value) => <option key={value} value={value}>{value}{value === data.meta.lastYear && hasPartial ? "*" : ""}</option>)}
           </select>
         </label>
       </div>
@@ -193,7 +201,7 @@ export function PermitTrends({ data }: { data: PermitsData }) {
         {basis === "atIssue" ? "A ward can cover different areas after a remap. The 2015 and 2023 annual totals each combine two boundary periods; changes are not solely changes in building activity." : "The remap markers are historical context; permits are assigned to the same 2023 geography throughout."}
       </p>
       <div className="pt-notes">
-        {hasPartial && <p>* {data.meta.lastYear} covers Jan 1–{date(data.meta.lastDate)}. Dashed lines show the incomplete year; counts are not annualized.</p>}
+        {hasPartial && <p>* {data.meta.lastYear} covers Jan 1–{date(data.meta.lastDate)}. {includePartial ? "Dashed lines show the incomplete year; counts are not annualized." : "The incomplete year is hidden."}</p>}
         <p>New boundaries took effect {boundaryPeriods.slice(1).map((period, index) => <span key={period.id}>{index ? " and " : ""}<a href={period.source} target="_blank" rel="noreferrer">{date(period.start)}</a></span>)}. Attribution coverage can differ between maps.</p>
       </div>
       <details className="pt-data">

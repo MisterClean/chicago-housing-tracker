@@ -355,12 +355,14 @@ export function Permitting() {
           {Math.round(data.meta.unclassifiedShare * 100)}% of permits could not
           be classified (and are ignored). Permits staged across several filings
           for one project are counted once. Ward boundaries were redrawn in 2015
-          and 2023: by default every permit is placed on today&rsquo;s map by
+          and 2023: the map defaults to placing every permit on today&rsquo;s map by
           its coordinates, while the &ldquo;at time of permit&rdquo; view places
           it by its coordinates on the ward map in force when it was issued. It
           splits the selected dates at May 18, 2015 and May 15, 2023, showing a
           separate map and table for each boundary period. Per-year rates in this view use the
-          actual days covered, including partial years.
+          actual days covered, including partial years. The trend chart above
+          defaults to boundaries at the time of permit and shows calendar-year
+          counts, with its own metric and boundary controls.
         </p>
         <p>
           Including conversions adds units created by turning existing buildings

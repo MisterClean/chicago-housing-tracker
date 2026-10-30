@@ -43,8 +43,9 @@ test("historical series use the historical tables, including attribution coverag
     assert.notDeepEqual(current, historical);
   }
   // Some permits can be placed under only one map; do not force totals to agree.
-  assert.equal(annualWardSeries(data, "units", "current").reduce((sum, s) => sum + s.points[2].value, 0), 2961);
-  assert.equal(annualWardSeries(data, "units", "atIssue").reduce((sum, s) => sum + s.points[2].value, 0), 2964);
+  const fixture = { ...data, units: { "1": { "2012": 3 } }, atIssue: { ...data.atIssue, units: { "1": { "2012": 6 } } } };
+  assert.equal(annualWardSeries(fixture, "units", "current").reduce((sum, s) => sum + s.points[2].value, 0), 3);
+  assert.equal(annualWardSeries(fixture, "units", "atIssue").reduce((sum, s) => sum + s.points[2].value, 0), 6);
 });
 
 test("date annotations use exact fractional years and axes include zero and all extremes", () => {
