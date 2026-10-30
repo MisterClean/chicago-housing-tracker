@@ -39,8 +39,9 @@ large-bundle advisory; lint reports the pre-existing dependency warning in
 ## Repeatable interaction checks
 
 1. Open `/permitting`: historical boundaries, housing units, all 50 lines, and
-   the partial year are selected by default. Confirm both remap annotations.
-2. Hover a line: the ward, nearest year, and value appear next to it and below
+   the partial year are shown by default, with Ward 27 pinned. Confirm both remap
+   annotations and that the ward picker and readout show Ward 27.
+2. Clear the default selection, then hover a line: the ward, nearest year, and value appear next to it and below
    the plot. The ward picker remains “All 50 wards.” Click the line to pin it;
    moving away preserves the selection. Click again or clear to unpin.
 3. Pick Ward 27 and 2022 in historical mode. With the current snapshot, housing

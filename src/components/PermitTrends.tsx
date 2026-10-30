@@ -11,7 +11,7 @@ export function PermitTrends({ data }: { data: PermitsData }) {
   const id = useId();
   const [metric, setMetric] = useState<TrendMetric>("units");
   const [basis, setBasis] = useState<WardBasis>("atIssue");
-  const [pinned, setPinned] = useState<number | null>(null);
+  const [pinned, setPinned] = useState<number | null>(27);
   const [hovered, setHovered] = useState<number | null>(null);
   const [year, setYear] = useState(data.meta.lastYear);
   const [includePartial, setIncludePartial] = useState(true);

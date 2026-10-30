@@ -146,7 +146,8 @@ dependency — it is a one-shot tool, so run it via `npx` when needed.
 ### Historical ward maps
 
 The annual **How wards change over time** chart on `/permitting` shows all 50
-wards across the full data history. It defaults to boundaries **at time of
+wards across the full data history, with **Ward 27 highlighted by default**.
+It defaults to boundaries **at time of
 permit**, with current (2023) boundaries available for comparing the same areas
 over time. Its metric, boundary, and partial-year controls are independent of the
 map below. Hover previews a line; click/tap pins it. A ward picker, keyboard
