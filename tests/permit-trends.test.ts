@@ -17,7 +17,7 @@ test("all 50 annual series reconcile to existing ward totals in both boundary ba
           const row = rows.find((r) => r.ward === s.ward)!;
           const expected = metric === "combined" ? row.units : metric === "conversions" ? row.convSfh + row.convMfh
             : metric === "units" ? row.newUnits : metric === "sfh" ? row.sfh - row.convSfh
-            : metric === "mfh" ? row.mfh - row.convMfh : row.permits;
+            : row.mfh - row.convMfh;
           assert.equal(s.points.find((p) => p.year === year)!.value, expected, `${basis} ${metric} ward ${s.ward} ${year}`);
         }
       }

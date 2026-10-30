@@ -153,10 +153,11 @@ over time. Its metric, boundary, and partial-year controls are independent of th
 map below. Hover previews a line; click/tap pins it. A ward picker, keyboard
 controls, year picker, and expandable annual data table provide alternatives.
 
-Metrics are new housing units, deduplicated new-construction permits,
+The metric dropdown sits beside ward boundaries and offers new housing units,
 single-family units, multifamily units, conversion unit change, and new units
-including conversions. SFH/MFH count homes, not buildings. Permit counts include
-records without classified housing units; they are not all building permits.
+including conversions. SFH/MFH count homes, not buildings. The chart heading
+updates with the metric, highlighted ward, visible years, boundary basis, and
+partial-year coverage so screenshots retain their context.
 Conversions can be negative and exclude demolitions. The chart uses raw annual
 counts, never annualized rates; the incomplete final year is dashed and can be
 hidden. A linear scale includes zero and all values, and stays fixed when a ward

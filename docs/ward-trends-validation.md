@@ -45,7 +45,7 @@ large-bundle advisory; lint reports the pre-existing dependency warning in
    the plot. The ward picker remains “All 50 wards.” Click the line to pin it;
    moving away preserves the selection. Click again or clear to unpin.
 3. Pick Ward 27 and 2022 in historical mode. With the current snapshot, housing
-   units are 3,253, permits 182, single-family units 14, multifamily units 3,239,
+   units are 3,253, single-family units 14, multifamily units 3,239,
    conversions +7, and including conversions 3,260. A data refresh can change
    these reference values; compare against the refreshed tables.
 4. Pick Ward 3, conversions, and 2015: the current snapshot shows −16 units.
@@ -63,3 +63,7 @@ large-bundle advisory; lint reports the pre-existing dependency warning in
    widening the document.
 9. Follow “Explore the ward map.” Its year range, boundary/count toggles, maps,
    ward table, and CSV continue to use their existing independent controls.
+10. The Metric dropdown follows Ward boundaries and offers five housing metrics;
+    permit counts are not an option. Switch metrics, wards, boundary basis, and
+    partial-year visibility: the heading above the plot updates to preserve that
+    context in screenshots, including when no ward is selected.

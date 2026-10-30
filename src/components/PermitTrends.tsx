@@ -87,20 +87,18 @@ export function PermitTrends({ data }: { data: PermitsData }) {
         <a href="#permit-map">Explore the ward map</a>
       </div>
 
-      <div className="pt-metrics" role="group" aria-label="Trend metric">
-        {(Object.keys(TREND_METRICS) as TrendMetric[]).map((key) => (
-          <button key={key} type="button" aria-pressed={metric === key} onClick={() => { setMetric(key); setHovered(null); }}>
-            {TREND_METRICS[key].label}
-          </button>
-        ))}
-      </div>
-      <p className="pt-definition" id={`${id}-definition`}>{info.description}</p>
-
       <div className="pt-controls">
-        <label>Ward boundaries
+        <label className="pt-boundary-control">Ward boundaries
           <select value={basis} onChange={(e) => { setBasis(e.target.value as WardBasis); setHovered(null); }}>
             <option value="atIssue">At time of permit</option>
             <option value="current">Current (2023)</option>
+          </select>
+        </label>
+        <label className="pt-metric-control">Metric
+          <select value={metric} onChange={(e) => { setMetric(e.target.value as TrendMetric); setHovered(null); }}>
+            {(Object.keys(TREND_METRICS) as TrendMetric[]).map((key) => (
+              <option key={key} value={key}>{TREND_METRICS[key].label}</option>
+            ))}
           </select>
         </label>
         <label>Highlight a ward
@@ -116,14 +114,26 @@ export function PermitTrends({ data }: { data: PermitsData }) {
         </label>}
       </div>
 
+      <header className="pt-chart-heading">
+        <h3 id={`${id}-chart-title`}>{info.title}</h3>
+        <p className="pt-chart-context">
+          <strong>{activeWard !== null ? `Ward ${activeWard} highlighted` : "All 50 wards"}</strong>
+          {" · Chicago · "}<span className="pt-chart-years">{first}–{last}</span>
+        </p>
+        <p className="pt-chart-coverage">
+          {basis === "atIssue" ? "Ward boundaries at time of permit" : "Current (2023) ward boundaries"}
+          {includePartial && hasPartial ? ` · ${last} through ${date(data.meta.lastDate)}` : " · Complete years only"}
+        </p>
+        <p className="pt-definition" id={`${id}-definition`}>{info.description}</p>
+      </header>
       <div className="pt-chart-meta">
-        <span>{info.unit === "permits" ? "Permits per year" : metric === "conversions" ? "Change in units per year" : "Units per year"}</span>
+        <span>{metric === "conversions" ? "Change in units per year" : "Units per year"}</span>
         <span className="pt-legend"><i /> All wards <i className="pt-selected-key" /> Highlighted ward</span>
       </div>
       <div ref={container} className="pt-chart">
         <svg viewBox={`0 0 ${width} ${height}`} role="group" tabIndex={0}
           aria-label={`${info.label} by ward and year. Use left and right arrows for years, up and down for wards, Enter to pin, Escape to clear.`}
-          aria-describedby={`${id}-readout ${id}-boundaries ${id}-definition`}
+          aria-describedby={`${id}-chart-title ${id}-readout ${id}-boundaries ${id}-definition`}
           onPointerMove={(event) => {
             if (event.pointerType === "touch") return;
             const target = pointerTarget(event);
@@ -148,7 +158,7 @@ export function PermitTrends({ data }: { data: PermitsData }) {
             if (event.key === "Enter" || event.key === " ") { setPinned(pinned === null ? hovered ?? 1 : null); setHovered(null); }
             if (event.key === "Escape") clearWard();
           }}>
-          <title>{info.label} · all 50 Chicago wards · {first}–{last}</title>
+          <title>{info.title} · all 50 Chicago wards · {first}–{last}{activeWard !== null ? ` · Ward ${activeWard} highlighted` : ""}</title>
           <g aria-hidden="true">
             {includePartial && hasPartial && <rect className="pt-partial-band" x={x(last - 0.5)} y={top} width={x(last) - x(last - 0.5)} height={bottom - top} />}
             {ticks.map((tick) => <g key={tick}>

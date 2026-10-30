@@ -1,12 +1,11 @@
 import type { PermitsData, WardBasis } from "./permits";
 
 export const TREND_METRICS = {
-  units: { label: "Housing units", unit: "units", description: "Gross new housing units permitted. Excludes conversions and demolitions." },
-  permits: { label: "Permits", unit: "permits", description: "New-construction permit records after staged filings are deduplicated. Includes records with no classified housing units; not all building permits." },
-  sfh: { label: "Single-family", unit: "units", description: "New units in single-family (1-unit) buildings. Excludes conversions." },
-  mfh: { label: "Multifamily", unit: "units", description: "New units in multifamily (2+ unit) buildings. Counts homes, not buildings; excludes conversions." },
-  conversions: { label: "Conversions", unit: "units", description: "Units gained minus units lost through documented conversions of existing buildings. Can be negative. Excludes demolitions; not total net housing growth." },
-  combined: { label: "Including conversions", unit: "units", description: "Gross new housing units plus conversion gains and losses. Excludes demolitions; not total net housing growth." },
+  units: { label: "Housing units", title: "New housing units permitted", unit: "units", description: "Gross new housing units permitted. Excludes conversions and demolitions." },
+  sfh: { label: "Single-family", title: "Single-family housing units permitted", unit: "units", description: "New units in single-family (1-unit) buildings. Excludes conversions." },
+  mfh: { label: "Multifamily", title: "Multifamily housing units permitted", unit: "units", description: "New units in multifamily (2+ unit) buildings. Counts homes, not buildings; excludes conversions." },
+  conversions: { label: "Conversions", title: "Housing units gained or lost through conversions", unit: "units", description: "Units gained minus units lost through documented conversions of existing buildings. Can be negative. Excludes demolitions; not total net housing growth." },
+  combined: { label: "Including conversions", title: "New housing units, including conversions", unit: "units", description: "Gross new housing units plus conversion gains and losses. Excludes demolitions; not total net housing growth." },
 } as const;
 
 export type TrendMetric = keyof typeof TREND_METRICS;

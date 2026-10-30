@@ -3,12 +3,14 @@
 .pt-heading h2 { font-size: clamp(23px, 3vw, 30px); }
 .pt-heading p { margin-top: 8px; color: var(--muted); font-size: 15px; }
 .pt-heading a { flex-shrink: 0; font-size: 13px; }
-.pt-metrics { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--rule); gap: 4px 20px; }
-.pt-metrics button { background: none; border: 0; border-bottom: 3px solid transparent; padding: 12px 0; color: var(--muted); font-size: 14px; font-weight: 500; cursor: pointer; min-height: 44px; }
-.pt-metrics button:hover { color: var(--ink); }
-.pt-metrics button[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--accent); }
-.pt-definition { min-height: 52px; padding-top: 12px; max-width: 80ch; font-size: 13px; color: var(--muted); }
-.pt-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 20px; margin: 12px 0 28px; }
+.pt-chart-heading { margin-bottom: 20px; }
+.pt-chart-heading h3 { font-size: clamp(21px, 2.4vw, 27px); line-height: 1.25; text-wrap: balance; }
+.pt-chart-context { margin-top: 8px; font-size: 15px; color: var(--muted); }
+.pt-chart-context strong { color: var(--ink); font-weight: 500; }
+.pt-chart-years { white-space: nowrap; }
+.pt-chart-coverage { margin-top: 4px; font-size: 12px; color: var(--muted); }
+.pt-definition { margin-top: 10px; max-width: 80ch; font-size: 13px; color: var(--muted); }
+.pt-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 20px; margin: 12px 0 28px; padding-bottom: 24px; border-bottom: 1px solid var(--rule); }
 .pt-controls label { display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 500; color: var(--muted); }
 .pt select { border: 1px solid var(--rule); border-radius: 0; background: var(--ground); color: var(--ink); padding: 10px 30px 10px 10px; min-height: 44px; font: 400 14px var(--sans); cursor: pointer; }
 .pt-clear { background: var(--ground); border: 1px solid var(--rule); padding: 10px 14px; min-height: 44px; font-size: 13px; color: var(--accent-text); cursor: pointer; }
@@ -63,17 +65,16 @@
 @media (max-width: 700px) {
   .pt-heading { flex-direction: column; gap: 10px; }
   .pt-controls .pt-partial-toggle { margin-left: 0; }
-  .pt-metrics { gap: 0 18px; }
   .pt-readout { align-items: start; }
   .pt-readout-value { flex-direction: column; gap: 4px; }
   .pt-readout { min-height: 120px; }
 }
 @media (max-width: 420px) {
+  .pt-chart-context { min-height: 48px; }
   .pt-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; }
-  .pt-controls > label:first-child, .pt-controls .pt-partial-toggle { grid-column: 1 / -1; }
+  .pt-controls .pt-boundary-control, .pt-controls .pt-metric-control, .pt-controls .pt-partial-toggle { grid-column: 1 / -1; }
   .pt-controls select { width: 100%; }
   .pt-clear { padding-inline: 10px; }
   .pt-year { flex-direction: column; align-items: start; gap: 4px; }
   .pt-year select { max-width: 128px; padding-right: 12px; }
-  .pt-metrics button { font-size: 13px; }
 }
